@@ -128,8 +128,8 @@ self.vlm_serving = APIVLMServing_openai(
 
 ```python
 self.lineformer_serving = APILineFormerServing_local(
-    config_path="path/to/your/lineformer_swin_t_config.py",  # 修改为实际路径
-    checkpoint_path="path/to/your/iter_3000.pth",            # 修改为实际路径
+    config_path="path/to/your/lineformer_swin_t_config.py",  # 修改为实际路径,下载网址： https://github.com/TheJaeLal/LineFormer
+    checkpoint_path="path/to/your/iter_3000.pth",            # 修改为实际路径，下载网址： https://github.com/TheJaeLal/LineFormer
     device="cpu",           
     num_workers=1, 
     padding_size=40
