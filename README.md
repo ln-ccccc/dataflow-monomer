@@ -12,6 +12,8 @@
 <!-- [![](https://img.shields.io/github/last-commit/OpenDCAI/DataFlow)](https://github.com/OpenDCAI/DataFlow/commits/main/) -->
 
 🎉 如果你认可我们的项目，欢迎在 GitHub 上点个 ⭐ Star，关注项目最新进展。
+</div>
+
 ## 安装步骤
 
 ### 1. 创建并激活 Conda 环境
