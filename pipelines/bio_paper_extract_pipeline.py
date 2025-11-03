@@ -29,15 +29,15 @@ class BioPaperExtract_APIPipeline:
         )
 
         self.llm_serving = APILLMServing_request(
-            api_url="http://123.129.219.111:3000/v1/chat/completions",
+            api_url="https://api.openai.com/v1/chat/completions",
             model_name="gemini-2.5-pro",
             max_workers=200,
         )
 
         self.paper_serving = PaperDownloaderServing(
-            unpaywall_email="zhangjun@dp.tech",
-            entrez_email="zhangjun@dp.tech",
-            entrez_api_key="6882518fa7c420140b98817f571ef1d8ea08",
+            unpaywall_email="your@email.com",
+            entrez_email="your@email.com",
+            entrez_api_key="your_api_key",
         )
 
         self.downloader_op = PaperDownloaderGenerator(
@@ -45,7 +45,7 @@ class BioPaperExtract_APIPipeline:
         )
 
         self.parser_op = PaperParsingGenerator(
-            host = "http://101.126.82.63:40001", # Uniparser server host
+            host = "uniparser_url:port", # Uniparser server host
             max_workers=5,
         )
 
