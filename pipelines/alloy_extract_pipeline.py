@@ -1,4 +1,3 @@
-from re import A
 import json
 import os
 import itertools
@@ -6,13 +5,14 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from typing import Literal
 
-from operators.alloy_extract.chunked_generator import ChunkedPromptedGenerator
+from operators.general.chunked_generator import ChunkedPromptedGenerator
 from dataflow.operators.core_text import PandasOperator
 from prompts.alloy import AlloyNameExtractPrompt, AlloyInfoExtractPrompt
 
 from dataflow.serving import APILLMServing_request
 from dataflow.utils.storage import FileStorage
 from utils.chartextraction.extract_figure_info import extract_figure_components
+from utils.format_utils import safe_parse_json, safe_parse_json_and_get_key
 
 
 class ExtractAlloy():
@@ -44,7 +44,8 @@ class ExtractAlloy():
             llm_serving = self.llm_serving, 
             prompt_template=self.prompt_2,
             json_schema=self.prompt_2.build_json_schema(mode=mode),
-            max_chunk_len=max_chunk_len
+            max_chunk_len=max_chunk_len,
+            aux_prompt_keys = ["materials_name_list"]
         )
         
         self.parse_alloys = PandasOperator([
@@ -52,7 +53,7 @@ class ExtractAlloy():
                 alloys=df["alloys"].apply(
                     lambda lst: list(
                         itertools.chain.from_iterable(
-                            [self._safe_parse_alloys(x) for x in lst]
+                            [safe_parse_json_and_get_key(x, "alloys", []) for x in lst]
                         )
                     )
                 )
@@ -65,7 +66,7 @@ class ExtractAlloy():
                     f"alloys_{self.mode}_info": df[f"alloys_{self.mode}_info"].apply(
                         lambda lst: list(
                             itertools.chain.from_iterable(
-                                [self._safe_parse_alloys(x) for x in lst]
+                                [safe_parse_json_and_get_key(x, "alloys", []) for x in lst]
                             )
                         )
                     )
@@ -89,24 +90,6 @@ class ExtractAlloy():
                 ),
             ]
         )
-        
-    def _safe_parse_alloys(self, x):
-        if isinstance(x, dict):  # 已经是字典
-            return x.get("alloys", [])
-        if not isinstance(x, str):  # 不是字符串
-            return []
-        try:
-            data = json.loads(x)
-            return data.get("alloys", [])
-        except json.JSONDecodeError:
-            # 尝试修复常见错误, 比如字符串被放在了```json```中
-            try:
-                if x.startswith("```json") and x.endswith("```"):
-                    x = x[len("```json"): -3].strip()
-                data = json.loads(x)
-                return data.get("alloys", [])
-            except:
-                return []
 
     def forward(self):
         self.prompt_generator_1.run(
@@ -120,7 +103,6 @@ class ExtractAlloy():
             storage = self.storage.step(),
             input_key = "content",
             output_key = f"alloys_{self.mode}_info",
-            materials_name_list_key = "materials_name_list",
         )
         self.parse_alloys_info.run(storage = self.storage.step())
 

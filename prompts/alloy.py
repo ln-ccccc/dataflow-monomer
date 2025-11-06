@@ -16,7 +16,7 @@ class AlloyNameExtractPrompt(PromptABC):
     def build_system_prompt(self) -> str:
         return ""
 
-    def build_prompt(self, materials_name_list) -> str:
+    def build_prompt(self, **kwargs) -> str:
         prompt = """You are an expert in high-entropy alloys and materials science.
 Your task is to extract structured materials information from the given scientific text and organize it according to the specified schema.
 
@@ -50,7 +50,8 @@ class AlloyInfoExtractPrompt(PromptABC):
     def build_system_prompt(self) -> str:
         return ""
 
-    def build_prompt(self, materials_name_list) -> str:
+    def build_prompt(self, **kwargs) -> str:
+        materials_name_list = kwargs.get("materials_name_list", [])
         prompt = f"""
       You are an expert in high-entropy alloys and materials science.
       Your task is to extract structured materials information from the given scientific text and organize it according to the specified schema.

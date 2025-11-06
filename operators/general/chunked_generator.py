@@ -9,9 +9,10 @@ from dataflow.core import LLMServingABC
 import tiktoken
 
 from prompts.alloy import AlloyNameExtractPrompt, AlloyInfoExtractPrompt
+from prompts.cof_extract import CofExtractPrompt
 from dataflow.core.prompt import prompt_restrict
 
-@prompt_restrict(AlloyNameExtractPrompt, AlloyInfoExtractPrompt)
+@prompt_restrict(AlloyNameExtractPrompt, AlloyInfoExtractPrompt, CofExtractPrompt)
 @OPERATOR_REGISTRY.register()
 class ChunkedPromptedGenerator(OperatorABC):
     """
@@ -24,13 +25,15 @@ class ChunkedPromptedGenerator(OperatorABC):
     def __init__(
         self,
         llm_serving: LLMServingABC,
-        prompt_template: AlloyNameExtractPrompt | AlloyInfoExtractPrompt,
+        prompt_template: AlloyNameExtractPrompt | AlloyInfoExtractPrompt | CofExtractPrompt,
+        aux_prompt_keys: list[str] = [],
         json_schema: dict = None,
         max_chunk_len: int = 128000,
     ):
         self.logger = get_logger()
         self.llm_serving = llm_serving
         self.prompt_template = prompt_template
+        self.aux_prompt_keys = aux_prompt_keys
         self.json_schema = json_schema
         self.max_chunk_len = max_chunk_len
         self.enc = tiktoken.get_encoding("cl100k_base")
@@ -69,7 +72,6 @@ class ChunkedPromptedGenerator(OperatorABC):
         storage: DataFlowStorage,
         input_key: str = "raw_content",
         output_key: str = "generated_content",
-        materials_name_list_key: str = "materials_name_list",
     ):
         self.logger.info("Running ChunkedPromptedGenerator...")
         dataframe = storage.read("dataframe")
@@ -83,7 +85,9 @@ class ChunkedPromptedGenerator(OperatorABC):
         # === 先收集所有chunk ===
         for i, row in dataframe.iterrows():
             raw_content = row.get(input_key, "")
-            materials_name_list = row.get(materials_name_list_key, [])
+            prompt_kwargs = {}
+            for aux_key in self.aux_prompt_keys:
+                prompt_kwargs[aux_key] = row.get(aux_key)
             if not raw_content:
                 row_chunk_map.append(0)
                 continue
@@ -91,7 +95,7 @@ class ChunkedPromptedGenerator(OperatorABC):
             chunks = self._split_recursive(raw_content)
             self.logger.info(f"Row {i}: split into {len(chunks)} chunks")
 
-            system_prompt = self.prompt_template.build_prompt(materials_name_list)
+            system_prompt = self.prompt_template.build_prompt(**prompt_kwargs)
             llm_inputs = [system_prompt + chunk for chunk in chunks]
             all_llm_inputs.extend(llm_inputs)
             row_chunk_map.append(len(chunks))
