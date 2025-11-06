@@ -1,0 +1,1260 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Generated schema for Root",
+  "type": "object",
+  "properties": {
+    "alloys": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "alloy_name": {
+            "type": "string"
+          },
+          "composition": {
+            "type": "string"
+          },
+          "structure_information": {
+            "type": "object",
+            "properties": {
+              "Composition": {
+                "type": "object",
+                "properties": {
+                  "composition": {
+                    "type": "string"
+                  },
+                  "elements": {
+                    "type": "string"
+                  },
+                  "n_elements": {
+                    "type": "string"
+                  },
+                  "element_content_ratio": {
+                    "type": "string"
+                  },
+                  "elemental_purity": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "composition",
+                  "elements",
+                  "n_elements",
+                  "element_content_ratio",
+                  "elemental_purity"
+                ]
+              },
+              "Crystal_Structure": {
+                "type": "object",
+                "properties": {
+                  "structure_model": {
+                    "type": "string"
+                  },
+                  "crystal_system": {
+                    "type": "string"
+                  },
+                  "space_group": {
+                    "type": "string"
+                  },
+                  "symmetry_symbol": {
+                    "type": "string"
+                  },
+                  "lattice_constant": {
+                    "type": "string"
+                  },
+                  "lattice_type": {
+                    "type": "string"
+                  },
+                  "supercell_size": {
+                    "type": "string"
+                  },
+                  "lattice_orientation": {
+                    "type": "string"
+                  },
+                  "n_sites": {
+                    "type": "string"
+                  },
+                  "n_atoms": {
+                    "type": "string"
+                  },
+                  "volume": {
+                    "type": "string"
+                  },
+                  "density": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "structure_model",
+                  "crystal_system",
+                  "space_group",
+                  "symmetry_symbol",
+                  "lattice_constant",
+                  "lattice_type",
+                  "supercell_size",
+                  "lattice_orientation",
+                  "n_sites",
+                  "n_atoms",
+                  "volume",
+                  "density"
+                ]
+              },
+              "Sample_Preparation": {
+                "type": "object",
+                "properties": {
+                  "material_category": {
+                    "type": "string"
+                  },
+                  "material_source": {
+                    "type": "string"
+                  },
+                  "preparation_method": {
+                    "type": "string"
+                  },
+                  "particle_size": {
+                    "type": "string"
+                  },
+                  "sample_shape": {
+                    "type": "string"
+                  },
+                  "sample_dimensions": {
+                    "type": "string"
+                  },
+                  "sample_type": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "material_category",
+                  "material_source",
+                  "preparation_method",
+                  "particle_size",
+                  "sample_shape",
+                  "sample_dimensions",
+                  "sample_type"
+                ]
+              }
+            },
+            "required": [
+              "Composition",
+              "Crystal_Structure",
+              "Sample_Preparation"
+            ]
+          },
+          "Processing_Parameters": {
+            "type": "object",
+            "properties": {
+              "Arc_or_Induction_Melting_Process": {
+                "type": "object",
+                "properties": {
+                  "equipment_model": {
+                    "type": "string"
+                  },
+                  "voltage_V": {
+                    "type": "string"
+                  },
+                  "current_A": {
+                    "type": "string"
+                  },
+                  "protective_atmosphere": {
+                    "type": "string"
+                  },
+                  "number_of_melting_cycles": {
+                    "type": "string"
+                  },
+                  "melting_crucible": {
+                    "type": "string"
+                  },
+                  "electromagnetic_stirring": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "equipment_model",
+                  "voltage_V",
+                  "current_A",
+                  "protective_atmosphere",
+                  "number_of_melting_cycles",
+                  "melting_crucible",
+                  "electromagnetic_stirring"
+                ]
+              },
+              "Additive_Manufacturing_Parameters": {
+                "type": "object",
+                "properties": {
+                  "equipment_model": {
+                    "type": "string"
+                  },
+                  "process_type": {
+                    "type": "string"
+                  },
+                  "substrate_temperature": {
+                    "type": "string"
+                  },
+                  "laser_power_W": {
+                    "type": "string"
+                  },
+                  "scanning_speed_mm_per_s": {
+                    "type": "string"
+                  },
+                  "hatch_spacing_mm": {
+                    "type": "string"
+                  },
+                  "layer_thickness_um": {
+                    "type": "string"
+                  },
+                  "laser_spot_diameter_um": {
+                    "type": "string"
+                  },
+                  "printing_strategy": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "equipment_model",
+                  "process_type",
+                  "substrate_temperature",
+                  "laser_power_W",
+                  "scanning_speed_mm_per_s",
+                  "hatch_spacing_mm",
+                  "layer_thickness_um",
+                  "laser_spot_diameter_um",
+                  "printing_strategy"
+                ]
+              },
+              "Heat_Treatment_Process": {
+                "type": "object",
+                "properties": {
+                  "equipment_model": {
+                    "type": "string"
+                  },
+                  "process_name": {
+                    "type": "string"
+                  },
+                  "heating_rate_C_per_min": {
+                    "type": "string"
+                  },
+                  "cooling_rate_C_per_min": {
+                    "type": "string"
+                  },
+                  "cooling_medium": {
+                    "type": "string"
+                  },
+                  "holding_time_h": {
+                    "type": "string"
+                  },
+                  "solution_temperature_C": {
+                    "type": "string"
+                  },
+                  "solution_time_h": {
+                    "type": "string"
+                  },
+                  "aging_time_h": {
+                    "type": "string"
+                  },
+                  "aging_temperature_C": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "equipment_model",
+                  "process_name",
+                  "heating_rate_C_per_min",
+                  "cooling_rate_C_per_min",
+                  "cooling_medium",
+                  "holding_time_h",
+                  "solution_temperature_C",
+                  "solution_time_h",
+                  "aging_time_h",
+                  "aging_temperature_C"
+                ]
+              },
+              "Sample_Pre_Treatment": {
+                "type": "object",
+                "properties": {
+                  "cutting_method": {
+                    "type": "string"
+                  },
+                  "grinding_sandpaper_grit": {
+                    "type": "string"
+                  },
+                  "polishing_method": {
+                    "type": "string"
+                  },
+                  "cleaning_method": {
+                    "type": "string"
+                  },
+                  "etchant_corrosive_type": {
+                    "type": "string"
+                  },
+                  "sealing_condition": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "cutting_method",
+                  "grinding_sandpaper_grit",
+                  "polishing_method",
+                  "cleaning_method",
+                  "etchant_corrosive_type",
+                  "sealing_condition"
+                ]
+              }
+            },
+            "required": [
+              "Arc_or_Induction_Melting_Process",
+              "Additive_Manufacturing_Parameters",
+              "Heat_Treatment_Process",
+              "Sample_Pre_Treatment"
+            ]
+          },
+          "Microstructure_and_Morphology_Characterization_Parameters": {
+            "type": "object",
+            "properties": {
+              "Optical_Microscopy_Morphology": {
+                "type": "object",
+                "properties": {
+                  "equipment_model": {
+                    "type": "string"
+                  },
+                  "magnification": {
+                    "type": "string"
+                  },
+                  "objective_magnification": {
+                    "type": "string"
+                  },
+                  "light_source_illumination_mode": {
+                    "type": "string"
+                  },
+                  "light_source_intensity": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "equipment_model",
+                  "magnification",
+                  "objective_magnification",
+                  "light_source_illumination_mode",
+                  "light_source_intensity"
+                ]
+              },
+              "SEM_Morphology": {
+                "type": "object",
+                "properties": {
+                  "equipment_model": {
+                    "type": "string"
+                  },
+                  "accelerating_voltage_kV": {
+                    "type": "string"
+                  },
+                  "working_distance_WD": {
+                    "type": "string"
+                  },
+                  "detector_selection": {
+                    "type": "string"
+                  },
+                  "scan_speed": {
+                    "type": "string"
+                  },
+                  "pixel_resolution": {
+                    "type": "string"
+                  },
+                  "vacuum_level": {
+                    "type": "string"
+                  },
+                  "temperature_and_atmosphere_control": {
+                    "type": "string"
+                  },
+                  "contrast_and_brightness": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "equipment_model",
+                  "accelerating_voltage_kV",
+                  "working_distance_WD",
+                  "detector_selection",
+                  "scan_speed",
+                  "pixel_resolution",
+                  "vacuum_level",
+                  "temperature_and_atmosphere_control",
+                  "contrast_and_brightness"
+                ]
+              },
+              "XRD_Phase_and_Structure_Analysis": {
+                "type": "object",
+                "properties": {
+                  "equipment_model": {
+                    "type": "string"
+                  },
+                  "target_material": {
+                    "type": "string"
+                  },
+                  "tube_voltage_and_current": {
+                    "type": "string"
+                  },
+                  "scan_mode": {
+                    "type": "string"
+                  },
+                  "scan_range_2theta": {
+                    "type": "string"
+                  },
+                  "step_size_2theta": {
+                    "type": "string"
+                  },
+                  "scan_speed_deg_per_min": {
+                    "type": "string"
+                  },
+                  "detector_type": {
+                    "type": "string"
+                  },
+                  "slit_system": {
+                    "type": "string"
+                  },
+                  "monochromator": {
+                    "type": "string"
+                  },
+                  "sample_rotation_parameters": {
+                    "type": "string"
+                  },
+                  "data_processing_parameters": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "equipment_model",
+                  "target_material",
+                  "tube_voltage_and_current",
+                  "scan_mode",
+                  "scan_range_2theta",
+                  "step_size_2theta",
+                  "scan_speed_deg_per_min",
+                  "detector_type",
+                  "slit_system",
+                  "monochromator",
+                  "sample_rotation_parameters",
+                  "data_processing_parameters"
+                ]
+              },
+              "TEM_Morphology": {
+                "type": "object",
+                "properties": {
+                  "equipment_model": {
+                    "type": "string"
+                  },
+                  "accelerating_voltage_kV": {
+                    "type": "string"
+                  },
+                  "beam_current_pA": {
+                    "type": "string"
+                  },
+                  "beam_spot_size": {
+                    "type": "string"
+                  },
+                  "convergence_angle": {
+                    "type": "string"
+                  },
+                  "sample_thickness": {
+                    "type": "string"
+                  },
+                  "bright_and_dark_field_images": {
+                    "type": "string"
+                  },
+                  "monochromator_for_energy_dispersion_reduction": {
+                    "type": "string"
+                  },
+                  "probe_size": {
+                    "type": "string"
+                  },
+                  "scan_speed": {
+                    "type": "string"
+                  },
+                  "detector_type": {
+                    "type": "string"
+                  },
+                  "resolution": {
+                    "type": "string"
+                  },
+                  "camera_length_mm": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "equipment_model",
+                  "accelerating_voltage_kV",
+                  "beam_current_pA",
+                  "beam_spot_size",
+                  "convergence_angle",
+                  "sample_thickness",
+                  "bright_and_dark_field_images",
+                  "monochromator_for_energy_dispersion_reduction",
+                  "probe_size",
+                  "scan_speed",
+                  "detector_type",
+                  "resolution",
+                  "camera_length_mm"
+                ]
+              },
+              "EBSD_and_ECCI_Phase_Analysis": {
+                "type": "object",
+                "properties": {
+                  "equipment_model": {
+                    "type": "string"
+                  },
+                  "detector_parameters": {
+                    "type": "string"
+                  },
+                  "ci_value_charge_index": {
+                    "type": "string"
+                  },
+                  "phase_analysis_mode": {
+                    "type": "string"
+                  },
+                  "scan_step_size": {
+                    "type": "string"
+                  },
+                  "accelerating_voltage_kV": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "equipment_model",
+                  "detector_parameters",
+                  "ci_value_charge_index",
+                  "phase_analysis_mode",
+                  "scan_step_size",
+                  "accelerating_voltage_kV"
+                ]
+              }
+            },
+            "required": [
+              "Optical_Microscopy_Morphology",
+              "SEM_Morphology",
+              "XRD_Phase_and_Structure_Analysis",
+              "TEM_Morphology",
+              "EBSD_and_ECCI_Phase_Analysis"
+            ]
+          },
+          "Physical_Property_Measurement_Parameters": {
+            "type": "object",
+            "properties": {
+              "Thermal": {
+                "type": "object",
+                "properties": {
+                  "TG_Thermogravimetric_Analysis": {
+                    "type": "object",
+                    "properties": {
+                      "device_model": {
+                        "type": "string"
+                      },
+                      "temperature_range": {
+                        "type": "string"
+                      },
+                      "heating_rate": {
+                        "type": "string"
+                      },
+                      "cooling_rate": {
+                        "type": "string"
+                      },
+                      "start_temperature": {
+                        "type": "string"
+                      },
+                      "end_temperature": {
+                        "type": "string"
+                      },
+                      "atmosphere": {
+                        "type": "string"
+                      },
+                      "crucible_types": {
+                        "type": "string"
+                      },
+                      "gas_flow_rate": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "device_model",
+                      "temperature_range",
+                      "heating_rate",
+                      "cooling_rate",
+                      "start_temperature",
+                      "end_temperature",
+                      "atmosphere",
+                      "crucible_types",
+                      "gas_flow_rate"
+                    ]
+                  },
+                  "DSC_Differential_Scanning_Calorimetry": {
+                    "type": "object",
+                    "properties": {
+                      "device_model": {
+                        "type": "string"
+                      },
+                      "temperature_range": {
+                        "type": "string"
+                      },
+                      "heating_rate": {
+                        "type": "string"
+                      },
+                      "cooling_rate": {
+                        "type": "string"
+                      },
+                      "start_temperature": {
+                        "type": "string"
+                      },
+                      "end_temperature": {
+                        "type": "string"
+                      },
+                      "atmosphere": {
+                        "type": "string"
+                      },
+                      "crucible_types": {
+                        "type": "string"
+                      },
+                      "gas_flow_rate": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "device_model",
+                      "temperature_range",
+                      "heating_rate",
+                      "cooling_rate",
+                      "start_temperature",
+                      "end_temperature",
+                      "atmosphere",
+                      "crucible_types",
+                      "gas_flow_rate"
+                    ]
+                  },
+                  "DTA_Differential_Thermal_Analysis": {
+                    "type": "object",
+                    "properties": {
+                      "device_model": {
+                        "type": "string"
+                      },
+                      "temperature_range": {
+                        "type": "string"
+                      },
+                      "heating_rate": {
+                        "type": "string"
+                      },
+                      "cooling_rate": {
+                        "type": "string"
+                      },
+                      "start_temperature": {
+                        "type": "string"
+                      },
+                      "end_temperature": {
+                        "type": "string"
+                      },
+                      "atmosphere": {
+                        "type": "string"
+                      },
+                      "crucible_types": {
+                        "type": "string"
+                      },
+                      "gas_flow_rate": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "device_model",
+                      "temperature_range",
+                      "heating_rate",
+                      "cooling_rate",
+                      "start_temperature",
+                      "end_temperature",
+                      "atmosphere",
+                      "crucible_types",
+                      "gas_flow_rate"
+                    ]
+                  },
+                  "Laser_Thermal_Conductivity": {
+                    "type": "object",
+                    "properties": {
+                      "device_model": {
+                        "type": "string"
+                      },
+                      "laser_energy": {
+                        "type": "string"
+                      },
+                      "pulse_width": {
+                        "type": "string"
+                      },
+                      "laser_wavelength": {
+                        "type": "string"
+                      },
+                      "laser_frequency": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "device_model",
+                      "laser_energy",
+                      "pulse_width",
+                      "laser_wavelength",
+                      "laser_frequency"
+                    ]
+                  }
+                },
+                "required": [
+                  "TG_Thermogravimetric_Analysis",
+                  "DSC_Differential_Scanning_Calorimetry",
+                  "DTA_Differential_Thermal_Analysis",
+                  "Laser_Thermal_Conductivity"
+                ]
+              },
+              "Mechanical": {
+                "type": "object",
+                "properties": {
+                  "Microhardness_Tester": {
+                    "type": "object",
+                    "properties": {
+                      "device_model": {
+                        "type": "string"
+                      },
+                      "indenter_type": {
+                        "type": "string"
+                      },
+                      "maximum load": {
+                        "type": "string"
+                      },
+                      "loading_time": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "device_model",
+                      "indenter_type",
+                      "maximum load",
+                      "loading_time"
+                    ]
+                  },
+                  "Nano_Indentation": {
+                    "type": "object",
+                    "properties": {
+                      "device_model": {
+                        "type": "string"
+                      },
+                      "indenter_type": {
+                        "type": "string"
+                      },
+                      "maximum_load": {
+                        "type": "string"
+                      },
+                      "temperature": {
+                        "type": "string"
+                      },
+                      "operating_mode": {
+                        "type": "string"
+                      },
+                      "atmosphere_environment": {
+                        "type": "string"
+                      },
+                      "loading_rate": {
+                        "type": "string"
+                      },
+                      "holding_time": {
+                        "type": "string"
+                      },
+                      "unloading_rate": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "device_model",
+                      "indenter_type",
+                      "maximum_load",
+                      "temperature",
+                      "operating_mode",
+                      "atmosphere_environment",
+                      "loading_rate",
+                      "holding_time",
+                      "unloading_rate"
+                    ]
+                  },
+                  "Universal_Tensile_Testing_Machine": {
+                    "type": "object",
+                    "properties": {
+                      "device_model": {
+                        "type": "string"
+                      },
+                      "test_mode": {
+                        "type": "string"
+                      },
+                      "loading_rate": {
+                        "type": "string"
+                      },
+                      "gripping_method": {
+                        "type": "string"
+                      },
+                      "test_temperature": {
+                        "type": "string"
+                      },
+                      "medium_environment": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "device_model",
+                      "test_mode",
+                      "loading_rate",
+                      "gripping_method",
+                      "test_temperature",
+                      "medium_environment"
+                    ]
+                  }
+                },
+                "required": [
+                  "Microhardness_Tester",
+                  "Nano_Indentation",
+                  "Universal_Tensile_Testing_Machine"
+                ]
+              },
+              "Electrical": {
+                "type": "object",
+                "properties": {
+                  "Electrochemical_Corrosion_Workstation": {
+                    "type": "object",
+                    "properties": {
+                      "device_model": {
+                        "type": "string"
+                      },
+                      "test_time": {
+                        "type": "string"
+                      },
+                      "test_mode": {
+                        "type": "string"
+                      },
+                      "start_potential": {
+                        "type": "string"
+                      },
+                      "end_potential": {
+                        "type": "string"
+                      },
+                      "scan_rate": {
+                        "type": "string"
+                      },
+                      "eis_frequency_range": {
+                        "type": "string"
+                      },
+                      "corrosive_solution": {
+                        "type": "string"
+                      },
+                      "test_temperature": {
+                        "type": "string"
+                      },
+                      "working_electrode_area": {
+                        "type": "string"
+                      },
+                      "reference_electrode_type": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "device_model",
+                      "test_time",
+                      "test_mode",
+                      "start_potential",
+                      "end_potential",
+                      "scan_rate",
+                      "eis_frequency_range",
+                      "corrosive_solution",
+                      "test_temperature",
+                      "working_electrode_area",
+                      "reference_electrode_type"
+                    ]
+                  },
+                  "Four_Probe_Resistivity_Tester": {
+                    "type": "object",
+                    "properties": {
+                      "device_model": {
+                        "type": "string"
+                      },
+                      "test_current": {
+                        "type": "string"
+                      },
+                      "measured_voltage": {
+                        "type": "string"
+                      },
+                      "probe_spacing": {
+                        "type": "string"
+                      },
+                      "ambient_temperature": {
+                        "type": "string"
+                      },
+                      "test_mode": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "device_model",
+                      "test_current",
+                      "measured_voltage",
+                      "probe_spacing",
+                      "ambient_temperature",
+                      "test_mode"
+                    ]
+                  }
+                },
+                "required": [
+                  "Electrochemical_Corrosion_Workstation",
+                  "Four_Probe_Resistivity_Tester"
+                ]
+              },
+              "Magnetic": {
+                "type": "object",
+                "properties": {
+                  "VSM_SQUID_Magnetic_Hysteresis_Loop_Tester": {
+                    "type": "object",
+                    "properties": {
+                      "equipment_model": {
+                        "type": "string"
+                      },
+                      "magnetic_field_range": {
+                        "type": "string"
+                      },
+                      "magnetic_field_precision_or_resolution": {
+                        "type": "string"
+                      },
+                      "magnetic_field_sweep_rate": {
+                        "type": "string"
+                      },
+                      "magnetic_field_uniformity": {
+                        "type": "string"
+                      },
+                      "temperature_range": {
+                        "type": "string"
+                      },
+                      "temperature_sweep_rate": {
+                        "type": "string"
+                      },
+                      "temperature_precision_or_resolution": {
+                        "type": "string"
+                      },
+                      "data_acquisition_density": {
+                        "type": "string"
+                      },
+                      "ac_susceptibility_frequency_range": {
+                        "type": "string"
+                      },
+                      "angular_resolution_for_magnetic_measurement": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "equipment_model",
+                      "magnetic_field_range",
+                      "magnetic_field_precision_or_resolution",
+                      "magnetic_field_sweep_rate",
+                      "magnetic_field_uniformity",
+                      "temperature_range",
+                      "temperature_sweep_rate",
+                      "temperature_precision_or_resolution",
+                      "data_acquisition_density",
+                      "ac_susceptibility_frequency_range",
+                      "angular_resolution_for_magnetic_measurement"
+                    ]
+                  }
+                },
+                "required": [
+                  "VSM_SQUID_Magnetic_Hysteresis_Loop_Tester"
+                ]
+              }
+            },
+            "required": [
+              "Thermal",
+              "Mechanical",
+              "Electrical",
+              "Magnetic"
+            ]
+          },
+          "Properties": {
+            "type": "object",
+            "properties": {
+              "Thermal": {
+                "type": "object",
+                "properties": {
+                  "Thermal_Properties": {
+                    "type": "object",
+                    "properties": {
+                      "thermal_decomposition_temperature": {
+                        "type": "string"
+                      },
+                      "pyrolysis_temperature": {
+                        "type": "string"
+                      },
+                      "softening_temperature": {
+                        "type": "string"
+                      },
+                      "specific_heat_capacity": {
+                        "type": "string"
+                      },
+                      "activation_energy": {
+                        "type": "string"
+                      },
+                      "melting_point": {
+                        "type": "string"
+                      },
+                      "phase_transition_onset_temperature": {
+                        "type": "string"
+                      },
+                      "phase_transition_end_temperature": {
+                        "type": "string"
+                      },
+                      "glass_transition_temperature": {
+                        "type": "string"
+                      },
+                      "thermal_conductivity": {
+                        "type": "string"
+                      },
+                      "thermal_diffusivity": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "thermal_decomposition_temperature",
+                      "pyrolysis_temperature",
+                      "softening_temperature",
+                      "specific_heat_capacity",
+                      "activation_energy",
+                      "melting_point",
+                      "phase_transition_onset_temperature",
+                      "phase_transition_end_temperature",
+                      "glass_transition_temperature",
+                      "thermal_conductivity",
+                      "thermal_diffusivity"
+                    ]
+                  }
+                },
+                "required": [
+                  "Thermal_Properties"
+                ]
+              },
+              "Mechanical": {
+                "type": "object",
+                "properties": {
+                  "Mechanical_Properties": {
+                    "type": "object",
+                    "properties": {
+                      "hardness_value": {
+                        "type": "string"
+                      },
+                      "indentation_image": {
+                        "type": "string"
+                      },
+                      "maximum_indentation_depth": {
+                        "type": "string"
+                      },
+                      "elastic_modulus": {
+                        "type": "string"
+                      },
+                      "poissons_ratio": {
+                        "type": "string"
+                      },
+                      "adhesion_force": {
+                        "type": "string"
+                      },
+                      "stress_strain_curve": {
+                        "type": "string"
+                      },
+                      "yield_strength": {
+                        "type": "string"
+                      },
+                      "tensile_strength": {
+                        "type": "string"
+                      },
+                      "elongation": {
+                        "type": "string"
+                      },
+                      "percentage_elongation": {
+                        "type": "string"
+                      },
+                      "reduction_of_area": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "hardness_value",
+                      "indentation_image",
+                      "maximum_indentation_depth",
+                      "elastic_modulus",
+                      "poissons_ratio",
+                      "adhesion_force",
+                      "stress_strain_curve",
+                      "yield_strength",
+                      "tensile_strength",
+                      "elongation",
+                      "percentage_elongation",
+                      "reduction_of_area"
+                    ]
+                  }
+                },
+                "required": [
+                  "Mechanical_Properties"
+                ]
+              },
+              "Electrical": {
+                "type": "object",
+                "properties": {
+                  "Electrical_Properties": {
+                    "type": "object",
+                    "properties": {
+                      "pitting_potential": {
+                        "type": "string"
+                      },
+                      "self_corrosion_potential": {
+                        "type": "string"
+                      },
+                      "self_corrosion_current_density": {
+                        "type": "string"
+                      },
+                      "corrosion_rate": {
+                        "type": "string"
+                      },
+                      "passivation_current_density": {
+                        "type": "string"
+                      },
+                      "phase_angle": {
+                        "type": "string"
+                      },
+                      "charge_transfer_resistance": {
+                        "type": "string"
+                      },
+                      "electrical_resistivity": {
+                        "type": "string"
+                      },
+                      "electrochemical_impedance_spectroscopy": {
+                        "type": "string"
+                      },
+                      "polarization_curve": {
+                        "type": "string"
+                      },
+                      "sheet_resistance": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "pitting_potential",
+                      "self_corrosion_potential",
+                      "self_corrosion_current_density",
+                      "corrosion_rate",
+                      "passivation_current_density",
+                      "phase_angle",
+                      "charge_transfer_resistance",
+                      "electrical_resistivity",
+                      "electrochemical_impedance_spectroscopy",
+                      "polarization_curve",
+                      "sheet_resistance"
+                    ]
+                  }
+                },
+                "required": [
+                  "Electrical_Properties"
+                ]
+              },
+              "Magnetic": {
+                "type": "object",
+                "properties": {
+                  "Magnetic_Properties": {
+                    "type": "object",
+                    "properties": {
+                      "magnetization": {
+                        "type": "string"
+                      },
+                      "magnetic_field_strength": {
+                        "type": "string"
+                      },
+                      "saturation_magnetization": {
+                        "type": "string"
+                      },
+                      "remanent_magnetization": {
+                        "type": "string"
+                      },
+                      "coercivity": {
+                        "type": "string"
+                      },
+                      "remanent_magnetization_alt": {
+                        "type": "string"
+                      },
+                      "maximum_energy_product": {
+                        "type": "string"
+                      },
+                      "magnetic_ordering_temperature": {
+                        "type": "string"
+                      },
+                      "magnetic_exchange_factor": {
+                        "type": "string"
+                      },
+                      "magnetocrystalline_anisotropy_field": {
+                        "type": "string"
+                      },
+                      "initial_permeability": {
+                        "type": "string"
+                      },
+                      "maximum_permeability": {
+                        "type": "string"
+                      },
+                      "hysteresis_loop_diagram": {
+                        "type": "string"
+                      },
+                      "eddy_current_loss": {
+                        "type": "string"
+                      },
+                      "residual_loss": {
+                        "type": "string"
+                      },
+                      "hysteresis_loss": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "magnetization",
+                      "magnetic_field_strength",
+                      "saturation_magnetization",
+                      "remanent_magnetization",
+                      "coercivity",
+                      "remanent_magnetization_alt",
+                      "maximum_energy_product",
+                      "magnetic_ordering_temperature",
+                      "magnetic_exchange_factor",
+                      "magnetocrystalline_anisotropy_field",
+                      "initial_permeability",
+                      "maximum_permeability",
+                      "hysteresis_loop_diagram",
+                      "eddy_current_loss",
+                      "residual_loss",
+                      "hysteresis_loss"
+                    ]
+                  }
+                },
+                "required": [
+                  "Magnetic_Properties"
+                ]
+              }
+            },
+            "required": [
+              "Thermal",
+              "Mechanical",
+              "Electrical",
+              "Magnetic"
+            ]
+          }
+        },
+        "required": [
+          "alloy_name",
+          "composition",
+          "structure_information",
+          "Processing_Parameters",
+          "Microstructure_and_Morphology_Characterization_Parameters",
+          "Physical_Property_Measurement_Parameters",
+          "Properties"
+        ]
+      }
+    }
+  },
+  "required": [
+    "alloys"
+  ]
+}

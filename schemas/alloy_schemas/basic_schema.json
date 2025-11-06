@@ -1,0 +1,156 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Generated schema for Root",
+  "type": "object",
+  "properties": {
+    "alloys": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "alloy_name": {
+            "type": "string"
+          },
+          "composition": {
+            "type": "string"
+          },
+          "structure_information": {
+            "type": "object",
+            "properties": {
+              "Composition": {
+                "type": "object",
+                "properties": {
+                  "composition": {
+                    "type": "string"
+                  },
+                  "elements": {
+                    "type": "string"
+                  },
+                  "n_elements": {
+                    "type": "string"
+                  },
+                  "element_content_ratio": {
+                    "type": "string"
+                  },
+                  "elemental_purity": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "composition",
+                  "elements",
+                  "n_elements",
+                  "element_content_ratio",
+                  "elemental_purity"
+                ]
+              },
+              "Crystal_Structure": {
+                "type": "object",
+                "properties": {
+                  "structure_model": {
+                    "type": "string"
+                  },
+                  "crystal_system": {
+                    "type": "string"
+                  },
+                  "space_group": {
+                    "type": "string"
+                  },
+                  "symmetry_symbol": {
+                    "type": "string"
+                  },
+                  "lattice_constant": {
+                    "type": "string"
+                  },
+                  "lattice_type": {
+                    "type": "string"
+                  },
+                  "supercell_size": {
+                    "type": "string"
+                  },
+                  "lattice_orientation": {
+                    "type": "string"
+                  },
+                  "n_sites": {
+                    "type": "string"
+                  },
+                  "n_atoms": {
+                    "type": "string"
+                  },
+                  "volume": {
+                    "type": "string"
+                  },
+                  "density": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "structure_model",
+                  "crystal_system",
+                  "space_group",
+                  "symmetry_symbol",
+                  "lattice_constant",
+                  "lattice_type",
+                  "supercell_size",
+                  "lattice_orientation",
+                  "n_sites",
+                  "n_atoms",
+                  "volume",
+                  "density"
+                ]
+              },
+              "Sample_Preparation": {
+                "type": "object",
+                "properties": {
+                  "material_category": {
+                    "type": "string"
+                  },
+                  "material_source": {
+                    "type": "string"
+                  },
+                  "preparation_method": {
+                    "type": "string"
+                  },
+                  "particle_size": {
+                    "type": "string"
+                  },
+                  "sample_shape": {
+                    "type": "string"
+                  },
+                  "sample_dimensions": {
+                    "type": "string"
+                  },
+                  "sample_type": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "material_category",
+                  "material_source",
+                  "preparation_method",
+                  "particle_size",
+                  "sample_shape",
+                  "sample_dimensions",
+                  "sample_type"
+                ]
+              }
+            },
+            "required": [
+              "Composition",
+              "Crystal_Structure",
+              "Sample_Preparation"
+            ]
+          }
+        },
+        "required": [
+          "alloy_name",
+          "composition",
+          "structure_information"
+        ]
+      }
+    }
+  },
+  "required": [
+    "alloys"
+  ]
+}
