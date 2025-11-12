@@ -35,7 +35,7 @@ def safe_parse_json(x, default):
     safe_parse_json(x, {})
     返回: {"name": "example", "value": 42}
     '''
-    if isinstance(x, dict):  # 已经是字典
+    if isinstance(x, type(default)):  # 已经是字典
         return x
     if not isinstance(x, str):  # 不是字符串
         return default

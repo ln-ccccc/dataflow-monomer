@@ -39,6 +39,34 @@ Each alloy should correspond to one independent record in the JSON output.
         return json_schema
     
 @PROMPT_REGISTRY.register()
+class AlloyFigureClassifyPrompt(PromptABC):
+    """
+    System prompt for classifying figures based on captions.
+    """
+
+    def __init__(self):
+        pass
+
+    def build_system_prompt(self) -> str:
+        return ""
+
+    def build_prompt(self, **kwargs) -> str:
+        classes = kwargs.get("classes", [])
+        caption = kwargs.get("caption", "")
+        prompt = f"""You are an expert in high-entropy alloys and materials science.
+You will be given a figure caption from a scientific paper.
+Your task is to classify the figure into one of the following categories based on its caption:
+### Categories:
+{classes}
+You must choose exactly one category from the above list that best describes the content of the figure based on the caption provided.
+Your output should be a single category name from the list above, with no additional text, explanation or quote mark.
+If you cannot find a proper category, respond with "Other" (no quote mark in your response).
+Now please read the caption:
+{caption}
+         """
+        return prompt
+    
+@PROMPT_REGISTRY.register()
 class AlloyInfoExtractPrompt(PromptABC):
     """
     System prompt for extracting Alloy.

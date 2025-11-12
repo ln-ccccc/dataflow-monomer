@@ -7,7 +7,8 @@ from typing import Literal
 
 from operators.general.chunked_generator import ChunkedPromptedGenerator
 from dataflow.operators.core_text import PandasOperator
-from prompts.alloy import AlloyNameExtractPrompt, AlloyInfoExtractPrompt
+from prompts.alloy import AlloyNameExtractPrompt, AlloyInfoExtractPrompt, AlloyFigureClassifyPrompt
+from operators.alloy_extract.figure_classify import FigureClassifier
 
 from dataflow.serving import APILLMServing_request
 from dataflow.utils.storage import FileStorage
@@ -46,6 +47,13 @@ class ExtractAlloy():
             json_schema=self.prompt_2.build_json_schema(mode=mode),
             max_chunk_len=max_chunk_len,
             aux_prompt_keys = ["materials_name_list"]
+        )
+        
+        self.figure_classify_prompt = AlloyFigureClassifyPrompt()
+        self.figure_classifier = FigureClassifier(
+            llm_serving = self.llm_serving,
+            prompt_template = self.figure_classify_prompt,
+            classes = ["Alloy Composition", "EDS line scanning analysis", "strain curve", "Bright-ﬁeld TEM image and SADPs", "Magnetization curve", "Other"]
         )
         
         self.parse_alloys = PandasOperator([
@@ -92,6 +100,12 @@ class ExtractAlloy():
         )
 
     def forward(self):
+        self.figure_classifier.run(
+            storage = self.storage.step(),
+            input_key = "figure_components",
+            input_caption_key="caption",
+            output_class_key="figure_class"
+        )
         self.prompt_generator_1.run(
             storage = self.storage.step(),
             input_key = "content",
