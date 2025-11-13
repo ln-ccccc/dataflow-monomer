@@ -13,9 +13,9 @@ from dataflow.operators.core_text import PandasOperator
 from utils.format_utils import safe_parse_json
 
 class ExtractCOF():
-    def __init__(self):
+    def __init__(self, entry_file_name:str, max_chunk_len=128000):
         self.storage = FileStorage(
-            first_entry_file_name="./data/CofExtractPipeline/cof_contents_short.jsonl",
+            first_entry_file_name=entry_file_name,
             cache_path="../cof_output",
             cache_type="jsonl",
         )
@@ -30,6 +30,7 @@ class ExtractCOF():
             llm_serving = self.llm_serving, 
             prompt_template=self.prompt,
             json_schema=self.prompt.build_json_schema(),
+            max_chunk_len=max_chunk_len
         )
         
         self.parse_result = PandasOperator([
@@ -53,5 +54,5 @@ class ExtractCOF():
 
 if __name__ == "__main__":
     # This is the entry point for the pipeline
-    model = ExtractCOF()
+    model = ExtractCOF(entry_file_name="./data/CofExtractPipeline/cof_contents_short.jsonl", max_chunk_len=32000)
     model.forward()

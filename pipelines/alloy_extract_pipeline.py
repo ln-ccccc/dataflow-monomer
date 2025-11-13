@@ -17,11 +17,11 @@ from utils.format_utils import safe_parse_json, safe_parse_json_and_get_key
 
 
 class ExtractAlloy():
-    def __init__(self, mode: Literal['experimental','DFT','MD'], max_chunk_len=128000):
+    def __init__(self, entry_file_name:str, mode: Literal['experimental','DFT','MD'], max_chunk_len=128000):
         self.mode=mode
         
         self.storage = FileStorage(
-            first_entry_file_name="./data/AlloyExtractPipeline/alloy_papers_short.jsonl",
+            first_entry_file_name=entry_file_name,
             cache_path="../alloy_output",
             cache_type="jsonl",
         )
@@ -46,7 +46,6 @@ class ExtractAlloy():
             prompt_template=self.prompt_2,
             json_schema=self.prompt_2.build_json_schema(mode=mode),
             max_chunk_len=max_chunk_len,
-            aux_prompt_keys = ["materials_name_list"]
         )
         
         self.figure_classify_prompt = AlloyFigureClassifyPrompt()
@@ -117,6 +116,7 @@ class ExtractAlloy():
             storage = self.storage.step(),
             input_key = "content",
             output_key = f"alloys_{self.mode}_info",
+            input_aux_keys = ["materials_name_list"]
         )
         self.parse_alloys_info.run(storage = self.storage.step())
 
@@ -133,5 +133,5 @@ if __name__ == "__main__":
     #                                     "content": paper_data["content"],
     #                                     "figure_components": extract_figure_components(paper_data)}) + "\n")
     
-    model = ExtractAlloy(mode='MD', max_chunk_len=3200)
+    model = ExtractAlloy(entry_file_name="./data/AlloyExtractPipeline/alloy_papers_short.jsonl", mode='MD', max_chunk_len=3200)
     model.forward()
