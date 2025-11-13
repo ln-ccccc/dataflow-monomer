@@ -35,11 +35,12 @@ git clone git@git.dp.tech:dataflow-dp/dataflow-dp.git
 
 ## 配置步骤
 
-### 4. 设置 API Key 环境变量
+### 4. 设置 GOOGLE vertex API 环境变量
 
 ```bash
-cd dataflow-dp
-export DF_API_KEY="your_openai_api_key_here"
+gcloud auth application-default login
+export GOOGLE_APPLICATION_CREDENTIALS="/share/syc/doraemon-20250708-dedc7a3d77a6.json"
+export GCP_PROJECT_ID="doraemon-20250708"
 ```
 
 
@@ -74,10 +75,13 @@ with open("alloy_papers.jsonl", "w") as f:
 ### 6. 运行示例
 
 ```bash
+cd dataflow-dp
 python pipelines/alloy_extract_pipeline.py
 ```
 
 目前的输出会在`../alloy_output`的step最大的一个jsonl文件中。其中`materials_name_list`项是所有的金属名称，`alloys_{xx mode}_info`是提取出来的金属信息。
+
+`figure_components`是论文中的图片信息，其中的`figure_type`项是根据caption分类后的图片类别。
 
 ## 开发指南
 ### 7. Pipeline解析
@@ -115,7 +119,7 @@ Your task is to ...
         json_schema = json.load(open("./schemas/alloy_schemas/basic_schema.json"))
         return json_schema
 ```
-其中json转json_schema可以用https://transform.tools/json-to-json-schema
+其中json转json_schema可以用https://transform.tools/json-to-json-schema ,**注意生成后要删掉`$schema`这一行**，否则会报错。
 
 在pipeline中，只需要更改
 ```python

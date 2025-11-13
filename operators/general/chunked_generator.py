@@ -105,7 +105,7 @@ class ChunkedPromptedGenerator(OperatorABC):
         try:
             if self.json_schema:
                 all_responses = self.llm_serving.generate_from_input(
-                    all_llm_inputs, json_schema=self.json_schema
+                    all_llm_inputs, response_schema=self.json_schema
                 )
             else:
                 all_responses = self.llm_serving.generate_from_input(all_llm_inputs)

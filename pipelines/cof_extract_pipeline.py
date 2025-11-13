@@ -6,7 +6,7 @@ import itertools
 from operators.general.chunked_generator import ChunkedPromptedGenerator
 from prompts.cof_extract import CofExtractPrompt
 
-from dataflow.serving import APILLMServing_request
+from dataflow.serving.api_google_vertexai_serving import APIGoogleVertexAIServing
 from dataflow.utils.storage import FileStorage
 
 from dataflow.operators.core_text import PandasOperator
@@ -19,11 +19,12 @@ class ExtractCOF():
             cache_path="../cof_output",
             cache_type="jsonl",
         )
-        self.llm_serving = APILLMServing_request(
-                api_url="http://123.129.219.111:3000/v1/chat/completions",
-                key_name_of_api_key="DF_API_KEY",
-                model_name="gemini-2.5-pro",
-                max_workers=200,
+        self.llm_serving = APIGoogleVertexAIServing(
+            project=os.getenv("GCP_PROJECT_ID"),
+            location='us-central1',
+            model_name="gemini-2.5-pro",
+            max_workers=100,
+            max_tokens=64000,
         )
         self.prompt = CofExtractPrompt()
         self.prompt_generator = ChunkedPromptedGenerator(
