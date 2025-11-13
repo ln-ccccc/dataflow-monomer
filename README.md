@@ -81,7 +81,8 @@ python pipelines/alloy_extract_pipeline.py
 
 ## 开发指南
 ### 7. Pipeline解析
-目前的pipeline包括5个算子，`prompt_generator_1`, `parse_alloys`, `get_alloy_names`, `prompt_generator_2`, `parse_alloys_info`.
+目前的pipeline包括6个算子，`figure_classifier`, `prompt_generator_1`, `parse_alloys`, `get_alloy_names`, `prompt_generator_2`, `parse_alloys_info`.
+0. `figure_classifier`是一个简单的分类器，用于对论文中的图片基于caption进行分类。这里不做过多介绍，感兴趣可以看`alloy_extract_pipeline`中的使用。
 1. `prompt_generator_1`会提取`content`中的金属名字，存入`alloys`当中。
 2. `parse_alloys`会对`alloys`原地操作，把大模型的字符串输出，转成json object，并提取alloys列表。
 例如
@@ -189,6 +190,37 @@ def build_json_schema(self, mode: Literal['experimental','DFT','MD']) -> dict:
         return json_schema
 ```
 可以看到，这里分了三种模式。用这种方法可以实现相同的prompt，但是不同的json输出内容。
+
+#### 添加新的prompt
+如果需要添加新的prompt，可以参考`alloy.py`中的`AlloyNameExtractPrompt`和`AlloyInfoExtractPrompt`，新建一个类继承自`PromptABC`，实现`build_prompt`和`build_json_schema`方法即可。
+之后如果要在`ChunkedPromptedGenerator`中使用，只需要把新建的类传入`prompt_template`参数即可。
+注意，还需要修改`ChunkedPromptedGenerator`中可用的prompt类型。
+```python
+@prompt_restrict(AlloyNameExtractPrompt, AlloyInfoExtractPrompt, CofExtractPrompt)
+@OPERATOR_REGISTRY.register()
+class ChunkedPromptedGenerator(OperatorABC):
+    """
+    基于Prompt的生成算子，支持自动chunk输入。
+    - 使用tiktoken精确计算token数量；
+    - 若输入超过max_chunk_len，采用递归二分法切分；
+    - 输出为每行对应的生成结果列表（而非拼接字符串）。
+    """
+
+    def __init__(
+        self,
+        llm_serving: LLMServingABC,
+        prompt_template: AlloyNameExtractPrompt | AlloyInfoExtractPrompt | CofExtractPrompt,
+        json_schema: dict = None,
+        max_chunk_len: int = 128000,
+    ):
+        self.logger = get_logger()
+        self.llm_serving = llm_serving
+        self.prompt_template = prompt_template
+        self.json_schema = json_schema
+        self.max_chunk_len = max_chunk_len
+        self.enc = tiktoken.get_encoding("cl100k_base")
+```
+要修改`@prompt_restrict`中的内容，添加新建的prompt类，并修改`prompt_template`的类型注解。
 
 ### 9. Pandas Operator
 Pipeline中的`parse_alloys`, `get_alloy_names`, `parse_alloys_info`都是用到`PandasOperator`对dataframe进行操作（是的，dataflow读入文件后storage形态都是pandas dataframe）. `PandasOperator`可以接受一个函数列表。目前代码中为了偷懒，用的都是lambda函数。例如：
