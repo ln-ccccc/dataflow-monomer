@@ -81,12 +81,21 @@ python pipelines/alloy_extract_pipeline.py
 
 目前的输出会在`../alloy_output`的step最大的一个jsonl文件中。其中`materials_name_list`项是所有的金属名称，`alloys_{xx mode}_info`是提取出来的金属信息。
 
-`figure_components`是论文中的图片信息，其中的`figure_type`项是根据caption分类后的图片类别。
+`figure_components`是论文中的图片信息，其中的`figure_class`项是根据caption分类后的图片类别。
 
 ## 开发指南
 ### 7. Pipeline解析
 目前的pipeline包括6个算子，`figure_classifier`, `prompt_generator_1`, `parse_alloys`, `get_alloy_names`, `prompt_generator_2`, `parse_alloys_info`.
 0. `figure_classifier`是一个简单的分类器，用于对论文中的图片基于caption进行分类。这里不做过多介绍，感兴趣可以看`alloy_extract_pipeline`中的使用。
+可以自行定义类别：
+```python
+self.figure_classify_prompt = AlloyFigureClassifyPrompt()
+self.figure_classifier = FigureClassifier(
+    llm_serving = self.llm_serving,
+    prompt_template = self.figure_classify_prompt,
+    classes = ["Alloy Composition", "EDS line scanning analysis", "strain curve", "Bright-ﬁeld TEM image and SADPs", "Magnetization curve", "Other"]
+)
+```
 1. `prompt_generator_1`会提取`content`中的金属名字，存入`alloys`当中。
 2. `parse_alloys`会对`alloys`原地操作，把大模型的字符串输出，转成json object，并提取alloys列表。
 例如
@@ -110,14 +119,14 @@ python pipelines/alloy_extract_pipeline.py
 `AlloyNameExtractPrompt`比较简单，准备好prompt和json_schema就可以，例如
 ```python
 def build_prompt(self, **kwargs) -> str:
-        prompt = """You are an expert in high-entropy alloys and materials science.
+    prompt = """You are an expert in high-entropy alloys and materials science.
 Your task is to ...
-            """
-        return prompt
-    
-    def build_json_schema(self) -> dict:
-        json_schema = json.load(open("./schemas/alloy_schemas/basic_schema.json"))
-        return json_schema
+        """
+    return prompt
+
+def build_json_schema(self) -> dict:
+    json_schema = json.load(open("./schemas/alloy_schemas/basic_schema.json"))
+    return json_schema
 ```
 其中json转json_schema可以用https://transform.tools/json-to-json-schema ,**注意生成后要删掉`$schema`这一行**，否则会报错。
 
@@ -154,18 +163,18 @@ self.prompt_generator_1.run(
 `AlloyInfoExtractPrompt`会复杂一些，主要是需要对prompt进行参数传递（这里是`materials_name_list`），以及json_schema的选择。
 #### 往Prompt中传参
 ```python
-    def build_prompt(self, **kwargs) -> str:
-        materials_name_list = kwargs.get("materials_name_list", [])
-        prompt = f"""
-      You are an expert in high-entropy alloys and materials science.
-      Your task is to extract structured materials information from the given scientific text and organize it according to the specified schema.
+def build_prompt(self, **kwargs) -> str:
+    materials_name_list = kwargs.get("materials_name_list", [])
+    prompt = f"""
+    You are an expert in high-entropy alloys and materials science.
+    Your task is to extract structured materials information from the given scientific text and organize it according to the specified schema.
 
-      ### Instructions:
-      Select alloy materials only from the {materials_name_list} provided.
-      ...
-    """
-       
-        return prompt
+    ### Instructions:
+    Select alloy materials only from the {materials_name_list} provided.
+    ...
+"""
+    
+    return prompt
 ```
 可以看到，`materials_name_list`通过kwargs被传入了`build_prompt`当中进行使用。
 这个在pipeline中是通过`input_aux_keys`来指定的，如下：
@@ -182,16 +191,16 @@ self.prompt_generator_2.run(
 #### json_schema选择
 ```python
 def build_json_schema(self, mode: Literal['experimental','DFT','MD']) -> dict:
-        if mode == "experimental":
-            json_schema = json.load(open("./schemas/alloy_schemas/experimental_schema.json"))
-        elif mode == "DFT":
-            json_schema = json.load(open("./schemas/alloy_schemas/DFT.json"))
-        elif mode == "MD":
-            json_schema = json.load(open("./schemas/alloy_schemas/MD.json"))
-        else:
-            raise ValueError(f"Unknown mode: {mode}")
-                
-        return json_schema
+    if mode == "experimental":
+        json_schema = json.load(open("./schemas/alloy_schemas/experimental_schema.json"))
+    elif mode == "DFT":
+        json_schema = json.load(open("./schemas/alloy_schemas/DFT.json"))
+    elif mode == "MD":
+        json_schema = json.load(open("./schemas/alloy_schemas/MD.json"))
+    else:
+        raise ValueError(f"Unknown mode: {mode}")
+            
+    return json_schema
 ```
 可以看到，这里分了三种模式。用这种方法可以实现相同的prompt，但是不同的json输出内容。
 
