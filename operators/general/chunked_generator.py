@@ -10,9 +10,11 @@ import tiktoken
 
 from prompts.alloy import AlloyNameExtractPrompt, AlloyInfoExtractPrompt
 from prompts.cof_extract import CofExtractPrompt
+from prompts.materials import StructureInfoExtractPrompt, ComputationDetailExtractPrompt, PropertyExtractPrompt
 from dataflow.core.prompt import prompt_restrict
 
-@prompt_restrict(AlloyNameExtractPrompt, AlloyInfoExtractPrompt, CofExtractPrompt)
+@prompt_restrict(AlloyNameExtractPrompt, AlloyInfoExtractPrompt, CofExtractPrompt, 
+                 StructureInfoExtractPrompt, ComputationDetailExtractPrompt, PropertyExtractPrompt)
 @OPERATOR_REGISTRY.register()
 class ChunkedPromptedGenerator(OperatorABC):
     """
@@ -94,8 +96,10 @@ class ChunkedPromptedGenerator(OperatorABC):
             chunks = self._split_recursive(raw_content)
             self.logger.info(f"Row {i}: split into {len(chunks)} chunks")
 
-            system_prompt = self.prompt_template.build_prompt(**prompt_kwargs)
-            llm_inputs = [system_prompt + chunk for chunk in chunks]
+            system_prompts = self.prompt_template.build_prompt(**prompt_kwargs)
+            if not isinstance(system_prompts, list):
+                system_prompts = [system_prompts] * len(chunks)
+            llm_inputs = [system_prompt + chunk for chunk, system_prompt in zip(chunks, system_prompts)]
             all_llm_inputs.extend(llm_inputs)
             row_chunk_map.append(len(chunks))
 
@@ -105,7 +109,7 @@ class ChunkedPromptedGenerator(OperatorABC):
         try:
             if self.json_schema:
                 all_responses = self.llm_serving.generate_from_input(
-                    all_llm_inputs, response_schema=self.json_schema
+                    all_llm_inputs, json_schema=self.json_schema
                 )
             else:
                 all_responses = self.llm_serving.generate_from_input(all_llm_inputs)
