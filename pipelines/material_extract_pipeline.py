@@ -215,5 +215,5 @@ if __name__ == "__main__":
     #                                     "content": paper_data["content"],
     #                                     "figure_components": extract_figure_components(paper_data)}) + "\n")
     
-    model = ExtractMaterial(entry_file_name="/share/djw/dataflow-dp/data/MaterialExtractPipeline/material_papers.jsonl", max_chunk_len=32000)
+    model = ExtractMaterial(entry_file_name="./data/MaterialExtractPipeline/material_papers.jsonl", max_chunk_len=32000)
     model.forward()
