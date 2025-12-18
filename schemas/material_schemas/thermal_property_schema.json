@@ -1,72 +1,83 @@
 {
-  "type": "array",
-  "items": {
-    "type": "object",
-    "properties": {
-      "composition": {
-        "type": "string",
-        "description": "The composition in the format Element:ratio,Element:ratio (e.g., Zr:1,O:2; Ti:0.5,Al:0.5,N:1). Do NOT leave this field empty."
-      },
-      "space_group": {
-        "type": "string",
-        "description": "Space group notation (e.g., P2_1/c, P4_2/nmc, Fm-3m, P6_3/mmc, R-3c)"
-      },
-      "number_of_atoms": {
-        "type": "string",
-        "description": "Total number of atoms in the unit cell (e.g., 3, 5, 8, 12). Leave empty if not mentioned"
-      },
-      "K_points": {
-        "type": "string",
-        "description": "K-point mesh or sampling scheme (e.g., 6 9 6 9 6; 4×4×4; Monkhorst-Pack 6×6×6). Leave empty if not mentioned"
-      },
-      "theoretical_calculation_method": {
-        "type": "string",
-        "description": "The theoretical method used (e.g., DFT, DFT+U, DFT-D, hybrid DFT). Leave empty if not mentioned"
-      },
-      "total_energy": {
-        "type": "string",
-        "description": "Total energy of the system with units (e.g., -1234.56 eV; -5678.90 eV/cell; -12.3456 Ry). Leave empty if not mentioned"
-      },
-      "formation_energy": {
-        "type": "string",
-        "description": "Formation energy with units (e.g., -2.34 eV/atom; -1.23 eV/formula unit). Leave empty if not mentioned"
-      },
-      "cohesive_energy": {
-        "type": "string",
-        "description": "Cohesive energy with units (e.g., -5.67 eV/atom; -8.90 eV). Leave empty if not mentioned"
-      },
-      "thermal_expansion_coefficient": {
-        "type": "string",
-        "description": "Thermal expansion coefficient with units (e.g., 2.5×10⁻⁵ K⁻¹; α=3.2×10⁻⁵ K⁻¹). Leave empty if not mentioned"
-      },
-      "phonon_DOS": {
-        "type": "string",
-        "description": "Phonon density of states description or values (e.g., phonon DOS calculated; peaks at...). Leave empty if not mentioned"
-      },
-      "phonon": {
-        "type": "string",
-        "description": "Phonon frequency or dispersion information (e.g., ω_max=15.2 THz; dispersion curves). Leave empty if not mentioned"
-      },
-      "vibrational_entropy": {
-        "type": "string",
-        "description": "Vibrational entropy with units (e.g., 5.67 J/mol·K; 0.023 eV/K). Leave empty if not mentioned"
-      },
-      "heat_capacity": {
-        "type": "string",
-        "description": "Heat capacity with units (e.g., 25.3 J/mol·K; C_v=24.5 J/mol·K at 300 K). Leave empty if not mentioned"
-      },
-      "diffusion_coefficient": {
-        "type": "string",
-        "description": "Diffusion coefficient with units (e.g., 1.2×10⁻¹² m²/s; D=3.4×10⁻¹³ m²/s). Leave empty if not mentioned"
-      },
-      "density": {
-        "type": "string",
-        "description": "Density value with units if provided (e.g., 5.68 g/cm³; ρ=4.23 g/cm³). Leave empty if not mentioned"
+  "title": "Thermodynamic and Phonon Properties Schema",
+  "description": "A schema for extracting material composition, energy data, and thermal/vibrational properties.",
+  "type": "object",
+  "properties": {
+    "thermodynamic_properties": {
+      "type": "array",
+      "description": "A list of materials and their associated thermodynamic, energy, and vibrational data.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "composition": {
+            "type": "string",
+            "description": "The composition in the format Element:ratio,Element:ratio (e.g., Zr:1,O:2; Ti:0.5,Al:0.5,N:1). Do NOT leave this field empty."
+          },
+          "space_group": {
+            "type": "string",
+            "description": "Space group notation (e.g., P2_1/c, P4_2/nmc, Fm-3m, P6_3/mmc, R-3c)"
+          },
+          "number_of_atoms": {
+            "type": "string",
+            "description": "Total number of atoms in the unit cell (e.g., 3, 5, 8, 12). Leave empty if not mentioned"
+          },
+          "K_points": {
+            "type": "string",
+            "description": "K-point mesh or sampling scheme (e.g., 6 9 6 9 6; 4×4×4; Monkhorst-Pack 6×6×6). Leave empty if not mentioned"
+          },
+          "theoretical_calculation_method": {
+            "type": "string",
+            "description": "The theoretical method used (e.g., DFT, DFT+U, DFT-D, hybrid DFT). Leave empty if not mentioned"
+          },
+          "total_energy": {
+            "type": "string",
+            "description": "Total energy of the system with units (e.g., -1234.56 eV; -5678.90 eV/cell; -12.3456 Ry). Leave empty if not mentioned"
+          },
+          "formation_energy": {
+            "type": "string",
+            "description": "Formation energy with units (e.g., -2.34 eV/atom; -1.23 eV/formula unit). Leave empty if not mentioned"
+          },
+          "cohesive_energy": {
+            "type": "string",
+            "description": "Cohesive energy with units (e.g., -5.67 eV/atom; -8.90 eV). Leave empty if not mentioned"
+          },
+          "thermal_expansion_coefficient": {
+            "type": "string",
+            "description": "Thermal expansion coefficient with units (e.g., 2.5×10⁻⁵ K⁻¹; α=3.2×10⁻⁵ K⁻¹). Leave empty if not mentioned"
+          },
+          "phonon_DOS": {
+            "type": "string",
+            "description": "Phonon density of states description or values (e.g., phonon DOS calculated; peaks at...). Leave empty if not mentioned"
+          },
+          "phonon": {
+            "type": "string",
+            "description": "Phonon frequency or dispersion information (e.g., ω_max=15.2 THz; dispersion curves). Leave empty if not mentioned"
+          },
+          "vibrational_entropy": {
+            "type": "string",
+            "description": "Vibrational entropy with units (e.g., 5.67 J/mol·K; 0.023 eV/K). Leave empty if not mentioned"
+          },
+          "heat_capacity": {
+            "type": "string",
+            "description": "Heat capacity with units (e.g., 25.3 J/mol·K; C_v=24.5 J/mol·K at 300 K). Leave empty if not mentioned"
+          },
+          "diffusion_coefficient": {
+            "type": "string",
+            "description": "Diffusion coefficient with units (e.g., 1.2×10⁻¹² m²/s; D=3.4×10⁻¹³ m²/s). Leave empty if not mentioned"
+          },
+          "density": {
+            "type": "string",
+            "description": "Density value with units if provided (e.g., 5.68 g/cm³; ρ=4.23 g/cm³). Leave empty if not mentioned"
+          }
+        },
+        "required": [
+          "composition"
+        ],
+        "additionalProperties": false
       }
-    },
-    "required": [
-      "composition"
-    ],
-    "additionalProperties": false
-  }
+    }
+  },
+  "required": [
+    "thermodynamic_properties"
+  ]
 }
