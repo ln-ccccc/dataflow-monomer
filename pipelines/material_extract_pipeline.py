@@ -19,22 +19,32 @@ from utils.format_utils import safe_parse_json, safe_parse_json_and_get_key
 
 from functools import partial
 
-def extract_material_indexes(materials, keys):
+def extract_nested_fields_list_of_dicts(records, sublist_key="material_structures", keys=None):
     """
-    从 materials 列表中提取相关信息，返回 list[list[dict]]
-    """
-    material_indexes = []
-    for material in materials:
-        mat_list = []
-        for m in material:
-            mat_dict = {}
-            for key in keys:
-                if key in m:
-                    mat_dict[key] = m[key]
-            mat_list.append(mat_dict)
-        material_indexes.append(mat_list)
-    return material_indexes
+    返回 list[list[dict]]，每行对应 records 的每个 block，每个 block 是 material_structures 的 dict 列表
 
+    Args:
+        records (list[dict]): 每行的嵌套数据，如 structure_info 或 computation_detail
+        sublist_key (str): 指向嵌套列表的 key
+        keys (list[str]): 想提取的字段名
+
+    Returns:
+        list[list[dict]]: 外层 list 对应每个 block，内层 list 对应 block 内的 dict
+    """
+    if keys is None:
+        keys = []
+
+    result = []
+
+    for block in records:
+        sublist = block.get(sublist_key, [])
+        block_result = []
+        for item in sublist:
+            item_dict = {k: item[k] for k in keys if k in item}
+            block_result.append(item_dict)
+        result.append(block_result)
+
+    return result
 
 class ExtractMaterial():
     def _parse_and_flatten_column(self, df, column_name):
@@ -61,8 +71,8 @@ class ExtractMaterial():
     def __init__(self, entry_file_name:str, max_chunk_len=128000):
         self.storage = FileStorage(
             first_entry_file_name=entry_file_name,
-            cache_path="../material_google_test_output",
-            cache_type="jsonl",
+            cache_path="./material_google_test3_output",
+            cache_type="json",
         )
         self.model_cache_dir = './dataflow_cache'
         # self.llm_serving = APILLMServing_request(
@@ -79,6 +89,7 @@ class ExtractMaterial():
             max_tokens=64000,
             use_batch=False,
             batch_wait=False,
+            use_function_call=False,
             batch_dataset="material_test",
             csv_filename="material_test_prompt.csv",
             bq_csv_filename="material_test_prompt.csv",
@@ -142,27 +153,26 @@ class ExtractMaterial():
             partial(self._parse_column, column_name="electrical_or_magnetic_properties")
         ])
         
-        self.get_material_indexes = PandasOperator(
-            [
-                lambda df: df.assign(
-                    material_indexes=df["structure_info"].apply(
-                        extract_material_indexes,
-                        args=(["composition", "lattice_parameter", "space_group", "number_of_atoms", "note"],)
-                    )
-                ),
-            ]
-        )
-        
-        self.get_computation_indexes = PandasOperator(
-            [
-                lambda df: df.assign(
-                    computation_indexes=df["computation_detail"].apply(
-                        extract_material_indexes,
-                        args=(["composition", "space_group", "number_of_atoms", "K_points", "theoretical_calculation_method"],)
-                    )
-                ),
-            ]
-        )
+        self.get_material_indexes = PandasOperator([
+            lambda df: df.assign(
+                material_indexes=df["structure_info"].apply(
+                    extract_nested_fields_list_of_dicts,
+                    sublist_key="material_structures",
+                    keys=["composition", "lattice_parameter", "space_group", "number_of_atoms", "note"]
+                )
+            )
+        ])
+
+        self.get_computation_indexes = PandasOperator([
+            lambda df: df.assign(
+                computation_indexes=df["computation_detail"].apply(
+                    extract_nested_fields_list_of_dicts,
+                    sublist_key="material_structures",
+                    keys=["composition", "space_group", "number_of_atoms", "K_points", "theoretical_calculation_method"]
+                )
+            )
+        ])
+
 
     def forward(self):
         self.prompt_generator_1.run(
@@ -215,5 +225,5 @@ if __name__ == "__main__":
     #                                     "content": paper_data["content"],
     #                                     "figure_components": extract_figure_components(paper_data)}) + "\n")
     
-    model = ExtractMaterial(entry_file_name="/share/djw/dataflow-dp/data/MaterialExtractPipeline/material_papers.jsonl", max_chunk_len=32000)
+    model = ExtractMaterial(entry_file_name="./data/MaterialExtractPipeline/material_papers.jsonl", max_chunk_len=32000)
     model.forward()
