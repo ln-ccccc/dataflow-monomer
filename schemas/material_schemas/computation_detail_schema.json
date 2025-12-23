@@ -1,72 +1,80 @@
 {
-  "type": "array",
-  "items": {
-    "type": "object",
-    "properties": {
-      "composition": {
-        "type": "string",
-        "description": "The composition in the format Element:ratio,Element:ratio (e.g., Zr:1,O:2; Ti:0.5,Al:0.5,N:1). Do NOT leave empty."
-      },
-      "lattice_parameter": {
-        "type": "string",
-        "description": "Lattice parameters with units, preserving the exact format from the text (e.g., a=5.191, b=5.239, c=5.392; a=b=c=4.05)"
-      },
-      "space_group": {
-        "type": "string",
-        "description": "Space group notation (e.g., P2_1/c, P4_2/nmc, Fm-3m, P6_3/mmc, R-3c)"
-      },
-      "number_of_atoms": {
-        "type": "string",
-        "description": "Total number of atoms in the unit cell (e.g., 3, 5, 8, 12). Leave empty if not mentioned"
-      },
-      "note": {
-        "type": "string",
-        "description": "Additional important structural information not covered by other fields (e.g., m-ZrO2, high-pressure phase, metastable phase)"
-      },
-      "cutoff_energy": {
-        "type": "string",
-        "description": "Plane wave cutoff energy with units (e.g., 800.0 eV, 520 eV, 400 Ry, 30 Ry). Leave empty if not mentioned."
-      },
-      "K_points": {
-        "type": "string",
-        "description": "K-point mesh or sampling scheme (e.g., \"6 9 6 9 6\", \"4×4×4\", \"8×8×8\", \"Monkhorst-Pack 6×6×6\", \"Gamma-centered 4×4×4\"). Leave empty if not mentioned."
-      },
-      "pseudo_potential": {
-        "type": "string",
-        "description": "Pseudopotential type or name (e.g., \"Vanderbilt-type ultrasoft pseudopotentials\", \"PAW\", \"USPP\", \"norm-conserving pseudopotentials\", \"Projector Augmented Wave\"). Leave empty if not mentioned."
-      },
-      "Exchange_Correlation_Functional": {
-        "type": "string",
-        "description": "Exchange-correlation functional name (e.g., \"GGA (PW91)\", \"PBE\", \"LDA\", \"HSE06\", \"B3LYP\", \"PBE+U\"). Leave empty if not mentioned."
-      },
-      "EDIFFG": {
-        "type": "string",
-        "description": "Energy convergence criterion for geometry optimization (e.g., 0.01 eV/Å, 0.05 eV/Å). Leave empty if not mentioned."
-      },
-      "EDIFF": {
-        "type": "string",
-        "description": "Energy convergence criterion for electronic self-consistency (e.g., 2.0×10⁻⁵ eV, 1.0×10⁻⁶ eV). Leave empty if not mentioned."
-      },
-      "Hubbard_U_value": {
-        "type": "string",
-        "description": "Hubbard U parameter values if DFT+U is used (e.g., U=4.0 eV for Fe; U_d=6.0 eV, U_p=0.0 eV). Leave empty if not mentioned."
-      },
-      "software": {
-        "type": "string",
-        "description": "Computational software package name (e.g., CASTEP, VASP, Quantum ESPRESSO, ABINIT, WIEN2k). Leave empty if not mentioned."
-      },
-      "theoretical_calculation_method": {
-        "type": "string",
-        "description": "The theoretical method used (e.g., DFT, DFT+U, DFT-D, hybrid DFT). Leave empty if not mentioned."
+  "type": "object",
+  "properties": {
+    "material_structures": {
+      "type": "array",
+      "description": "A list of extracted material structures.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "composition": {
+            "type": "string",
+            "description": "The composition in the format Element:ratio,Element:ratio (e.g., Zr:1,O:2; Ti:0.5,Al:0.5,N:1). Do NOT leave empty."
+          },
+          "lattice_parameter": {
+            "type": "string",
+            "description": "Lattice parameters with units, preserving the exact format from the text (e.g., a=5.191, b=5.239, c=5.392; a=b=c=4.05). Leave empty if not mentioned."
+          },
+          "space_group": {
+            "type": "string",
+            "description": "Space group notation (e.g., P2_1/c, P4_2/nmc, Fm-3m, P6_3/mmc, R-3c). Do NOT leave empty."
+          },
+          "number_of_atoms": {
+            "type": "string",
+            "description": "Total number of atoms in the unit cell (e.g., 3, 5, 8, 12). Leave empty if not mentioned."
+          },
+          "note": {
+            "type": "string",
+            "description": "Additional important structural information not covered by other fields (e.g., m-ZrO2, high-pressure phase, metastable phase). Leave empty if not mentioned."
+          },
+          "cutoff_energy": {
+            "type": "string",
+            "description": "Plane wave cutoff energy with units (e.g., 800.0 eV, 520 eV, 400 Ry, 30 Ry). Leave empty if not mentioned."
+          },
+          "K_points": {
+            "type": "string",
+            "description": "K-point mesh or sampling scheme (e.g., \"6×6×6\", \"4×4×4\", \"Monkhorst-Pack 6×6×6\", \"Gamma-centered 4×4×4\"). Leave empty if not mentioned."
+          },
+          "pseudo_potential": {
+            "type": "string",
+            "description": "Pseudopotential type or name (e.g., PAW, USPP, norm-conserving pseudopotentials). Leave empty if not mentioned."
+          },
+          "Exchange_Correlation_Functional": {
+            "type": "string",
+            "description": "Exchange-correlation functional name (e.g., PBE, LDA, HSE06, PBE+U). Leave empty if not mentioned."
+          },
+          "EDIFFG": {
+            "type": "string",
+            "description": "Energy convergence criterion for geometry optimization (e.g., 0.01 eV/Å). Leave empty if not mentioned."
+          },
+          "EDIFF": {
+            "type": "string",
+            "description": "Energy convergence criterion for electronic self-consistency (e.g., 1.0×10⁻⁶ eV). Leave empty if not mentioned."
+          },
+          "Hubbard_U_value": {
+            "type": "string",
+            "description": "Hubbard U parameter values if DFT+U is used (e.g., U=4.0 eV for Fe). Leave empty if not mentioned."
+          },
+          "software": {
+            "type": "string",
+            "description": "Computational software package name (e.g., VASP, Quantum ESPRESSO, CASTEP). Leave empty if not mentioned."
+          },
+          "theoretical_calculation_method": {
+            "type": "string",
+            "description": "The theoretical method used (e.g., DFT, DFT+U, hybrid DFT). Do NOT leave empty."
+          }
+        },
+        "required": [
+          "composition",
+          "space_group",
+          "number_of_atoms",
+          "K_points",
+          "theoretical_calculation_method"
+        ],
+        "additionalProperties": false
       }
-    },
-    "required": [
-      "composition",
-      "space_group",
-      "number_of_atoms",
-      "K_points",
-      "theoretical_calculation_method"
-    ],
-    "additionalProperties": false
-  }
+    }
+  },
+  "required": ["material_structures"],
+  "additionalProperties": false
 }

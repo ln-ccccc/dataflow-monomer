@@ -1,68 +1,79 @@
 {
-  "type": "array",
-  "items": {
-    "type": "object",
-    "properties": {
-      "composition": {
-        "type": "string",
-        "description": "The composition in the format Element:ratio,Element:ratio (e.g., Zr:1,O:2; Ti:0.5,Al:0.5,N:1). Do NOT leave this field empty."
-      },
-      "space_group": {
-        "type": "string",
-        "description": "Space group notation (e.g., P2_1/c, P4_2/nmc, Fm-3m, P6_3/mmc, R-3c)"
-      },
-      "number_of_atoms": {
-        "type": "string",
-        "description": "Total number of atoms in the unit cell (e.g., 3, 5, 8, 12). Leave empty if not mentioned"
-      },
-      "K_points": {
-        "type": "string",
-        "description": "K-point mesh or sampling scheme (e.g., 6 9 6 9 6; 4×4×4; Monkhorst-Pack 6×6×6). Leave empty if not mentioned"
-      },
-      "theoretical_calculation_method": {
-        "type": "string",
-        "description": "The theoretical method used (e.g., DFT, DFT+U, DFT-D, hybrid DFT). Leave empty if not mentioned"
-      },
-      "bulk_modulus": {
-        "type": "string",
-        "description": "Bulk modulus with units (e.g., 173.8 GPa; B=150.5 GPa; K=180.2 GPa). Leave empty if not mentioned"
-      },
-      "shear_modulus": {
-        "type": "string",
-        "description": "Shear modulus with units (e.g., 89.8 GPa; G=82.1 GPa; μ=95.3 GPa). Leave empty if not mentioned"
-      },
-      "elastic_constants": {
-        "type": "string",
-        "description": "Elastic constants tensor components (e.g., C11=332.4, C22=307.8, C33=287.7, C44=65.9, C55=71.1, C66=108.9, C12=122.1, C13=88.3, C23=107.8). Leave empty if not mentioned"
-      },
-      "Youngs_modulus": {
-        "type": "string",
-        "description": "Young's modulus with units (e.g., 229.9 GPa; E=213.4 GPa; Y=250.5 GPa). Leave empty if not mentioned"
-      },
-      "Poissons_ratio": {
-        "type": "string",
-        "description": "Poisson's ratio (dimensionless) (e.g., 0.27; ν=0.26; 0.28). Leave empty if not mentioned"
-      },
-      "stacking_energy": {
-        "type": "string",
-        "description": "Stacking fault energy with units (e.g., 50.2 mJ/m²; γ=75.3 mJ/m²). Leave empty if not mentioned"
-      },
-      "stress_strain": {
-        "type": "string",
-        "description": "Stress–strain relationship or method (e.g., stress–strain method; uniaxial stress–strain). Leave empty if not mentioned"
-      },
-      "yield_strength": {
-        "type": "string",
-        "description": "Yield strength with units (e.g., 450 MPa; σ_y=380 MPa). Leave empty if not mentioned"
-      },
-      "yield_stress": {
-        "type": "string",
-        "description": "Yield stress with units (e.g., 450 MPa; τ_y=380 MPa). Leave empty if not mentioned"
+  "title": "Mechanical Properties Schema",
+  "description": "A schema for extracting material composition, structural info, and mechanical properties like moduli and stress/strain data.",
+  "type": "object",
+  "properties": {
+    "mechanical_properties": {
+      "type": "array",
+      "description": "A list of materials and their associated mechanical and elastic properties.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "composition": {
+            "type": "string",
+            "description": "The composition in the format Element:ratio,Element:ratio (e.g., Zr:1,O:2; Ti:0.5,Al:0.5,N:1). Do NOT leave this field empty."
+          },
+          "space_group": {
+            "type": "string",
+            "description": "Space group notation (e.g., P2_1/c, P4_2/nmc, Fm-3m, P6_3/mmc, R-3c)"
+          },
+          "number_of_atoms": {
+            "type": "string",
+            "description": "Total number of atoms in the unit cell (e.g., 3, 5, 8, 12). Leave empty if not mentioned"
+          },
+          "K_points": {
+            "type": "string",
+            "description": "K-point mesh or sampling scheme (e.g., 6 9 6 9 6; 4×4×4; Monkhorst-Pack 6×6×6). Leave empty if not mentioned"
+          },
+          "theoretical_calculation_method": {
+            "type": "string",
+            "description": "The theoretical method used (e.g., DFT, DFT+U, DFT-D, hybrid DFT). Leave empty if not mentioned"
+          },
+          "bulk_modulus": {
+            "type": "string",
+            "description": "Bulk modulus with units (e.g., 173.8 GPa; B=150.5 GPa; K=180.2 GPa). Leave empty if not mentioned"
+          },
+          "shear_modulus": {
+            "type": "string",
+            "description": "Shear modulus with units (e.g., 89.8 GPa; G=82.1 GPa; μ=95.3 GPa). Leave empty if not mentioned"
+          },
+          "elastic_constants": {
+            "type": "string",
+            "description": "Elastic constants tensor components (e.g., C11=332.4, C22=307.8, C33=287.7, C44=65.9, C55=71.1, C66=108.9, C12=122.1, C13=88.3, C23=107.8). Leave empty if not mentioned"
+          },
+          "Youngs_modulus": {
+            "type": "string",
+            "description": "Young's modulus with units (e.g., 229.9 GPa; E=213.4 GPa; Y=250.5 GPa). Leave empty if not mentioned"
+          },
+          "Poissons_ratio": {
+            "type": "string",
+            "description": "Poisson's ratio (dimensionless) (e.g., 0.27; ν=0.26; 0.28). Leave empty if not mentioned"
+          },
+          "stacking_energy": {
+            "type": "string",
+            "description": "Stacking fault energy with units (e.g., 50.2 mJ/m²; γ=75.3 mJ/m²). Leave empty if not mentioned"
+          },
+          "stress_strain": {
+            "type": "string",
+            "description": "Stress–strain relationship or method (e.g., stress–strain method; uniaxial stress–strain). Leave empty if not mentioned"
+          },
+          "yield_strength": {
+            "type": "string",
+            "description": "Yield strength with units (e.g., 450 MPa; σ_y=380 MPa). Leave empty if not mentioned"
+          },
+          "yield_stress": {
+            "type": "string",
+            "description": "Yield stress with units (e.g., 450 MPa; τ_y=380 MPa). Leave empty if not mentioned"
+          }
+        },
+        "required": [
+          "composition"
+        ],
+        "additionalProperties": false
       }
-    },
-    "required": [
-      "composition"
-    ],
-    "additionalProperties": false
-  }
+    }
+  },
+  "required": [
+    "mechanical_properties"
+  ]
 }
