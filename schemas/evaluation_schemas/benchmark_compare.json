@@ -1,0 +1,52 @@
+{
+    "type": "object",
+    "properties": {
+        "doi": {"type": "string"},
+        "overall_score": {"type": "number"},
+        "category_scores": {
+            "type": "object",
+            "description": "Scores for each category. Must contain at least one entry.",
+            "additionalProperties": {
+                "type": "object",
+                "properties": {
+                    "score": {"type": "number"},
+                    "completeness": {
+                        "type": "object",
+                        "properties": {
+                            "score": {"type": "number"},
+                            "missing_count": {"type": "number"},
+                            "benchmark_count": {"type": "number"}
+                        },
+                        "required": ["score", "missing_count", "benchmark_count"]
+                    },
+                    "accuracy": {
+                        "type": "object",
+                        "properties": {
+                            "score": {"type": "number"},
+                            "field_match_rate": {"type": "number"}
+                        },
+                        "required": ["score", "field_match_rate"]
+                    },
+                    "extra_data": {
+                        "type": "object",
+                        "properties": {
+                            "score": {"type": "number"},
+                            "extra_count": {"type": "number"}
+                        },
+                        "required": ["score", "extra_count"]
+                    }
+                },
+                "required": ["score", "completeness", "accuracy", "extra_data"]
+            }
+        },
+        "summary": {
+            "type": "object",
+            "properties": {
+                "strengths": {"type": "array", "items": {"type": "string"}},
+                "weaknesses": {"type": "array", "items": {"type": "string"}}
+            },
+            "required": ["strengths", "weaknesses"]
+        }
+    },
+    "required": ["doi", "overall_score", "category_scores", "summary"]
+}
