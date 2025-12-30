@@ -44,7 +44,8 @@ class EvaluationPipeline():
     def forward(self):
         self.evaluation.run(
             storage = self.storage.step(),
-            benchmark_path = "./data/BenchmarkCompareEvaluationPipeline/benchmark.json",
+            input_benchmark_path = "./data/BenchmarkCompareEvaluationPipeline/benchmark.json",
+            input_evaluation_keys = ["doi","structure_info","material_indexes","computation_detail","computation_indexes","thermal_properties","mechanical_properties","electrical_or_magnetic_properties"],
             output_key = "evaluation_results"
         )
 
