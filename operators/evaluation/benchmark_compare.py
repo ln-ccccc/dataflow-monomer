@@ -13,7 +13,7 @@ from dataflow.core.prompt import prompt_restrict
 )
 @OPERATOR_REGISTRY.register()
 class BenchmarkEvaluator(OperatorABC):
-    def __init__(self, llm_serving, prompt_template=None, json_schema=None, logger=None):
+    def __init__(self, llm_serving, prompt_template=None, json_schema=None):
         self.llm_serving = llm_serving
         self.prompt_template = prompt_template or BenchmarkCompareEvaluationPrompt()
         self.json_schema = json_schema
@@ -59,16 +59,22 @@ class BenchmarkEvaluator(OperatorABC):
     def run(
         self,
         storage: DataFlowStorage,
-        benchmark_path: str,
+        input_benchmark_path: str,
+        input_evaluation_keys: List[str] = [], # 待评估的提取字段列
         output_key: str = "evaluation_result",
     ):
-        self.logger.info(f"Loading data from {benchmark_path}")
+        self.logger.info(f"Loading data from {input_benchmark_path}")
 
         # === 1. 加载并预处理数据 ===
-        benchmark_list = self.load_json(benchmark_path)
+        benchmark_list = self.load_json(input_benchmark_path)
         df_bench = pd.DataFrame(benchmark_list)
         df_ext = storage.read("dataframe")
 
+        missing_columns = [col for col in input_evaluation_keys if col not in df_ext.columns]
+        if missing_columns:
+            self.logger.warning(f"The following evaluation keys were not found in the extraction dataframe and will be ignored: {missing_columns}")
+        df_ext = df_ext[input_evaluation_keys].copy()
+        
         # 通过 DOI 对齐数据，确保 row 内 benchmark 和 extraction 匹配
         # 使用 inner join 自动过滤掉无法配对的数据
         dataframe = pd.merge(
