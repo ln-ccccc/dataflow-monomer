@@ -21,12 +21,14 @@ class ContentOnlyEvaluator(OperatorABC):
         llm_serving: Any, 
         prompt_template: Optional[Any] = None, 
         json_schema: Optional[Dict] = None, 
-        max_tokens: int = 64000
+        max_tokens: int = 64000,
+        input_evaluation_keys: List[str] = [], # 待评估的提取字段列
     ):
         self.llm_serving = llm_serving
         self.prompt_template = prompt_template or ContentOnlyEvaluationPrompt()
         self.json_schema = json_schema
         self.logger = get_logger()
+        self.input_evaluation_keys = input_evaluation_keys
         # 显式配置 LLM 输出上限
         if hasattr(self.llm_serving, 'max_tokens'):
             self.llm_serving.max_tokens = max_tokens
@@ -35,7 +37,6 @@ class ContentOnlyEvaluator(OperatorABC):
         self,
         storage: DataFlowStorage,
         input_key: str = "content",           # 原文列
-        input_evaluation_keys: List[str] = [], # 待评估的提取字段列
         output_key: str = "content_evaluation",
     ) -> str:
         self.logger.info("Starting ContentOnlyEvaluator...")
@@ -57,7 +58,7 @@ class ContentOnlyEvaluator(OperatorABC):
 
             # 动态筛选需要评估的字段
             extraction_result = {
-                key: row.get(key) for key in input_evaluation_keys if key in row
+                key: row.get(key) for key in self.input_evaluation_keys if key in row
             }
             # 注入辅助信息
 
@@ -74,7 +75,7 @@ class ContentOnlyEvaluator(OperatorABC):
             all_responses = self.llm_serving.generate_from_input(
                 all_llm_inputs, 
                 system_prompt=system_prompt,
-                response_schema=self.json_schema,  # 传入之前定义的 JSON Schema
+                json_schema=self.json_schema,  # 传入之前定义的 JSON Schema
                 use_function_call=False
             )
         except Exception as e:

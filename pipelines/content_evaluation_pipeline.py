@@ -10,14 +10,15 @@ from dataflow.operators.core_text import PandasOperator, PromptedGenerator
 from prompts.evaluation import ContentOnlyEvaluationPrompt
 from dataflow.serving.api_google_vertexai_serving import APIGoogleVertexAIServing
 from operators.evaluation.content_evaluation import ContentOnlyEvaluator
-from dataflow.utils.storage import FileStorage
-
-class ContentOnlyEvaluationPipeline():
+from dataflow.utils.storage import FileStorage, BatchedFileStorage
+from dataflow.pipeline import BatchedPipelineABC
+class ContentOnlyEvaluationPipeline(BatchedPipelineABC):
     def __init__(self, entry_file_name:str):
-        self.storage = FileStorage(
+        super().__init__()
+        self.storage = BatchedFileStorage(
             first_entry_file_name=entry_file_name,
             cache_path="./evaluation_test_output2",
-            cache_type="json",
+            cache_type="jsonl",
         )
 
         self.llm_serving = APIGoogleVertexAIServing(
@@ -38,17 +39,18 @@ class ContentOnlyEvaluationPipeline():
             llm_serving = self.llm_serving, 
             prompt_template=ContentOnlyEvaluationPrompt(),
             json_schema=ContentOnlyEvaluationPrompt().build_json_schema(),
+            input_evaluation_keys = ["doi","structure_info","material_indexes","computation_detail","computation_indexes","thermal_properties","mechanical_properties","electrical_or_magnetic_properties"], # 待评估的提取字段列
         )
         
     def forward(self):
         self.evaluation.run(
             storage = self.storage.step(),
             input_key = "content",           # 原文列
-            input_evaluation_keys = ["doi","structure_info","material_indexes","computation_detail","computation_indexes","thermal_properties","mechanical_properties","electrical_or_magnetic_properties"], # 待评估的提取字段列
             output_key = "content_evaluation"
         )
 
 
 if __name__ == "__main__":
-    model = ContentOnlyEvaluationPipeline(entry_file_name="./data/BenchmarkCompareEvaluationPipeline/content_extraction.json")
-    model.forward()
+    model = ContentOnlyEvaluationPipeline(entry_file_name="./data/BenchmarkCompareEvaluationPipeline/content_extraction.jsonl")
+    model.compile()
+    model.forward(batch_size=100, resume_from_last=True)

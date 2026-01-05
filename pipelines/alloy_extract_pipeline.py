@@ -11,16 +11,17 @@ from prompts.alloy import AlloyNameExtractPrompt, AlloyInfoExtractPrompt, AlloyF
 from operators.alloy_extract.figure_classify import FigureClassifier
 
 from dataflow.serving.api_google_vertexai_serving import APIGoogleVertexAIServing
-from dataflow.utils.storage import FileStorage
+from dataflow.utils.storage import FileStorage, BatchedFileStorage
 from utils.chartextraction.extract_figure_info import extract_figure_components
 from utils.format_utils import safe_parse_json, safe_parse_json_and_get_key
+from dataflow.pipeline import BatchedPipelineABC, PipelineABC
 
-
-class ExtractAlloy():
+class ExtractAlloy(BatchedPipelineABC):
     def __init__(self, entry_file_name:str, mode: Literal['experimental','DFT','MD'], max_chunk_len=128000):
+        super().__init__()
         self.mode=mode
         
-        self.storage = FileStorage(
+        self.storage = BatchedFileStorage(
             first_entry_file_name=entry_file_name,
             cache_path="../alloy_output",
             cache_type="jsonl",
@@ -47,13 +48,15 @@ class ExtractAlloy():
             prompt_template=self.prompt_2,
             json_schema=self.prompt_2.build_json_schema(mode=mode),
             max_chunk_len=max_chunk_len,
+            input_aux_keys = ["materials_name_list"]
         )
         
         self.figure_classify_prompt = AlloyFigureClassifyPrompt()
         self.figure_classifier = FigureClassifier(
             llm_serving = self.llm_serving,
             prompt_template = self.figure_classify_prompt,
-            classes = ["Alloy Composition", "EDS line scanning analysis", "strain curve", "Bright-ﬁeld TEM image and SADPs", "Magnetization curve", "Other"]
+            classes = ["Alloy Composition", "EDS line scanning analysis", "strain curve", "Bright-ﬁeld TEM image and SADPs", "Magnetization curve", "Other"],
+            input_caption_key="caption",
         )
         
         self.parse_alloys = PandasOperator([
@@ -103,7 +106,6 @@ class ExtractAlloy():
         self.figure_classifier.run(
             storage = self.storage.step(),
             input_key = "figure_components",
-            input_caption_key="caption",
             output_class_key="figure_class"
         )
         self.prompt_generator_1.run(
@@ -117,22 +119,11 @@ class ExtractAlloy():
             storage = self.storage.step(),
             input_key = "content",
             output_key = f"alloys_{self.mode}_info",
-            input_aux_keys = ["materials_name_list"]
         )
         self.parse_alloys_info.run(storage = self.storage.step())
 
 
-if __name__ == "__main__":
-    # This is the entry point for the pipeline
-    # with open("alloy_papers.jsonl", "w") as f:
-    #     for root, _, files in os.walk("../Alloy-test"):
-    #         for fname in files:
-    #             if fname.lower().endswith(".json"):
-    #                 paper = os.path.join(root, fname)
-    #                 paper_data = json.load(open(paper, "r"))
-    #                 f.write(json.dumps({"doi":paper_data["token"],
-    #                                     "content": paper_data["content"],
-    #                                     "figure_components": extract_figure_components(paper_data)}) + "\n")
-    
+if __name__ == "__main__":    
     model = ExtractAlloy(entry_file_name="./data/AlloyExtractPipeline/alloy_papers_short.jsonl", mode='MD', max_chunk_len=3200)
-    model.forward()
+    model.compile()
+    model.forward(batch_size=100, resume_from_last=True)

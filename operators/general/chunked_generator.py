@@ -30,6 +30,7 @@ class ChunkedPromptedGenerator(OperatorABC):
         prompt_template: AlloyNameExtractPrompt | AlloyInfoExtractPrompt | CofExtractPrompt,
         json_schema: dict = None,
         max_chunk_len: int = 128000,
+        input_aux_keys: list[str] = []
     ):
         self.logger = get_logger()
         self.llm_serving = llm_serving
@@ -37,6 +38,7 @@ class ChunkedPromptedGenerator(OperatorABC):
         self.json_schema = json_schema
         self.max_chunk_len = max_chunk_len
         self.enc = tiktoken.get_encoding("cl100k_base")
+        self.input_aux_keys = input_aux_keys
 
     @staticmethod
     def get_desc(lang: str = "zh"):
@@ -72,7 +74,6 @@ class ChunkedPromptedGenerator(OperatorABC):
         storage: DataFlowStorage,
         input_key: str = "raw_content",
         output_key: str = "generated_content",
-        input_aux_keys: list[str] = []
     ):
         self.logger.info("Running ChunkedPromptedGenerator...")
         dataframe = storage.read("dataframe")
@@ -87,7 +88,7 @@ class ChunkedPromptedGenerator(OperatorABC):
         for i, row in dataframe.iterrows():
             raw_content = row.get(input_key, "")
             prompt_kwargs = {}
-            for aux_key in input_aux_keys:
+            for aux_key in self.input_aux_keys:
                 prompt_kwargs[aux_key] = row.get(aux_key)
             if not raw_content:
                 row_chunk_map.append(0)
@@ -109,7 +110,7 @@ class ChunkedPromptedGenerator(OperatorABC):
         try:
             if self.json_schema:
                 all_responses = self.llm_serving.generate_from_input(
-                    all_llm_inputs, response_schema=self.json_schema
+                    all_llm_inputs, json_schema=self.json_schema
                 )
             else:
                 all_responses = self.llm_serving.generate_from_input(all_llm_inputs)
