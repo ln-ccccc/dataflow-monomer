@@ -27,11 +27,13 @@ class FigureClassifier(OperatorABC):
         llm_serving: LLMServingABC,
         prompt_template: AlloyFigureClassifyPrompt,
         classes: list[str],
+        input_caption_key: str = "caption",
     ):
         self.logger = get_logger()
         self.llm_serving = llm_serving
         self.prompt_template = prompt_template
         self.classes = classes
+        self.input_caption_key = input_caption_key
 
     @staticmethod
     def get_desc(lang: str = "zh"):
@@ -49,7 +51,6 @@ class FigureClassifier(OperatorABC):
         self,
         storage: DataFlowStorage,
         input_key: str = "figure_components",
-        input_caption_key: str = "caption",
         output_class_key: str = "class",
     ):
         dataframe = storage.read("dataframe")
@@ -58,7 +59,7 @@ class FigureClassifier(OperatorABC):
         for i, row in dataframe.iterrows():
             figure_components = row[input_key]
             for component in figure_components:
-                caption = component.get(input_caption_key, "")
+                caption = component.get(self.input_caption_key, "")
                 llm_inputs = self.prompt_template.build_prompt(
                     caption=caption,
                     classes=self.classes,

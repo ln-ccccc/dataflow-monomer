@@ -10,15 +10,16 @@ from dataflow.operators.core_text import PandasOperator, PromptedGenerator
 from prompts.evaluation import BenchmarkCompareEvaluationPrompt
 from dataflow.serving.api_google_vertexai_serving import APIGoogleVertexAIServing
 from operators.evaluation.benchmark_compare import BenchmarkEvaluator
-from dataflow.utils.storage import FileStorage
+from dataflow.utils.storage import FileStorage, BatchedFileStorage
+from dataflow.pipeline import BatchedPipelineABC
 
-
-class EvaluationPipeline():
+class EvaluationPipeline(BatchedPipelineABC):
     def __init__(self, entry_file_name:str, max_chunk_len=128000):
-        self.storage = FileStorage(
+        super().__init__()
+        self.storage = BatchedFileStorage(
             first_entry_file_name=entry_file_name,
             cache_path="./evaluation_test_output",
-            cache_type="json",
+            cache_type="jsonl",
         )
 
         self.llm_serving = APIGoogleVertexAIServing(
@@ -39,17 +40,18 @@ class EvaluationPipeline():
             llm_serving = self.llm_serving, 
             prompt_template=BenchmarkCompareEvaluationPrompt(),
             json_schema=BenchmarkCompareEvaluationPrompt().build_json_schema(),
+            input_benchmark_path = "./data/BenchmarkCompareEvaluationPipeline/benchmark.json", #
+            input_evaluation_keys = ["doi","structure_info","material_indexes","computation_detail","computation_indexes","thermal_properties","mechanical_properties","electrical_or_magnetic_properties"], #
         )
         
     def forward(self):
         self.evaluation.run(
             storage = self.storage.step(),
-            input_benchmark_path = "./data/BenchmarkCompareEvaluationPipeline/benchmark.json",
-            input_evaluation_keys = ["doi","structure_info","material_indexes","computation_detail","computation_indexes","thermal_properties","mechanical_properties","electrical_or_magnetic_properties"],
             output_key = "evaluation_results"
         )
 
 
 if __name__ == "__main__":
-    model = EvaluationPipeline(entry_file_name="./data/BenchmarkCompareEvaluationPipeline/extraction.json")
-    model.forward()
+    model = EvaluationPipeline(entry_file_name="./data/BenchmarkCompareEvaluationPipeline/extraction.jsonl")
+    model.compile()
+    model.forward(batch_size=100, resume_from_last=True)

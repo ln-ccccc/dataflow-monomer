@@ -13,12 +13,12 @@ from operators.alloy_extract.figure_classify import FigureClassifier
 from dataflow.serving.api_google_vertexai_serving import APIGoogleVertexAIServing
 
 from dataflow.serving import APILLMServing_request
-from dataflow.utils.storage import FileStorage
+from dataflow.utils.storage import FileStorage, BatchedFileStorage
 from utils.chartextraction.extract_figure_info import extract_figure_components
 from utils.format_utils import safe_parse_json, safe_parse_json_and_get_key
 
 from functools import partial
-
+from dataflow.pipeline import BatchedPipelineABC
 def extract_nested_fields_list_of_dicts(records, sublist_key="material_structures", keys=None):
     """
     返回 list[list[dict]]，每行对应 records 的每个 block，每个 block 是 material_structures 的 dict 列表
@@ -46,7 +46,7 @@ def extract_nested_fields_list_of_dicts(records, sublist_key="material_structure
 
     return result
 
-class ExtractMaterial():
+class ExtractMaterial(BatchedPipelineABC):
     def _parse_and_flatten_column(self, df, column_name):
         return df.assign(
             **{
@@ -69,7 +69,8 @@ class ExtractMaterial():
         )    
     
     def __init__(self, entry_file_name:str, max_chunk_len=128000):
-        self.storage = FileStorage(
+        super().__init__()
+        self.storage = BatchedFileStorage(
             first_entry_file_name=entry_file_name,
             cache_path="./material_google_test3_output",
             cache_type="json",
@@ -109,6 +110,7 @@ class ExtractMaterial():
             prompt_template=self.prompt_2,
             json_schema=self.prompt_2.build_json_schema(),
             max_chunk_len=max_chunk_len,
+            input_aux_keys = ["material_indexes"],
         )
         
         self.prompt_3 = PropertyExtractPrompt(mode='thermal')
@@ -117,6 +119,7 @@ class ExtractMaterial():
             prompt_template=self.prompt_3,
             json_schema=self.prompt_3.build_json_schema(),
             max_chunk_len=max_chunk_len,
+            input_aux_keys = ["computation_indexes"],
         )
         
         self.prompt_4 = PropertyExtractPrompt(mode='mechanical')
@@ -125,6 +128,7 @@ class ExtractMaterial():
             prompt_template=self.prompt_4,
             json_schema=self.prompt_4.build_json_schema(),
             max_chunk_len=max_chunk_len,
+            input_aux_keys = ["computation_indexes"],
         )
         
         self.prompt_5 = PropertyExtractPrompt(mode='electrical or magnetic')
@@ -133,6 +137,7 @@ class ExtractMaterial():
             prompt_template=self.prompt_5,
             json_schema=self.prompt_5.build_json_schema(),
             max_chunk_len=max_chunk_len,
+            input_aux_keys = ["computation_indexes"],
         )
         
         self.parser_1 = PandasOperator([
@@ -186,7 +191,6 @@ class ExtractMaterial():
             storage = self.storage.step(),
             input_key = "content",
             output_key = f"computation_detail",
-            input_aux_keys = ["material_indexes"],
         )
         self.parser_2.run(storage = self.storage.step())
         self.get_computation_indexes.run(storage = self.storage.step())
@@ -194,36 +198,23 @@ class ExtractMaterial():
             storage = self.storage.step(),
             input_key = "content",
             output_key = f"thermal_properties",
-            input_aux_keys = ["computation_indexes"],
         )
         self.parser_3.run(storage = self.storage.step())
         self.prompt_generator_4.run(
             storage = self.storage.step(),
             input_key = "content",
             output_key = f"mechanical_properties",
-            input_aux_keys = ["computation_indexes"],
         )
         self.parser_4.run(storage = self.storage.step())
         self.prompt_generator_5.run(
             storage = self.storage.step(),
             input_key = "content",
             output_key = f"electrical_or_magnetic_properties",
-            input_aux_keys = ["computation_indexes"],
         )
         self.parser_5.run(storage = self.storage.step())
 
 
 if __name__ == "__main__":
-    # # This is the entry point for the pipeline
-    # with open("data/MaterialExtractPipeline/material_papers.jsonl", "w") as f:
-    #     for root, _, files in os.walk("../material_test_pdfs"):
-    #         for fname in files:
-    #             if fname.lower().endswith(".json"):
-    #                 paper = os.path.join(root, fname)
-    #                 paper_data = json.load(open(paper, "r"))
-    #                 f.write(json.dumps({"doi":paper_data["token"],
-    #                                     "content": paper_data["content"],
-    #                                     "figure_components": extract_figure_components(paper_data)}) + "\n")
-    
     model = ExtractMaterial(entry_file_name="./data/MaterialExtractPipeline/material_papers.jsonl", max_chunk_len=32000)
-    model.forward()
+    model.compile()
+    model.forward(batch_size=100, resume_from_last=True)
