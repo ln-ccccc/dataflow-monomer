@@ -99,11 +99,17 @@ class PaperParsingGenerator(OperatorABC):
             data = {'token': token, **semantic_cfg}
             response = requests.post(result_url, json=data)
             if response.status_code == 200:
+                output_json_path = os.path.join(output_dir, f'{name}_parser.json')
+                with open(output_json_path, 'w', encoding='utf-8') as jf:
+                    import json
+                    json.dump(response.json(), jf, ensure_ascii=False, indent=2)
                 content = response.json().get('content', '')
-                output_path = os.path.join(output_dir, f'{name}_parser.md')
-                with open(output_path, 'w', encoding='utf-8') as f:
-                    f.write(content)
-                self.logger.info(f"Successfully exported Markdown: {output_path}")
+                if self.output_md_path:
+                    output_path = os.path.join(output_dir, f'{name}_parser.md')
+                    with open(output_path, 'w', encoding='utf-8') as f:
+                        f.write(content)
+                    self.logger.info(f"Successfully exported Markdown: {output_path}")
+                return content
             else:
                 self.logger.error(f"Failed to get Markdown: {response.text}")
         except Exception as e:
@@ -160,12 +166,12 @@ class PaperParsingGenerator(OperatorABC):
         """
         if not pdf_path or not isinstance(pdf_path, str):
             self.logger.warning(f"Invalid PDF path: {pdf_path}")
-            return ""
+            return "", ""
         
         pdf_path_obj = Path(pdf_path)
         if not pdf_path_obj.exists():
             self.logger.warning(f"PDF file not found: {pdf_path}")
-            return ""
+            return "", ""
         
         try:
             self.logger.info(f"Parsing PDF: {pdf_path}")
@@ -175,28 +181,28 @@ class PaperParsingGenerator(OperatorABC):
             token = self._upload_pdf(self.host, str(pdf_path_obj))
             if not token:
                 self.logger.error(f"Failed to upload PDF: {pdf_path}")
-                return ""
+                return "", ""
             
             # Wait for parsing result
             if not self._wait_for_result(self.host, token):
                 self.logger.error(f"Failed to parse PDF: {pdf_path}")
-                return ""
+                return "", ""
             
             # Export formats directly to output directory (no subfolder)
-            self._export_formats(self.host, token, output_dir, name)
-            
+            # self._export_formats(self.host, token, output_dir, name)
+            content = self._export_formats(self.host, token, output_dir, name)
             # Return markdown file path
             md_path = Path(output_dir) / f"{name}_parser.md"
             if md_path.exists():
                 self.logger.info(f"Successfully parsed PDF to: {md_path}")
-                return str(md_path)
+                return str(md_path), content
             else:
                 self.logger.warning(f"Markdown file not generated: {md_path}")
-                return ""
+                return "", ""
                 
         except Exception as e:
             self.logger.error(f"Error parsing PDF {pdf_path}: {e}")
-            return ""
+            return "", ""
 
     def _process_row(self, idx: int, pdf_path: str, output_dir: str) -> Tuple[int, str]:
         """
@@ -214,18 +220,23 @@ class PaperParsingGenerator(OperatorABC):
             self.logger.warning(f"Row {idx}: Invalid or missing PDF path: {pdf_path}")
             return (idx, "")
         
-        md_path = self._parse_single_pdf(pdf_path, output_dir)
-        return (idx, md_path)
+        md_path, content = self._parse_single_pdf(pdf_path, output_dir)
+
+        if self.output_content_key:
+            return (idx, md_path, content)
+        else:
+            return (idx, md_path)
 
     def run(
         self,
         storage: DataFlowStorage,
         input_pdf_path_key: str = "pdf_path",
+        output_content_key: str = None,
         output_md_path: str = "md_path",
         output_dir: str = "./parser",
     ):
         self.input_pdf_path_key = input_pdf_path_key
-        self.output_md_path = output_md_path
+        self.output_md_path, self.output_content_key = output_md_path, output_content_key
         
         # Ensure output directory exists and is absolute
         output_dir_abs = str(Path(output_dir).resolve())
@@ -243,6 +254,7 @@ class PaperParsingGenerator(OperatorABC):
         if self.output_md_path not in dataframe.columns:
             dataframe[self.output_md_path] = None
 
+        # ---------- 原多线程实现（已停用，仅保留备查） ----------
         # Prepare tasks for parallel processing
         tasks = []
         for idx, row in dataframe.iterrows():
@@ -257,23 +269,43 @@ class PaperParsingGenerator(OperatorABC):
                 executor.submit(self._process_row, idx, pdf_path, output_dir_abs): idx
                 for idx, pdf_path in tasks
             }
-            
+        
             # Collect results as they complete
             for future in as_completed(future_to_idx):
                 try:
-                    idx, md_path = future.result()
-                    results[idx] = md_path
+                    idx, md_path, content = future.result()
+                    results[idx] = md_path, content
                 except Exception as e:
                     idx = future_to_idx[future]
                     self.logger.error(f"Error processing row {idx}: {e}")
-                    results[idx] = ""
+                    results[idx] = "", ""
+
+        # 顺序 for loop 处理，不使用多线程
+        # results = {}
+        # for idx, row in dataframe.iterrows():
+        #     pdf_path = row.get(self.input_pdf_path_key)
+        #     try:
+        #         result = self._process_row(idx, pdf_path, output_dir_abs)
+        #         # 当 output_content_key 不为空时，_process_row 返回 (idx, md_path, content)
+        #         # 否则返回 (idx, md_path)
+        #         if self.output_content_key:
+        #             _, md_path, content = result
+        #             results[idx] = (md_path, content)
+        #         else:
+        #             _, md_path = result
+        #             results[idx] = (md_path, "")
+        #     except Exception as e:
+        #         self.logger.error(f"Error processing row {idx}: {e}")
+        #         results[idx] = ("", "")
         
         # Update dataframe in original order
         for idx in dataframe.index:
             if idx in results:
-                dataframe.loc[idx, self.output_md_path] = results[idx]
+                dataframe.loc[idx, self.output_md_path] = results[idx][0]
+                dataframe.loc[idx, self.output_content_key] = results[idx][1]
             else:
                 dataframe.loc[idx, self.output_md_path] = ""
+                dataframe.loc[idx, self.output_content_key] = ""
 
         # Save updated dataframe
         storage.write(dataframe)
@@ -285,6 +317,6 @@ class PaperParsingGenerator(OperatorABC):
             f"Parsing complete. Successfully parsed {success_count}/{total_count} PDFs."
         )
         
-        return [self.output_md_path]
+        return [self.output_md_path, self.output_content_key]
 
 

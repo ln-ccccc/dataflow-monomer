@@ -1,0 +1,75 @@
+{
+  "type": "object",
+  "properties": {
+    "Synthesis Methods": {
+      "type": "string",
+      "description": "The specific method name (e.g., Solvothermal synthesis, Microwave-assisted synthesis, Schiff-base condensation). NOT 'Complexation' or 'Suzuki coupling' unless it forms the polymer network."
+    },
+    "Reaction Conditions": {
+      "type": "object",
+      "properties": {
+        "Temperature": {
+          "type": "string",
+          "description": "Reaction temperature (e.g., '120 °C')."
+        },
+        "Reaction time": {
+          "type": "string",
+          "description": "Reaction duration (e.g., '72 h')."
+        },
+        "Cooling rate": {
+          "type": "string",
+          "description": "Rate of cooling if specified."
+        },
+        "Activation": {
+          "type": "string",
+          "description": "Post-synthesis purification of the SOLID powder. Includes filtration, washing solvents, Soxhlet extraction, and drying conditions."
+        },
+        "Solvent Composition": {
+          "type": "string",
+          "description": "Names of solvents used in the synthesis mixture."
+        },
+        "Solvent ratio": {
+          "type": "string",
+          "description": "Volumetric ratio (e.g., '1:1')."
+        },
+        "Solvent Volume": {
+          "type": "string",
+          "description": "Total volume or individual volumes (e.g., '2 mL total' or '1 mL mesitylene, 1 mL dioxane')."
+        },
+        "Solvent Additive": {
+          "type": "string",
+          "description": "Additives like acetic acid, aqueous HCl, modulation agents."
+        },
+        "Reaction Concentration": {
+          "type": "string",
+          "description": "Amounts of ALL reactants (monomers). Format: 'Name: Amount (mg/mmol)'."
+        },
+        "Catalyst": {
+          "type": "string",
+          "description": "Catalyst used to drive the polymerization (e.g., '6M aqueous acetic acid')."
+        },
+        "Atmosphere": {
+          "type": "string",
+          "description": "Environment (e.g., 'degassed', 'N2', 'vacuum', 'sealed tube')."
+        }
+      },
+      "required": [
+        "Temperature",
+        "Reaction time",
+        "Cooling rate",
+        "Activation",
+        "Solvent Composition",
+        "Solvent ratio",
+        "Solvent Volume",
+        "Solvent Additive",
+        "Reaction Concentration",
+        "Catalyst",
+        "Atmosphere"
+      ]
+    }
+  },
+  "required": [
+    "Synthesis Methods",
+    "Reaction Conditions"
+  ]
+}
