@@ -14,26 +14,6 @@
 🎉 如果你认可我们的项目，欢迎在 GitHub 上点个 ⭐ Star，关注项目最新进展。
 </div>
 
-## DataFlow-AI4S是什么？
-
-### 核心理念
-继承DataFlow数据治理理念，针对AI4S领域解决"数据处理效率提升难、数据处理流程黑盒、算子能力沉淀困难"的三大痛点。现阶段，此repo支持数据处理算子（提取、合成、过滤、评估等）与数据管线的搭建，未来我们将建设从原始文献到高质量数据入库的端到端自动化处理能力。以数据管线为核心驱动，打造从pipeline创建、任务执行跟踪、数据集评估、专家审核、数据入库的闭环流程，敬请期待!!
-
-### 已有功能
-1. 多领域文献内容结构化
-1.1. 合金领域结构化提取
-1.2. 合成生物学领域结构化提取
-1.3. COF领域结构化提取
-1.4. 通用材料结构化提取模板
-
-2. 文献曲线识别
-2.1. 曲线图识别
-2.2. 曲线数据点识别
-2.3. 曲线重绘制（矢量图）
-
-
-
-
 ## 安装步骤
 
 ### 1. 创建并激活 Conda 环境
@@ -51,7 +31,7 @@ pip install open-dataflow
 git clone git@git.dp.tech:dataflow-dp/dataflow-dp.git
 ```
 
-**注意，`cof_extract_pipeline`、`bio_paper_extract_pipeline`完全是`alloy_extract_pipeline`的简单版本，因此以下着重介绍`alloy_extract_pipeline`**
+**注意，`cof_extract_pipeline`完全是`alloy_extract_pipeline`的简单版本，因此以下着重介绍`alloy_extract_pipeline`**
 
 ## 配置步骤
 
@@ -59,8 +39,8 @@ git clone git@git.dp.tech:dataflow-dp/dataflow-dp.git
 
 ```bash
 gcloud auth application-default login
-export GOOGLE_APPLICATION_CREDENTIALS="/share/your/vertexai_apikey.json"
-export GCP_PROJECT_ID="your_project_ID"
+export GOOGLE_APPLICATION_CREDENTIALS="/share/syc/doraemon-20250708-dedc7a3d77a6.json"
+export GCP_PROJECT_ID="doraemon-20250708"
 ```
 
 
@@ -288,138 +268,3 @@ self.get_alloy_names = PandasOperator(
 "  - lambda df: df.assign(score2=df['score'] * 2)\n"
 "  - lambda df: df.sort_values('score', ascending=False)"
 ```
-
-<!-- ## 一个可参考的设计流程(钢研项目为例子)
-此部分的代码见 `pipelines\material_extract_pipeline.py`
-
-### 1. 理解需求，整理知识体系
-根据你所认知的需求，可以根据该领域的知识体系来设计一套提取流程（概念意义上的）。这套流程应该清楚地表示出应提取的属性，包括但不限于结构、工艺、性质等，下面给出一个示例。
-![](static/material_extract_procedure.png)
-
-### 2. 流程抽象、Prompt与Schema的设计
-根据上图，在数据处理流程中可以抽象出几个层次，每个层次对应一个属性的提取或前/后处理。图中左一模块表示了材料结构中应提取的特征。通过给定良好的prompt（科学约束，见`prompts\evaluation.py`的**class BenchmarkCompareEvaluationPrompt(PromptABC)**）与schema（输出结构约束，见`schemas\material_schemas\computation_detail_schema.json`），大模型将更好地提取期望的输出。
-```python
-self.prompt_1 = StructureInfoExtractPrompt()
-        self.prompt_generator_1 = ChunkedPromptedGenerator(
-            llm_serving = self.llm_serving, 
-            prompt_template=self.prompt_1,
-            json_schema=self.prompt_1.build_json_schema(),
-            max_chunk_len=max_chunk_len
-        )
-```
-
-左二模块则为典型的前/后处理算子，主要功能是提取前一个算子的输出中的关键主键，作为下一次prompt的内容
-```python
-self.get_material_indexes = PandasOperator([
-            lambda df: df.assign(
-                material_indexes=df["structure_info"].apply(
-                    extract_nested_fields_list_of_dicts,
-                    sublist_key="material_structures",
-                    keys=["composition", "lattice_parameter", "space_group", "number_of_atoms", "note"]
-                )
-            )
-        ])
-``` -->
-
----
-
-## 一个可参考的设计流程(钢研项目为例子)
-
-本流程的代码实现位于 `pipelines\material_extract_pipeline.py`。该流水线采用多级级联的设计思路，旨在从科技论文中精确提取材料的结构信息、计算细节以及多物理场性质。
-
-### 1. 设计流程与算子映射图
-
-在钢研项目中，设计流程如下图所示，整个过程分为三个主要阶段：**结构提取**、**计算细节提取**与**性质分类提取**。
-![](static/material_extract_procedure.png)
-
-### 2. 核心设计：科学约束与结构约束
-
-为了保证提取结果的专业性与可解析性，我们采用了“双约束”机制：
-
-#### A. 科学约束 (Scientific Constraints)
-
-**实现位置**：`prompts\materials.py` (继承自 `PromptABC`)
-通过在 Prompt 模板中植入领域知识，约束 LLM 的理解逻辑：
-
-* **物理量标准化**：强制模型识别量纲并转换（如能量统一为 ）。
-* **逻辑校验**：例如，若提取到某种对称性，Prompt 会要求模型寻找对应的空间群号。
-* **上下文锁定**：利用 `input_aux_keys` 将前序步骤的 `material_indexes` 注入当前 Prompt，防止模型在多材料文中产生关联错误。
-
-#### B. 输出结构约束 (Schema Constraints)
-
-**实现位置**：`schemas\material_schemas\*.json`
-通过 JSON Schema 严格定义输出格式：
-
-* **字段强类型**：确保 `lattice_parameter` 等数值字段不被提取为描述性文字。
-* **枚举值约束 (Enum)**：对计算方法（如 `GGA`, `HSE06`）进行限定，极大降低模型幻觉。
-
-### 3. 流水线阶段详解
-
-#### 第一阶段：结构信息提取与索引构建 (Structure Info & Indexing)
-
-首先从文本中提取基础的材料结构特征。为了保证后续步骤的上下文关联性，我们通过一个后处理算子提取“主键”信息。
-
-* **提取算子 (`prompt_generator_1`)**: 使用 `StructureInfoExtractPrompt` 提取包括化学式、空间群、原子数等结构信息。
-* **后处理/索引算子 (`get_material_indexes`)**:
-使用 `PandasOperator` 调用 `extract_nested_fields_list_of_dicts` 函数。
-* **对应图中**: “选择部分关键信息作为主键 (materials index)”。
-* **代码实现**:
-```python
-self.get_material_indexes = PandasOperator([
-    lambda df: df.assign(
-        material_indexes=df["structure_info"].apply(
-            extract_nested_fields_list_of_dicts,
-            sublist_key="material_structures",
-            keys=["composition", "lattice_parameter", "space_group", "number_of_atoms", "note"]
-        )
-    )
-])
-
-```
-
-
-
-
-
-#### 第二阶段：计算细节提取 (Computation Detail)
-
-在已知结构的基础上，进一步提取模拟计算的相关参数（如 K 点、赝势、交换关联泛函等）。
-
-* **提取算子 (`prompt_generator_2`)**: 使用 `ComputationDetailExtractPrompt`。该算子通过 `input_aux_keys = ["material_indexes"]` 接收上一阶段生成的索引，确保 LLM 在提取计算细节时能对号入座。
-* **索引算子 (`get_computation_indexes`)**:
-提取如 `theoretical_calculation_method` 等字段，作为性质提取阶段的依据。
-
-#### 第三阶段：多分支性质提取 (Property Extraction)
-
-根据计算细节索引，流水线并行或顺序触发三个特定领域的提取分支：
-
-1. **热学性质 (Thermal)**: 对应 `prompt_generator_3` (mode='thermal')。
-2. **力学性质 (Mechanical)**: 对应 `prompt_generator_4` (mode='mechanical')。
-3. **电学/磁学性质 (Electrical/Magnetic)**: 对应 `prompt_generator_5` (mode='electrical or magnetic')。
-
-> **设计亮点**：图中黄色高亮部分（如 `composition`, `space group`）表示从上一步继承的 Key。通过这种“索引透传”机制，大模型可以精准定位文中描述的具体材料及其对应的物理性质，避免数据错位。
-
-### 3. 算子对应关系表
-
-| 流程阶段 | 逻辑功能 | 代码算子 (Operator / Generator) | 关键 Schema 字段 (Index) |
-| --- | --- | --- | --- |
-| **Step 1** | 材料结构提取 | `self.prompt_generator_1` | `composition`, `space_group` |
-| **Step 2** | 提取材料索引 | `self.get_material_indexes` | 构建 `material_indexes` 列表 |
-| **Step 3** | 计算参数提取 | `self.prompt_generator_2` | `K-points`, `theoretical_method` |
-| **Step 4** | 提取计算索引 | `self.get_computation_indexes` | 构建 `computation_indexes` 列表 |
-| **Step 5** | 性质分类提取 | `prompt_generator_3/4/5` | `Bulk modulus`, `Heat capacity` 等 |
-
-### 4. 如何运行
-
-流水线通过 `forward()` 方法驱动，内部自动维护 `storage.step()` 来管理各算子间的数据流转。
-
-```python
-model = ExtractMaterial(entry_file_name="your_data.jsonl")
-model.compile()
-model.forward(batch_size=100)
-
-```
-
----
-
-#### **如果你发现你依然没头绪如何使用DataFlow-AI4S，那是由于我的文档写得稀烂所致，请直接在飞书联系本人@黄鉦皓解决遇到的问题。你的每一次提问都会让我更加了解用户（代码使用者）的困惑点在哪。如果你在数据处理中遇到重复造轮子的问题和需求或相关优化建议，也请热情告知！**

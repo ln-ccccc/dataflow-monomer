@@ -123,7 +123,16 @@ class ExtractAlloy(BatchedPipelineABC):
         self.parse_alloys_info.run(storage = self.storage.step())
 
 
-if __name__ == "__main__":    
+if __name__ == "__main__":
+    # with open("alloy_papers.jsonl", "w") as f:
+    #     for root, _, files in os.walk("../Alloy-test"):
+    #         for fname in files:
+    #             if fname.lower().endswith(".json"):
+    #                 paper = os.path.join(root, fname)
+    #                 paper_data = json.load(open(paper, "r"))
+    #                 f.write(json.dumps({"doi":paper_data["token"],
+    #                                     "content": paper_data["content"],
+    #                                     "figure_components": extract_figure_components(paper_data)}) + "\n")
     model = ExtractAlloy(entry_file_name="./data/AlloyExtractPipeline/alloy_papers_short.jsonl", mode='MD', max_chunk_len=3200)
     model.compile()
     model.forward(batch_size=100, resume_from_last=True)
