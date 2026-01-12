@@ -1,0 +1,47 @@
+{
+  "type": "object",
+  "properties": {
+    "Catalytic Sites": {
+      "type": "string",
+      "description": "Single-atom catalytic centers; bimetallic nodes; co-catalysts such as encapsulated nanoparticles or enzymes; redox-active or Lewis acid/base sites."
+    },
+    "Test Reactions": {
+      "type": "string",
+      "description": "Examples of photocatalytic or other reactions with performance metrics, e.g., hydrogen evolution rate, CO2 reduction selectivity, PLQY, lifetime, stability over cycles."
+    },
+    "Other Application Entities": {
+      "type": "string",
+      "description": "Applications such as pollutant adsorption, drug delivery, or other functional uses."
+    },
+    "Enantiomer Separation": {
+      "type": "string",
+      "description": "Applied in the purification of chiral drug enantiomers."
+    },
+    "Photonics Devices": {
+      "type": "string",
+      "description": "Used for circularly polarized luminescence (CPL) and optical information encryption."
+    },
+    "Asymmetric Catalysis": {
+      "type": "string",
+      "description": "Employed as a heterogeneous catalyst for asymmetric synthesis reactions."
+    },
+    "Enantiomer detection": {
+      "type": "string",
+      "description": "Chiral COF utilized for sensing enantiomeric excess in alcohol derivatives."
+    },
+    "4D Information Encryption": {
+      "type": "string",
+      "description": "Applied in photoresponsive 4D information encryption systems."
+    }
+  },
+  "required": [
+    "Catalytic Sites",
+    "Test Reactions",
+    "Other Application Entities",
+    "Enantiomer Separation",
+    "Photonics Devices",
+    "Asymmetric Catalysis",
+    "Enantiomer detection",
+    "4D Information Encryption"
+  ]
+}
