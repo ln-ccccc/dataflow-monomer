@@ -8,13 +8,11 @@ from dataflow.core import LLMServingABC
 
 import tiktoken
 
-from prompts.alloy import AlloyNameExtractPrompt, AlloyInfoExtractPrompt
-from prompts.cof_extract import CofExtractPrompt
-from prompts.materials import StructureInfoExtractPrompt, ComputationDetailExtractPrompt, PropertyExtractPrompt
+from prompts.monomer import MonomerNameExtractPrompt
+from prompts.polymer import PolymerExtractPrompt
 from dataflow.core.prompt import prompt_restrict
 
-@prompt_restrict(AlloyNameExtractPrompt, AlloyInfoExtractPrompt, CofExtractPrompt, 
-                 StructureInfoExtractPrompt, ComputationDetailExtractPrompt, PropertyExtractPrompt)
+@prompt_restrict(MonomerNameExtractPrompt, PolymerExtractPrompt)
 @OPERATOR_REGISTRY.register()
 class ChunkedPromptedGenerator(OperatorABC):
     """
@@ -27,7 +25,7 @@ class ChunkedPromptedGenerator(OperatorABC):
     def __init__(
         self,
         llm_serving: LLMServingABC,
-        prompt_template: AlloyNameExtractPrompt | AlloyInfoExtractPrompt | CofExtractPrompt,
+        prompt_template: MonomerNameExtractPrompt | PolymerExtractPrompt,
         json_schema: dict = None,
         max_chunk_len: int = 128000,
         input_aux_keys: list[str] = []
@@ -108,12 +106,13 @@ class ChunkedPromptedGenerator(OperatorABC):
         self.logger.info(f"Total {len(all_llm_inputs)} chunks to generate")
 
         try:
-            if self.json_schema:
-                all_responses = self.llm_serving.generate_from_input(
-                    all_llm_inputs, json_schema=self.json_schema
-                )
-            else:
-                all_responses = self.llm_serving.generate_from_input(all_llm_inputs)
+            # Force disable schema to avoid SDK errors, rely on prompt instructions
+            # if self.json_schema:
+            #     all_responses = self.llm_serving.generate_from_input(
+            #         all_llm_inputs, response_schema=self.json_schema
+            #     )
+            # else:
+            all_responses = self.llm_serving.generate_from_input(all_llm_inputs)
         except Exception as e:
             self.logger.error(f"Global generation failed: {e}")
             all_generated_results = [[] for _ in range(len(dataframe))]

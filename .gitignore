@@ -1,2 +1,20 @@
-cache*
-__pycache__
+__pycache__/
+*.py[cod]
+.DS_Store
+.env
+.venv/
+.vscode/
+.idea/
+monomer.log
+
+# Data outputs (keep directory structure)
+data/*
+!data/.gitkeep
+
+# Common large artifacts
+*.parquet
+*.pkl
+*.ipynb_checkpoints/
+
+# OS/Editor
+Thumbs.db
