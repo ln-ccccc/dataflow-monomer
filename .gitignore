@@ -6,10 +6,12 @@ __pycache__/
 .vscode/
 .idea/
 monomer.log
+logs/
 
 # Data outputs (keep directory structure)
 data/*
 !data/.gitkeep
+outputs/
 
 # Common large artifacts
 *.parquet

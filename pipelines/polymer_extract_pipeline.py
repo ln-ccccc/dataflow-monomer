@@ -9,7 +9,7 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 from operators.general.chunked_generator import ChunkedPromptedGenerator
 from prompts.polymer import PolymerExtractPrompt
-from dataflow.serving.api_google_vertexai_serving import APIGoogleVertexAIServing
+from serving.api_openai_serving import APIOpenAICompatServing
 try:
     from dataflow.utils.storage import BatchedFileStorage
 except Exception:
@@ -33,12 +33,13 @@ class ExtractPolymer(BatchedPipelineABC):
             cache_path="../polymer_output",
             cache_type="jsonl",
         )
-        self.llm_serving = APIGoogleVertexAIServing(
-            project=os.getenv("GCP_PROJECT_ID"),
-            location='us-central1',
-            model_name="gemini-2.5-pro",
-            max_workers=100,
-            max_tokens=64000,
+        self.llm_serving = APIOpenAICompatServing(
+            base_url=os.getenv("LLM_OPENAI_BASE_URL"),
+            api_key=os.getenv("LLM_OPENAI_API_KEY"),
+            model_name=os.getenv("LLM_OPENAI_MODEL", "gemini-2.5-pro"),
+            max_workers=int(os.getenv("MONOMER_LLM_MAX_WORKERS", "100")),
+            max_tokens=int(os.getenv("MONOMER_LLM_MAX_TOKENS", "64000")),
+            timeout=int(os.getenv("LLM_OPENAI_TIMEOUT", "60")),
         )
         self.prompt = PolymerExtractPrompt()
         self.prompt_generator = ChunkedPromptedGenerator(

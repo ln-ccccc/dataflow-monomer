@@ -55,6 +55,8 @@ _ensure_local_libstdcpp()
 def _patch_file_storage_write():
     try:
         import dataflow.utils.storage as _s
+        if getattr(_s, "LCC_LOCAL_STORAGE", False):
+            return
         import pandas as _pd
         def clean_surrogates(obj):
             if isinstance(obj, str):
@@ -186,6 +188,9 @@ for upper, lower in [("HTTP_PROXY", "http_proxy"), ("HTTPS_PROXY", "https_proxy"
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 if ROOT_DIR not in sys.path:
     sys.path.append(ROOT_DIR)
+PARENT_DIR = os.path.dirname(ROOT_DIR)
+if PARENT_DIR and PARENT_DIR not in sys.path:
+    sys.path.append(PARENT_DIR)
 from pipelines.monomer_extract_pipeline import ExtractMonomer
 
 PAPER_ROOT = "/share/lcc/paper"
@@ -255,7 +260,7 @@ def prepare_input_data(json_files, output_jsonl):
     print(f"Prepared {count} entries in {output_jsonl}")
     return count
 
-def run_pipeline(input_file, api_workers=8, api_timeout=5, api_sleep_every=100, api_sleep_seconds=0.2, api_row_workers=2, library_output_path=None):
+def run_pipeline(input_file, api_workers=8, api_timeout=5, api_sleep_every=100, api_sleep_seconds=0.2, api_row_workers=2, llm_max_workers=100, llm_max_tokens=12800, library_output_path=None):
     print("Initializing Pipeline...")
     pipeline = ExtractMonomer(
         entry_file_name=input_file,
@@ -265,6 +270,8 @@ def run_pipeline(input_file, api_workers=8, api_timeout=5, api_sleep_every=100, 
         api_sleep_every=api_sleep_every,
         api_sleep_seconds=api_sleep_seconds,
         api_row_workers=api_row_workers,
+        llm_max_workers=llm_max_workers,
+        llm_max_tokens=llm_max_tokens,
         library_output_path=library_output_path,
     )
     print("Compiling Pipeline...")
@@ -475,6 +482,128 @@ def write_smiles_issue_csv(pipeline, output_path):
         writer.writerows(rows)
     return len(rows)
 
+def merge_global_library(scan_dir, output_path):
+    """
+    扫描 scan_dir 下所有的 monomers.csv，合并去重后写入 output_path。
+    格式与 monomers.csv 完全一致。
+    去重策略：
+    - Key: SMILES (if valid) > Full Name > Abbreviation
+    - 合并字段：
+      - doi: 集合合并
+      - abbreviation/full_name/cas_no: 集合合并
+      - smiles_valid: 优先保留 valid
+      - 其他字段: 非空覆盖
+    """
+    print(f"Merging global library from {scan_dir} ...")
+    csv_files = glob.glob(os.path.join(scan_dir, "**", "monomers.csv"), recursive=True)
+    if not csv_files:
+        print("No monomers.csv files found to merge.")
+        return
+
+    unique_map = {}
+    total_read = 0
+    
+    # 辅助函数：标准化列表字符串 "a;b" -> ["a", "b"]
+    def _split_clean(s):
+        return [x.strip() for x in str(s).split(";") if x.strip()]
+
+    # 辅助函数：选择 Key
+    def _get_key(row):
+        # 优先使用 smiles_final (如果 valid 且非空)
+        s = str(row.get("smiles_final", "")).strip()
+        v = str(row.get("smiles_valid", "")).strip()
+        if s and v == "valid":
+            return s
+        # 其次使用 full_name
+        fns = _split_clean(row.get("full_name", ""))
+        if fns:
+            return fns[0]
+        # 最后使用 abbreviation
+        abs = _split_clean(row.get("abbreviation", ""))
+        if abs:
+            return abs[0]
+        # 如果都没有，回退到 invalid smiles
+        if s:
+            return s
+        return ""
+
+    for fpath in csv_files:
+        try:
+            with open(fpath, "r", encoding="utf-8") as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    total_read += 1
+                    key = _get_key(row)
+                    if not key:
+                        continue
+                    if key not in unique_map:
+                        unique_map[key] = row
+                    else:
+                        # Merge logic
+                        existing = unique_map[key]
+                        
+                        # Merge Lists (Set union)
+                        for col in ["doi", "abbreviation", "full_name", "cas_no"]:
+                            old_list = set(_split_clean(existing.get(col, "")))
+                            new_list = set(_split_clean(row.get(col, "")))
+                            merged_list = sorted(list(old_list | new_list))
+                            existing[col] = ";".join(merged_list)
+                        
+                        # Merge Single Fields (Priority to valid/non-empty)
+                        # 如果 existing 是 invalid 而 incoming 是 valid，则覆盖
+                        e_valid = str(existing.get("smiles_valid", "")).strip()
+                        n_valid = str(row.get("smiles_valid", "")).strip()
+                        
+                        should_overwrite = False
+                        if e_valid != "valid" and n_valid == "valid":
+                            should_overwrite = True
+                        elif e_valid == "valid" and n_valid == "valid":
+                            # 都是 valid，不做覆盖，维持 existing (人工校正保护原则)
+                            should_overwrite = False
+                        elif e_valid != "valid" and n_valid != "valid":
+                            # 都是 invalid，取非空更长的? 暂不处理，维持 existing
+                            should_overwrite = False
+                            
+                        if should_overwrite:
+                            # 覆盖主要的单值字段
+                            for col in ["smiles", "smiles_can", "iupac_name", 
+                                        "smiles_pubchem", "smiles_pubchem_can", 
+                                        "smiles_opsin", "smiles_opsin_can",
+                                        "smiles_cactus", "smiles_cactus_can",
+                                        "smiles_api_can", "smiles_final", "smiles_valid"]:
+                                v = row.get(col, "")
+                                if v:
+                                    existing[col] = v
+                        else:
+                            # 如果不完全覆盖，也要补充缺失的字段
+                            for col in ["smiles", "smiles_can", "iupac_name", 
+                                        "smiles_pubchem", "smiles_pubchem_can", 
+                                        "smiles_opsin", "smiles_opsin_can",
+                                        "smiles_cactus", "smiles_cactus_can",
+                                        "smiles_api_can", "smiles_final"]: # valid 不自动补，由上述逻辑控制
+                                if not existing.get(col) and row.get(col):
+                                    existing[col] = row.get(col)
+
+        except Exception as e:
+            print(f"Error reading {fpath}: {e}")
+
+    # Write out
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    # 确保 CSV_COLUMNS 里的所有列都存在
+    final_rows = []
+    for row in unique_map.values():
+        out_row = {}
+        for col in CSV_COLUMNS:
+            out_row[col] = row.get(col, "")
+        final_rows.append(out_row)
+    
+    with open(output_path, "w", encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=CSV_COLUMNS)
+        writer.writeheader()
+        writer.writerows(final_rows)
+    
+    print(f"Global library merged: {len(final_rows)} unique entries from {total_read} source rows. Saved to {output_path}")
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--base-dir", default="/share/lcc/paper")
@@ -495,6 +624,9 @@ def main():
     api_sleep_every = _env_int("MONOMER_API_SLEEP_EVERY", 1000)
     api_sleep_seconds = _env_float("MONOMER_API_SLEEP_SECONDS", 0.2)
     api_row_workers = _env_int("MONOMER_API_ROW_WORKERS", 4)
+    llm_max_workers = _env_int("MONOMER_LLM_MAX_WORKERS", 100)
+    llm_max_tokens = _env_int("MONOMER_LLM_MAX_TOKENS", 12800)
+    
     print(f"Scanning JSON under: {base_dir}")
     files = find_json_files(base_dir)
     if args.limit and args.limit > 0:
@@ -515,12 +647,17 @@ def main():
         api_sleep_every=api_sleep_every,
         api_sleep_seconds=api_sleep_seconds,
         api_row_workers=api_row_workers,
+        llm_max_workers=llm_max_workers,
+        llm_max_tokens=llm_max_tokens,
         library_output_path=args.library_output_path,
     )
     save_results_to_csv(pipeline, output_root=args.output_dir, csv_workers=csv_workers, progress_every=progress_every)
     issue_count = write_smiles_issue_csv(pipeline, args.smiles_issue_csv)
     if issue_count:
         print(f"Wrote {issue_count} problem rows to {args.smiles_issue_csv}")
+
+    if args.library_output_path:
+        merge_global_library(args.output_dir or base_dir, args.library_output_path)
 
 if __name__ == "__main__":
     main()

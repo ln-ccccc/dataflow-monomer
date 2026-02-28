@@ -49,7 +49,51 @@ def _ensure_local_libstdcpp():
 
 
 _ensure_local_libstdcpp()
+def _load_env_from_setup_env(path=None):
+    try:
+        if path is None:
+            path = os.getenv("LCC_SETUP_ENV_PATH", "/share/lcc/setup_env.sh")
+        if not os.path.exists(path):
+            return
+        wanted = {
+            "GOOGLE_APPLICATION_CREDENTIALS",
+            "GCP_PROJECT_ID",
+            "GOOGLE_CLOUD_PROJECT",
+            "HTTP_PROXY",
+            "HTTPS_PROXY",
+            "http_proxy",
+            "https_proxy",
+            "no_proxy",
+        }
+        with open(path, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if not line.startswith("export "):
+                    continue
+                _, rest = line.split("export ", 1)
+                if "=" not in rest:
+                    continue
+                key, value = rest.split("=", 1)
+                key = key.strip()
+                if key.startswith("MONOMER_") or key in wanted:
+                    pass
+                else:
+                    continue
+                if os.environ.get(key):
+                    continue
+                value = value.strip()
+                if len(value) >= 2 and ((value[0] == value[-1] == '"') or (value[0] == value[-1] == "'")):
+                    value = value[1:-1]
+                os.environ[key] = value
+        for upper, lower in [("HTTP_PROXY", "http_proxy"), ("HTTPS_PROXY", "https_proxy")]:
+            if upper in os.environ and lower not in os.environ:
+                os.environ[lower] = os.environ[upper]
+    except Exception:
+        pass
+
+_load_env_from_setup_env()
 from rdkit import Chem
+
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 from operators.general.chunked_generator import ChunkedPromptedGenerator
@@ -187,6 +231,8 @@ class MonomerSmilesEnrichStage:
         self._session_local = threading.local()
         self._name_cache = {}
         self._name_cache_lock = threading.Lock()
+        self._smiles_canon_cache = {}
+        self._smiles_canon_cache_lock = threading.Lock()
         self.enrich_operator = PandasOperator([
             lambda df: df.assign(
                 monomers_info=df.apply(self._enrich_from_row, axis=1)
@@ -264,6 +310,23 @@ class MonomerSmilesEnrichStage:
                 return value
         return ""
 
+    def _query_pubchem_smiles(self, smiles):
+        url = (
+            "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/smiles/"
+            f"{quote(smiles)}/property/"
+            "IsomericSMILES,CanonicalSMILES,ConnectivitySMILES/JSON"
+        )
+        data = self._get(url, as_json=True) or {}
+        props = data.get("PropertyTable", {}).get("Properties", [])
+        if not props:
+            return ""
+        prop = props[0]
+        for key in ("IsomericSMILES", "CanonicalSMILES", "ConnectivitySMILES"):
+            value = prop.get(key)
+            if value:
+                return value
+        return ""
+
     def _query_opsin(self, name):
         url = f"https://opsin.ch.cam.ac.uk/opsin/{quote(name)}.json"
         data = self._get(url, as_json=True) or {}
@@ -299,6 +362,9 @@ class MonomerSmilesEnrichStage:
         return self._to_mol(s) is not None
 
     def _canon_smiles(self, s):
+        s = self._normalize_smiles(s)
+        if not s:
+            return ""
         mol = self._to_mol(s)
         if not mol:
             return ""
@@ -323,14 +389,52 @@ class MonomerSmilesEnrichStage:
         monomer["smiles_opsin_can"] = opsin_can
         monomer["smiles_cactus_can"] = cactus_can
 
-        api_cans = [x for x in [pubchem_can, opsin_can, cactus_can] if x]
-        uniq = list(dict.fromkeys(api_cans))
-        api_can = uniq[0] if len(uniq) == 1 else ""
-        monomer["smiles_api_can"] = api_can
+        api_candidates = [x for x in [pubchem_can, opsin_can, cactus_can] if x]
+        uniq_api = list(dict.fromkeys(api_candidates))
+        
+        # smiles_api_can 填充逻辑：
+        # 如果 API 结果一致，取该结果
+        # 如果不一致但其中有一个与 text_can 一致，取 text_can
+        # 否则取第一个非空结果作为参考（或者置空）
+        if len(uniq_api) == 1:
+            monomer["smiles_api_can"] = uniq_api[0]
+        elif text_can and text_can in uniq_api:
+            monomer["smiles_api_can"] = text_can
+        else:
+            monomer["smiles_api_can"] = uniq_api[0] if uniq_api else ""
 
-        matched = bool(text_can) and bool(api_can) and text_can == api_can
-        monomer["smiles_final"] = text_can if matched else ""
-        monomer["smiles_valid"] = "valid" if matched else "invalid"
+        api_can = str(monomer.get("smiles_api_can", "")).strip()
+
+        # 根据用户新规则重构判定逻辑
+        # Invalid 条件 (满足任一):
+        # 1. 正文 smiles 为空
+        # 2. PubChem/OPSIN/CACTUS 三个 API 结果全为空
+        # 3. 正文 SMILES / API SMILES 任一无法被 RDKit 正则化出 canonical (等价于 canonical 为空)
+        # Valid 条件 (同时满足):
+        # 1. 正文 smiles 不为空
+        # 2. 三库 API 至少有一个不为空
+        # 3. 正文 canonical smiles 与任意一个“非空 API 结果”的 canonical smiles 完全一致
+
+        # text_can 为空 -> Invalid (规则1 & 3)
+        if not text_can:
+            monomer["smiles_final"] = text_smiles
+            monomer["smiles_valid"] = "invalid"
+            return monomer
+
+        # API 全为空 (canonical 后全空) -> Invalid (规则2)
+        if not api_candidates:
+            monomer["smiles_final"] = text_can
+            monomer["smiles_valid"] = "invalid"
+            return monomer
+            
+        # 规则 3: 正文 canonical 与任意一个非空 API canonical 一致 -> Valid
+        if text_can in api_candidates:
+            monomer["smiles_final"] = text_can
+            monomer["smiles_valid"] = "valid"
+        else:
+            monomer["smiles_final"] = text_can
+            monomer["smiles_valid"] = "invalid"
+
         return monomer
 
     def _split_query_names(self, monomer):
@@ -469,15 +573,38 @@ class MonomerSmilesEnrichStage:
         return self._enrich_monomer_list(seed)
 
     def run(self, storage):
-        df = storage.step().read("dataframe")
+        step_storage = storage.step()
+        df = step_storage.read("dataframe")
         records = df.to_dict(orient="records")
-        if self.row_workers <= 1 or len(records) <= 1:
-            monomers_info = [self._enrich_from_row(r) for r in records]
+        logger = None
+        try:
+            from dataflow import get_logger
+            logger = get_logger()
+        except Exception:
+            logger = None
+        total = len(records)
+        if logger:
+            logger.info(f"Running MonomerSmilesEnrichStage rows {total} api_workers {self.api_workers} row_workers {self.row_workers}")
+        try:
+            progress_every = int(os.getenv("MONOMER_ENRICH_PROGRESS_EVERY") or "50")
+        except Exception:
+            progress_every = 50
+        if progress_every <= 0:
+            progress_every = 0
+
+        if self.row_workers <= 1 or total <= 1:
+            monomers_info = []
+            for i, r in enumerate(records, 1):
+                monomers_info.append(self._enrich_from_row(r))
+                if logger and progress_every and i % progress_every == 0:
+                    logger.info(f"MonomerSmilesEnrichStage progress {i}/{total}")
         else:
             with ThreadPoolExecutor(max_workers=self.row_workers) as executor:
                 monomers_info = list(executor.map(self._enrich_from_row, records))
         df["monomers_info"] = monomers_info
-        storage.write(df)
+        step_storage.write(df)
+        if logger:
+            logger.info("MonomerSmilesEnrichStage complete")
 
  
 
@@ -518,7 +645,7 @@ class ExtractMonomer:
         api_sleep_every = api_sleep_every if api_sleep_every is not None else _env_int("MONOMER_API_SLEEP_EVERY", 50)
         api_sleep_seconds = api_sleep_seconds if api_sleep_seconds is not None else _env_float("MONOMER_API_SLEEP_SECONDS", 0.5)
         api_row_workers = api_row_workers if api_row_workers is not None else _env_int("MONOMER_API_ROW_WORKERS", 4)
-        llm_max_workers = llm_max_workers if llm_max_workers is not None else _env_int("MONOMER_LLM_MAX_WORKERS", 50)
+        llm_max_workers = llm_max_workers if llm_max_workers is not None else _env_int("MONOMER_LLM_MAX_WORKERS", 100)
         llm_max_tokens = llm_max_tokens if llm_max_tokens is not None else _env_int("MONOMER_LLM_MAX_TOKENS", 12800)
         if llm_max_tokens < 1:
             llm_max_tokens = 1
@@ -527,13 +654,13 @@ class ExtractMonomer:
 
         self.storage = FileStorage(
             first_entry_file_name=entry_file_name,
-            cache_path="../monomer_output",
-            cache_type="jsonl",
+            cache_path="/share/lcc/dataflow-dp/outputs/monomer_demo",
+            cache_type="json",
         )
         self.llm_serving = APIGoogleVertexAIServing(
-            project=os.getenv("GCP_PROJECT_ID"),
+            project=os.getenv("GOOGLE_CLOUD_PROJECT") or os.getenv("GCP_PROJECT_ID"),
             location='us-central1',
-            model_name="gemini-2.5-pro",
+            model_name="gemini-2.5-flash",
             max_workers=llm_max_workers,
             max_tokens=llm_max_tokens,
         )
@@ -563,7 +690,7 @@ class ExtractMonomer:
     def forward(self, batch_size=10, resume_from_last=False):
         self.seed_stage.run(self.storage)
         self.smiles_stage.run(self.storage)
-        self.library_stage.run(self.storage)
+        # self.library_stage.run(self.storage)
 
 
 class MonomerLibrarySaveStage:
@@ -636,6 +763,13 @@ class MonomerLibrarySaveStage:
         o = existing.get("smiles_opsin", "") or incoming.get("smiles_opsin", "") or ""
         c = existing.get("smiles_cactus", "") or incoming.get("smiles_cactus", "") or ""
         
+        # 新字段合并
+        sc = existing.get("smiles_can", "") or incoming.get("smiles_can", "") or ""
+        pc = existing.get("smiles_pubchem_can", "") or incoming.get("smiles_pubchem_can", "") or ""
+        oc = existing.get("smiles_opsin_can", "") or incoming.get("smiles_opsin_can", "") or ""
+        cc = existing.get("smiles_cactus_can", "") or incoming.get("smiles_cactus_can", "") or ""
+        ac = existing.get("smiles_api_can", "") or incoming.get("smiles_api_can", "") or ""
+        
         # 合并 DOI
         existing_doi = set(self._normalize_list(existing.get("doi", [])))
         incoming_doi = set(self._normalize_list(incoming.get("doi", [])))
@@ -647,9 +781,15 @@ class MonomerLibrarySaveStage:
             "smiles_pubchem": p,
             "smiles_opsin": o,
             "smiles_cactus": c,
+            "smiles_can": sc,
+            "smiles_pubchem_can": pc,
+            "smiles_opsin_can": oc,
+            "smiles_cactus_can": cc,
+            "smiles_api_can": ac,
             "doi": doi_list, 
         }
-        merged["smiles_final"] = self._pick_final(merged)
+        # 优先使用 existing 的 smiles_final（人工校正保护），如果 existing 没有才用 incoming
+        merged["smiles_final"] = existing.get("smiles_final", "") or incoming.get("smiles_final", "") or ""
         return merged
 
     def _load_library(self):
@@ -667,6 +807,11 @@ class MonomerLibrarySaveStage:
                 "smiles_pubchem": str(row.get("smiles_pubchem", "")).strip(),
                 "smiles_opsin": str(row.get("smiles_opsin", "")).strip(),
                 "smiles_cactus": str(row.get("smiles_cactus", "")).strip(),
+                "smiles_can": str(row.get("smiles_can", "")).strip(),
+                "smiles_pubchem_can": str(row.get("smiles_pubchem_can", "")).strip(),
+                "smiles_opsin_can": str(row.get("smiles_opsin_can", "")).strip(),
+                "smiles_cactus_can": str(row.get("smiles_cactus_can", "")).strip(),
+                "smiles_api_can": str(row.get("smiles_api_can", "")).strip(),
                 "smiles_final": str(row.get("smiles_final", "")).strip(),
                 "doi": [x for x in str(row.get("doi", "")).split(";") if x.strip()], 
             })
@@ -681,6 +826,11 @@ class MonomerLibrarySaveStage:
                 "smiles_pubchem": v.get("smiles_pubchem", ""),
                 "smiles_opsin": v.get("smiles_opsin", ""),
                 "smiles_cactus": v.get("smiles_cactus", ""),
+                "smiles_can": v.get("smiles_can", ""),
+                "smiles_pubchem_can": v.get("smiles_pubchem_can", ""),
+                "smiles_opsin_can": v.get("smiles_opsin_can", ""),
+                "smiles_cactus_can": v.get("smiles_cactus_can", ""),
+                "smiles_api_can": v.get("smiles_api_can", ""),
                 "smiles_final": v.get("smiles_final", ""),
                 "doi": ";".join(self._normalize_list(v.get("doi", []))), 
             })
@@ -688,12 +838,25 @@ class MonomerLibrarySaveStage:
         pd.DataFrame(normalized).to_csv(self.library_path, index=False)
 
     def run(self, storage):
-        df = storage.step().read("dataframe")
+        step_storage = storage.step()
+        df = step_storage.read("dataframe")
+        logger = None
+        try:
+            from dataflow import get_logger
+            logger = get_logger()
+        except Exception:
+            logger = None
         rows = self._load_library()
+        if logger:
+            logger.info(f"Running MonomerLibrarySaveStage df_rows {len(df)} library_rows {len(rows)}")
+        added = 0
         for _, row in df.iterrows():
             extracted_doi = str(getattr(row, "extracted_doi", "")).strip() 
             monomers = row.get("monomers_info", []) or []
             for m in monomers:
+                # 至少命中一个 API 才入库 (用户原话: "且三库 API 至少有一个不为空" 是 Valid 条件，入库条件可能宽松些，但通常我们只存有信息的)
+                # 这里沿用原逻辑：如果所有 API 都为空则不入库
+                # 注意：Valid 规则里 "三库 API 全为空" 是 Invalid。
                 if not (
                     str(m.get("smiles_pubchem", "")).strip()
                     or str(m.get("smiles_opsin", "")).strip()
@@ -722,7 +885,15 @@ class MonomerLibrarySaveStage:
                     "smiles_pubchem": str(m.get("smiles_pubchem", "")).strip(),
                     "smiles_opsin": str(m.get("smiles_opsin", "")).strip(),
                     "smiles_cactus": str(m.get("smiles_cactus", "")).strip(),
+                    "smiles_can": str(m.get("smiles_can", "")).strip(),
+                    "smiles_pubchem_can": str(m.get("smiles_pubchem_can", "")).strip(),
+                    "smiles_opsin_can": str(m.get("smiles_opsin_can", "")).strip(),
+                    "smiles_cactus_can": str(m.get("smiles_cactus_can", "")).strip(),
+                    "smiles_api_can": str(m.get("smiles_api_can", "")).strip(),
                     "smiles_final": str(m.get("smiles_final", "")).strip(),
                     "doi": current_dois, 
                 })
+                added += 1
         self._save_library(rows)
+        if logger:
+            logger.info(f"MonomerLibrarySaveStage complete added {added} library_rows {len(rows)}")

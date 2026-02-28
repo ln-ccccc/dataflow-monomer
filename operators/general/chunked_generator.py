@@ -7,6 +7,8 @@ from dataflow.core import OperatorABC
 from dataflow.core import LLMServingABC
 
 import tiktoken
+import os
+import time
 
 from prompts.monomer import MonomerNameExtractPrompt
 from prompts.polymer import PolymerExtractPrompt
@@ -16,10 +18,10 @@ from dataflow.core.prompt import prompt_restrict
 @OPERATOR_REGISTRY.register()
 class ChunkedPromptedGenerator(OperatorABC):
     """
-    基于Prompt的生成算子，支持自动chunk输入。
+    基于Prompt的生成算子，支持自动chunk输入并输出批次进度日志。
     - 使用tiktoken精确计算token数量；
     - 若输入超过max_chunk_len，采用递归二分法切分；
-    - 输出为每行对应的生成结果列表（而非拼接字符串）。
+    - 以批次发送到 LLM，打印 dispatch/progress/rate/ETA/空响应计数。
     """
 
     def __init__(
@@ -42,14 +44,11 @@ class ChunkedPromptedGenerator(OperatorABC):
     def get_desc(lang: str = "zh"):
         if lang == "zh":
             return (
-                "基于提示词的生成算子，支持长文本自动分chunk。"
-                "采用递归二分方式进行chunk切分，确保每段不超过max_chunk_len tokens。"
-                "返回每行对应的生成结果列表。"
+                "基于提示词的生成算子，支持长文本自动分chunk并输出批次进度日志。"
             )
         else:
             return (
-                "Prompt-based generator with recursive chunk splitting."
-                "Uses tiktoken for token counting and returns a list of chunked responses."
+                "Prompt-based generator with recursive chunk splitting and batched progress logs."
             )
 
     # === token计算 ===
@@ -78,16 +77,13 @@ class ChunkedPromptedGenerator(OperatorABC):
         self.logger.info(f"Loaded DataFrame with {len(dataframe)} rows.")
 
         all_generated_results = []
-
         all_llm_inputs = []
         row_chunk_map = []  # 记录每个row对应的chunk数量
 
-        # === 先收集所有chunk ===
+        # === 收集所有chunk ===
         for i, row in dataframe.iterrows():
             raw_content = row.get(input_key, "")
-            prompt_kwargs = {}
-            for aux_key in self.input_aux_keys:
-                prompt_kwargs[aux_key] = row.get(aux_key)
+            prompt_kwargs = {k: row.get(k) for k in self.input_aux_keys}
             if not raw_content:
                 row_chunk_map.append(0)
                 continue
@@ -102,22 +98,40 @@ class ChunkedPromptedGenerator(OperatorABC):
             all_llm_inputs.extend(llm_inputs)
             row_chunk_map.append(len(chunks))
 
-        # === 一次性并发调用 ===
-        self.logger.info(f"Total {len(all_llm_inputs)} chunks to generate")
+        # === 分批并发调用 ===
+        total = len(all_llm_inputs)
+        self.logger.info(f"Total {total} chunks to generate")
 
         try:
-            # Force disable schema to avoid SDK errors, rely on prompt instructions
-            # if self.json_schema:
-            #     all_responses = self.llm_serving.generate_from_input(
-            #         all_llm_inputs, response_schema=self.json_schema
-            #     )
-            # else:
-            all_responses = self.llm_serving.generate_from_input(all_llm_inputs)
-        except Exception as e:
-            self.logger.error(f"Global generation failed: {e}")
-            all_generated_results = [[] for _ in range(len(dataframe))]
-        else:
-            # === 按row重新划分responses ===
+            all_responses = []
+            if total > 0:
+                bs_env = os.getenv("MONOMER_LLM_BATCH")
+                try:
+                    batch_size = int(bs_env) if bs_env else 20
+                except Exception:
+                    batch_size = 20
+                if batch_size <= 0:
+                    batch_size = 20
+                done = 0
+                start = time.time()
+                batches = (total + batch_size - 1) // batch_size
+                for b, i in enumerate(range(0, total, batch_size), start=1):
+                    j = min(i + batch_size, total)
+                    batch = all_llm_inputs[i:j]
+                    self.logger.info(f"LLM dispatch {b}/{batches} size {len(batch)}")
+                    out = self.llm_serving.generate_from_input(batch)
+                    if not isinstance(out, list) or len(out) != len(batch):
+                        out = [""] * len(batch)
+                    all_responses.extend(out)
+                    done += len(batch)
+                    elapsed = max(1e-6, time.time() - start)
+                    rate = done / elapsed
+                    remain = total - done
+                    eta = remain / rate if rate > 0 else 0
+                    empty_cnt = sum(1 for x in out if not (str(x).strip()))
+                    self.logger.info(f"LLM progress {done}/{total} rate {rate:.2f}/s ETA {eta:.1f}s empty {empty_cnt}/{len(out)}")
+            
+            # 重新按 row 划分
             all_generated_results = []
             idx = 0
             for num_chunks in row_chunk_map:
@@ -126,6 +140,10 @@ class ChunkedPromptedGenerator(OperatorABC):
                 else:
                     all_generated_results.append(all_responses[idx:idx + num_chunks])
                     idx += num_chunks
+                    
+        except Exception as e:
+            self.logger.error(f"Global generation failed: {e}")
+            all_generated_results = [[] for _ in range(len(dataframe))]
 
         dataframe[output_key] = all_generated_results
         output_file = storage.write(dataframe)

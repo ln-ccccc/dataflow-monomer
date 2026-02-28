@@ -19,10 +19,9 @@
 - 输出：
   - 每篇论文一个 `monomers.csv`
   - 全局单体库 `monomer_library.csv`
-  - SMILES 解析问题列表 `monomer_smiles_issues.csv`
 
 ## 2. 整体流程概览
-流水线从磁盘 JSON 到最终 CSV 的大致步骤如下：
+流水线从磁盘 JSON 到最终 CSV 的大致步骤如下（`run_monomer.py` 会把这些步骤串起来执行）：
 1. 扫描 JSON 并生成输入 JSONL  
    - 遍历 `base_dir` 下所有 `.json` 文件，将有效内容写入 `input.jsonl`
 
@@ -66,56 +65,60 @@
      - 当本次 monomers 为空且已有非空 CSV 时，不覆盖原文件
 
 6. 问题 SMILES 导出  
-   - 函数：`write_smiles_issue_csv`
-   - 将 `smiles_valid != "invalid"` 以外的记录过滤掉，仅导出无效 SMILES 的条目
-   - 默认输出路径：`/share/lcc/dataflow-dp/data/monomer_smiles_issues.csv`
+  - 函数：`write_smiles_issue_csv`
+  - 将 `smiles_valid != "invalid"` 以外的记录过滤掉，仅导出无效 SMILES 的条目
+  - 默认输出路径：`/share/lcc/dataflow-dp/data/monomer_smiles_issues.csv`
 
-## 5. Runner 示例
+## 3. 入口脚本：run_monomer.py
 
-以下示例展示如何以最小 Runner 执行 Monomer 流水线（请根据你仓库实际类名/路径调整）：
+`run_monomer.py` 是 Monomer 抽取的官方入口脚本，负责把“扫描 JSON → 生成输入 JSONL → 调用流水线 → 写出各类 CSV”串为一条可执行命令。
+
+### 3.1 基本用法
+
+在仓库根目录运行：
 
 ```bash
-python - << 'PY'
-import os, glob, json, csv
-from pipelines.monomer_extract_pipeline import ExtractMonomer
-
-BASE_DIR = "/share/lcc/paper"
-INPUT_JSONL = "/share/lcc/dataflow-dp/data/monomer_input_full.jsonl"
-LIB_PATH = "/share/lcc/dataflow-dp/data/monomer_library.csv"
-
-def find_json_files(base_path):
-    return glob.glob(os.path.join(base_path, "**", "*.json"), recursive=True)
-
-def prepare_input_data(json_files, output_jsonl):
-    with open(output_jsonl, "w", encoding="utf-8") as f:
-        for p in json_files:
-            try:
-                data = json.load(open(p, "r", encoding="utf-8"))
-                content = data.get("content", "")
-                if not content:
-                    continue
-                doi_hint = data.get("token", "")
-                extracted = os.path.basename(os.path.dirname(p))
-                f.write(json.dumps({
-                    "file_path": p,
-                    "content": content,
-                    "doi_hint": doi_hint,
-                    "extracted_doi": extracted
-                }) + "\n")
-            except Exception:
-                pass
-
-files = find_json_files(BASE_DIR)
-prepare_input_data(files, INPUT_JSONL)
-
-os.environ.setdefault("MONOMER_LLM_MAX_WORKERS", "2")
-pipeline = ExtractMonomer(entry_file_name=INPUT_JSONL, library_output_path=LIB_PATH)
-pipeline.compile()
-pipeline.forward()
-PY
+cd /share/lcc/dataflow-dp
+python run_monomer.py \
+  --base-dir /share/lcc/paper \
+  --input-jsonl /share/lcc/dataflow-dp/data/monomer_input_full.jsonl \
+  --smiles-issue-csv /share/lcc/dataflow-dp/data/monomer_smiles_issues.csv
 ```
 
-如需小规模测试，可在 `prepare_input_data` 后切片 `files[:N]` 或采样生成 `INPUT_JSONL`。
+关键参数：
+- `--base-dir`：论文 JSON 根目录（默认 `/share/lcc/paper`）
+- `--input-jsonl`：汇总后的输入 JSONL 路径（默认 `/share/lcc/dataflow-dp/data/monomer_input_full.jsonl`）
+- `--limit`：仅处理前 N 个 JSON（0 表示不限制）
+- `--output-dir`：若设置，则 `monomers.csv` 写到该目录下以 DOI/目录名为子目录；未设置时写回原 JSON 所在目录
+- `--smiles-issue-csv`：SMILES 问题汇总文件路径（默认 `/share/lcc/dataflow-dp/data/monomer_smiles_issues.csv`）
+- `--library-output-path`：全局单体库输出路径（默认 `/share/lcc/dataflow-dp/data/monomer_library.csv`，与流水线内部保持一致）
+
+脚本运行时会打印几个关键阶段：
+- `Scanning JSON under: ...`：遍历 JSON 文件
+- `Prepared X entries in ...`：写入输入 JSONL
+- `Initializing Pipeline / Compiling Pipeline / Running Pipeline`：构建并执行 `ExtractMonomer` 流水线
+- `Loaded X rows from storage. Writing CSVs with ... workers...`：从流水线存储中读出结果并并发写 `monomers.csv`
+- `Saved CSV results to ...`：统计写出成功的论文数
+- `Wrote N problem rows to ...monomer_smiles_issues.csv`：输出无效 SMILES 的问题表
+
+### 3.2 相关环境变量
+
+`run_monomer.py` 通过环境变量控制并发与节流参数（命令行不再暴露这些开关）：
+- `MONOMER_CSV_WORKERS`：写 `monomers.csv` 的并发 worker 数，默认 `min(4, CPU 核心数)`
+- `MONOMER_PROGRESS_EVERY`：写 CSV 时每处理多少行打印一次进度（默认 `500`）
+- `MONOMER_API_WORKERS`：调用外部化学库（PubChem / OPSIN / CACTUS）时的并发 worker 数（默认 `4`）
+- `MONOMER_API_TIMEOUT`：每次外部请求超时时间（秒，默认 `10`）
+- `MONOMER_API_SLEEP_EVERY`：每处理多少个请求触发一次节流睡眠（默认 `1000`）
+- `MONOMER_API_SLEEP_SECONDS`：触发节流时睡眠时长（秒，默认 `0.2`）
+- `MONOMER_API_ROW_WORKERS`：对同一行内部的 monomer 进行并行处理的 worker 数（默认 `4`）
+
+同时，脚本会在启动时自动：
+- 加载 `/share/lcc/setup_env.sh` 中的环境变量（包括 `MONOMER_*`、`PROPS_*`、GCP 凭据与代理变量）
+- 将大写的 `HTTP_PROXY` / `HTTPS_PROXY` 同步为小写的 `http_proxy` / `https_proxy`
+
+如需做小规模测试，可以：
+- 使用 `--limit` 限制扫描的 JSON 数量，例如 `--limit 100`
+- 在环境变量中把 `MONOMER_API_WORKERS` / `MONOMER_CSV_WORKERS` 设为较小值，降低外部依赖压力
 
 ## 4. 数据结构说明
 - 中间 JSONL（`monomer_input_full.jsonl`）每行字段：
@@ -137,46 +140,47 @@ PY
   - `smiles_final`：选出的最终 SMILES
   - `smiles_valid`：`valid` / `invalid`
 
-## 5. 输出文件格式
-- 每篇论文的 `monomers.csv`：
-  - 路径：
-    - 默认：各自 JSON 所在目录
-    - 或者：`--output-dir` 下以 DOI/目录名为子目录
-  - 列：
-    - `doi`
-    - `abbreviation`
-    - `full_name`
-    - `smiles`
-    - `cas_no`
-    - `iupac_name`
-    - `smiles_pubchem`
-    - `smiles_opsin`
-    - `smiles_cactus`
-    - `smiles_final`
-    - `smiles_valid`
-  - 特别说明：
-    - `doi` 优先使用 `extracted_doi`，若为空则回退到 monomer 内部携带的 `doi`
-    - 列表字段以 `;` 连接为字符串
+## 4. 输出文件格式
 
-- 全局单体库 `monomer_library.csv`：
-  - 默认路径：`/share/lcc/dataflow-dp/data/monomer_library.csv`
-  - 列：
-    - `abbreviation`
-    - `full_name`
-    - `smiles_pubchem`
-    - `smiles_opsin`
-    - `smiles_cactus`
-    - `smiles_final`
-    - `doi`
-  - 行为：
-    - 仅对至少一个外部库命中的单体进行记录
-    - 多次运行会不断追加记录，不进行去重
+### Valid / Invalid 判定规则
+单体有效性 (`smiles_valid`) 依据正文 SMILES 与外部 API 结果的正则化对比决定：
+- **Invalid** (满足任一条件即判定为无效):
+  1. 正文 `smiles` 为空（或无法被 RDKit 正则化）。
+  2. 三个外部 API (PubChem/OPSIN/CACTUS) 结果**全为空**。
+  3. 正文 Canonical SMILES 与**所有**非空 API 结果的 Canonical SMILES 都不一致。
+- **Valid** (必须同时满足以下所有条件):
+  1. 正文 `smiles` 不为空。
+  2. 三个外部 API 至少有一个结果不为空。
+  3. 正文 Canonical SMILES 与**任意一个**非空 API 结果的 Canonical SMILES 完全一致。
 
-- SMILES 问题文件 `monomer_smiles_issues.csv`：
-  - 默认路径：`/share/lcc/dataflow-dp/data/monomer_smiles_issues.csv`
-  - 仅包含 `smiles_valid == "invalid"` 的单体条目，用于人工排查
+### 1. 每篇论文的 `monomers.csv`
+- **路径**：
+  - 默认：各自 JSON 所在目录
+  - 或者：`--output-dir` 下以 DOI/目录名为子目录
+- **列结构** (对应 `run_monomer.py` 中的 `CSV_COLUMNS`)：
+  - `doi` / `abbreviation` / `full_name` / `cas_no` / `iupac_name`
+  - `smiles`: 正文原始提取的 SMILES
+  - `smiles_can`: 正文 SMILES 经 RDKit 正则化后的 Canonical SMILES
+  - `smiles_pubchem` / `smiles_pubchem_can`: PubChem 结果及其 Canonical 形式
+  - `smiles_opsin` / `smiles_opsin_can`: OPSIN 结果及其 Canonical 形式
+  - `smiles_cactus` / `smiles_cactus_can`: CACTUS 结果及其 Canonical 形式
+  - `smiles_api_can`: 多个 API 结果中选出的代表性 Canonical SMILES (若一致则为该值，若不一致但命中正文则为正文值，否则取第一个非空结果)
+  - `smiles_final`: 最终采用的 SMILES (Valid 时为 Canonical SMILES，Invalid 时可能为原始值或空)
+  - `smiles_valid`: `valid` 或 `invalid`
+- **特别说明**：
+  - `doi` 优先使用 `extracted_doi`，若为空则回退到 monomer 内部携带的 `doi`
+  - 列表字段以 `;` 连接为字符串
 
-## 6. 环境与依赖
+### 2. 全局单体库 `monomer_library.csv`
+- **默认路径**：`/share/lcc/dataflow-dp/data/monomer_library.csv`
+- **列结构**：包含上述所有 SMILES 相关字段 (`smiles_pubchem`...`smiles_api_can`, `smiles_final`) 以及 `abbreviation`, `full_name`, `doi`。
+- **行为**：
+  - 仅对至少一个外部库命中的单体进行记录。
+  - 多次运行会不断追加记录，不进行去重。
+  - 包含正则化后的 `_can` 字段，便于后续精确匹配。
+
+
+## 5. 环境与依赖
 - LLM 服务：
   - 使用 Vertex AI Gemini（通过 `APIGoogleVertexAIServing` 封装）
   - 建议在 Runner 中 `source /share/lcc/setup_env.sh` 以加载凭据与代理
@@ -190,7 +194,7 @@ PY
 - 化学工具：
   - 依赖 RDKit 对 SMILES 进行解析与规范化
 
-## 7. 常见问题排查
+## 6. 常见问题排查
 - 运行结束未见任何 `monomers.csv`：
   - 检查日志中是否出现：
     - `Prepared X entries in ...`（准备输入数据）
