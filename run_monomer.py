@@ -482,127 +482,29 @@ def write_smiles_issue_csv(pipeline, output_path):
         writer.writerows(rows)
     return len(rows)
 
-def merge_global_library(scan_dir, output_path):
-    """
-    扫描 scan_dir 下所有的 monomers.csv，合并去重后写入 output_path。
-    格式与 monomers.csv 完全一致。
-    去重策略：
-    - Key: SMILES (if valid) > Full Name > Abbreviation
-    - 合并字段：
-      - doi: 集合合并
-      - abbreviation/full_name/cas_no: 集合合并
-      - smiles_valid: 优先保留 valid
-      - 其他字段: 非空覆盖
-    """
-    print(f"Merging global library from {scan_dir} ...")
+def concat_monomers_csv(scan_dir, output_path):
     csv_files = glob.glob(os.path.join(scan_dir, "**", "monomers.csv"), recursive=True)
     if not csv_files:
-        print("No monomers.csv files found to merge.")
-        return
-
-    unique_map = {}
-    total_read = 0
-    
-    # 辅助函数：标准化列表字符串 "a;b" -> ["a", "b"]
-    def _split_clean(s):
-        return [x.strip() for x in str(s).split(";") if x.strip()]
-
-    # 辅助函数：选择 Key
-    def _get_key(row):
-        # 优先使用 smiles_final (如果 valid 且非空)
-        s = str(row.get("smiles_final", "")).strip()
-        v = str(row.get("smiles_valid", "")).strip()
-        if s and v == "valid":
-            return s
-        # 其次使用 full_name
-        fns = _split_clean(row.get("full_name", ""))
-        if fns:
-            return fns[0]
-        # 最后使用 abbreviation
-        abs = _split_clean(row.get("abbreviation", ""))
-        if abs:
-            return abs[0]
-        # 如果都没有，回退到 invalid smiles
-        if s:
-            return s
-        return ""
-
-    for fpath in csv_files:
-        try:
-            with open(fpath, "r", encoding="utf-8") as f:
-                reader = csv.DictReader(f)
-                for row in reader:
-                    total_read += 1
-                    key = _get_key(row)
-                    if not key:
-                        continue
-                    if key not in unique_map:
-                        unique_map[key] = row
-                    else:
-                        # Merge logic
-                        existing = unique_map[key]
-                        
-                        # Merge Lists (Set union)
-                        for col in ["doi", "abbreviation", "full_name", "cas_no"]:
-                            old_list = set(_split_clean(existing.get(col, "")))
-                            new_list = set(_split_clean(row.get(col, "")))
-                            merged_list = sorted(list(old_list | new_list))
-                            existing[col] = ";".join(merged_list)
-                        
-                        # Merge Single Fields (Priority to valid/non-empty)
-                        # 如果 existing 是 invalid 而 incoming 是 valid，则覆盖
-                        e_valid = str(existing.get("smiles_valid", "")).strip()
-                        n_valid = str(row.get("smiles_valid", "")).strip()
-                        
-                        should_overwrite = False
-                        if e_valid != "valid" and n_valid == "valid":
-                            should_overwrite = True
-                        elif e_valid == "valid" and n_valid == "valid":
-                            # 都是 valid，不做覆盖，维持 existing (人工校正保护原则)
-                            should_overwrite = False
-                        elif e_valid != "valid" and n_valid != "valid":
-                            # 都是 invalid，取非空更长的? 暂不处理，维持 existing
-                            should_overwrite = False
-                            
-                        if should_overwrite:
-                            # 覆盖主要的单值字段
-                            for col in ["smiles", "smiles_can", "iupac_name", 
-                                        "smiles_pubchem", "smiles_pubchem_can", 
-                                        "smiles_opsin", "smiles_opsin_can",
-                                        "smiles_cactus", "smiles_cactus_can",
-                                        "smiles_api_can", "smiles_final", "smiles_valid"]:
-                                v = row.get(col, "")
-                                if v:
-                                    existing[col] = v
-                        else:
-                            # 如果不完全覆盖，也要补充缺失的字段
-                            for col in ["smiles", "smiles_can", "iupac_name", 
-                                        "smiles_pubchem", "smiles_pubchem_can", 
-                                        "smiles_opsin", "smiles_opsin_can",
-                                        "smiles_cactus", "smiles_cactus_can",
-                                        "smiles_api_can", "smiles_final"]: # valid 不自动补，由上述逻辑控制
-                                if not existing.get(col) and row.get(col):
-                                    existing[col] = row.get(col)
-
-        except Exception as e:
-            print(f"Error reading {fpath}: {e}")
-
-    # Write out
+        print("No monomers.csv files found to concatenate.")
+        return 0
+    csv_files = sorted(csv_files)
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    # 确保 CSV_COLUMNS 里的所有列都存在
-    final_rows = []
-    for row in unique_map.values():
-        out_row = {}
-        for col in CSV_COLUMNS:
-            out_row[col] = row.get(col, "")
-        final_rows.append(out_row)
-    
-    with open(output_path, "w", encoding="utf-8", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=CSV_COLUMNS)
+    total_rows = 0
+    with open(output_path, "w", encoding="utf-8", newline="") as fout:
+        writer = csv.DictWriter(fout, fieldnames=CSV_COLUMNS)
         writer.writeheader()
-        writer.writerows(final_rows)
-    
-    print(f"Global library merged: {len(final_rows)} unique entries from {total_read} source rows. Saved to {output_path}")
+        for fpath in csv_files:
+            try:
+                with open(fpath, "r", encoding="utf-8") as fin:
+                    reader = csv.DictReader(fin)
+                    for row in reader:
+                        out_row = {col: row.get(col, "") for col in CSV_COLUMNS}
+                        writer.writerow(out_row)
+                        total_rows += 1
+            except Exception as e:
+                print(f"Error reading {fpath}: {e}")
+    print(f"Monomer library concatenated: {total_rows} rows from {len(csv_files)} files. Saved to {output_path}")
+    return total_rows
 
 def main():
     parser = argparse.ArgumentParser()
@@ -657,7 +559,7 @@ def main():
         print(f"Wrote {issue_count} problem rows to {args.smiles_issue_csv}")
 
     if args.library_output_path:
-        merge_global_library(args.output_dir or base_dir, args.library_output_path)
+        concat_monomers_csv(args.output_dir or base_dir, args.library_output_path)
 
 if __name__ == "__main__":
     main()

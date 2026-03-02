@@ -1,12 +1,96 @@
 import argparse
 import copy
 import csv
+import ctypes
 import glob
 import json
 import os
 import sys
 from typing import List, Tuple
+
+def _ensure_local_libstdcpp():
+    try:
+        if os.environ.get("LCC_LIBSTDCPP_READY") == "1":
+            return
+        candidates = []
+        prefix = os.path.dirname(os.path.dirname(sys.executable))
+        candidates.append(os.path.join(prefix, "lib", "libstdc++.so.6"))
+        conda_prefix = os.environ.get("CONDA_PREFIX")
+        if conda_prefix:
+            candidates.append(os.path.join(conda_prefix, "lib", "libstdc++.so.6"))
+        candidates.append("/opt/mamba/envs/lcc/lib/libstdc++.so.6")
+        candidate = None
+        for c in candidates:
+            if os.path.exists(c):
+                candidate = c
+                break
+        if not candidate:
+            return
+        lib_dir = os.path.dirname(candidate)
+        cur_ld = os.environ.get("LD_LIBRARY_PATH", "")
+        parts = [p for p in cur_ld.split(":") if p]
+        if lib_dir not in parts:
+            os.environ["LD_LIBRARY_PATH"] = lib_dir + (":" + cur_ld if cur_ld else "")
+        cur = os.environ.get("LD_PRELOAD", "").strip()
+        parts = [p for p in cur.split() if p]
+        if candidate not in parts:
+            os.environ["LD_PRELOAD"] = candidate + (" " + cur if cur else "")
+        os.environ["LCC_LIBSTDCPP_READY"] = "1"
+        try:
+            os.execv(sys.executable, [sys.executable] + sys.argv)
+        except Exception:
+            try:
+                ctypes.CDLL(candidate, mode=ctypes.RTLD_GLOBAL)
+            except Exception:
+                pass
+    except Exception:
+        pass
+
+def _load_env_from_setup_env(path=None):
+    try:
+        if path is None:
+            path = os.getenv("LCC_SETUP_ENV_PATH", "/share/lcc/setup_env.sh")
+        if not os.path.exists(path):
+            return
+        wanted = {
+            "GOOGLE_APPLICATION_CREDENTIALS",
+            "GCP_PROJECT_ID",
+            "GOOGLE_CLOUD_PROJECT",
+            "HTTP_PROXY",
+            "HTTPS_PROXY",
+            "http_proxy",
+            "https_proxy",
+            "no_proxy",
+        }
+        with open(path, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if not line.startswith("export "):
+                    continue
+                _, rest = line.split("export ", 1)
+                if "=" not in rest:
+                    continue
+                key, value = rest.split("=", 1)
+                key = key.strip()
+                if key not in wanted:
+                    continue
+                if os.environ.get(key):
+                    continue
+                value = value.strip()
+                if len(value) >= 2 and ((value[0] == value[-1] == '"') or (value[0] == value[-1] == "'")):
+                    value = value[1:-1]
+                os.environ[key] = value
+        for upper, lower in [("HTTP_PROXY", "http_proxy"), ("HTTPS_PROXY", "https_proxy")]:
+            if upper in os.environ and lower not in os.environ:
+                os.environ[lower] = os.environ[upper]
+    except Exception:
+        pass
+
+_ensure_local_libstdcpp()
+_load_env_from_setup_env()
+
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+
 from operators.general.chunked_generator import ChunkedPromptedGenerator
 from dataflow.operators.core_text import PandasOperator
 from prompts.generic_md_prompt import MarkdownSchemaPrompt
@@ -180,9 +264,9 @@ class ExtractCategoryProperties(PipelineBase):
             cache_type="jsonl",
         )
         self.llm_serving = APIGoogleVertexAIServing(
-            project=os.getenv("GCP_PROJECT_ID"),
+            project=os.getenv("GOOGLE_CLOUD_PROJECT") or os.getenv("GCP_PROJECT_ID"),
             location='us-central1',
-            model_name="gemini-2.5-pro",
+            model_name="gemini-2.5-flash",
             max_workers=llm_max_workers,
             max_tokens=llm_max_tokens,
         )
@@ -204,9 +288,9 @@ class ExtractCategoryProperties(PipelineBase):
 
     def _parse_all(self, row):
         out = []
-        doi_fb = ""
+        doi_fb = str(row.get("doi_hint", "") or "").strip()
         file_path = str(row.get("file_path","") or "")
-        if file_path:
+        if not doi_fb and file_path:
             try:
                 doi_fb = os.path.basename(os.path.dirname(file_path))
             except Exception:
@@ -231,49 +315,30 @@ class ExtractCategoryProperties(PipelineBase):
         return out
 
     def forward(self):
+        logger = None
+        try:
+            from dataflow import get_logger
+            logger = get_logger()
+        except Exception:
+            logger = None
+        if logger:
+            logger.info(f"Running ExtractCategoryProperties category {self.category} prompts {len(self.pairs)}")
         for key, gen in self.generators:
+            if logger:
+                logger.info(f"ExtractCategoryProperties stage llm_run category {self.category} key {key}")
             gen.run(
                 storage=self.storage.step(),
                 input_key="content",
                 output_key=f"{key}_raw"
             )
+        if logger:
+            logger.info(f"ExtractCategoryProperties stage parse category {self.category}")
         self.parse_operator.run(storage=self.storage.step())
+        if logger:
+            logger.info(f"ExtractCategoryProperties complete category {self.category}")
 
     def compile(self):
         pass
-
-def _load_env_from_setup_env(path=None):
-    if path is None:
-        path = os.getenv("LCC_SETUP_ENV_PATH", "/share/lcc/setup_env.sh")
-    if not os.path.exists(path):
-        return
-    wanted = {
-        "GOOGLE_APPLICATION_CREDENTIALS",
-        "GCP_PROJECT_ID",
-        "HTTP_PROXY",
-        "HTTPS_PROXY",
-        "http_proxy",
-        "https_proxy",
-        "no_proxy",
-    }
-    with open(path, "r", encoding="utf-8") as f:
-        for line in f:
-            line = line.strip()
-            if not line.startswith("export "):
-                continue
-            _, rest = line.split("export ", 1)
-            if "=" not in rest:
-                continue
-            key, value = rest.split("=", 1)
-            key = key.strip()
-            if key not in wanted:
-                continue
-            if os.environ.get(key):
-                continue
-            value = value.strip()
-            if len(value) >= 2 and ((value[0] == value[-1] == '"') or (value[0] == value[-1] == "'")):
-                value = value[1:-1]
-            os.environ[key] = value
 
 def find_json_files(base_path):
     if os.path.isfile(base_path) and base_path.lower().endswith(".json"):
@@ -345,6 +410,12 @@ def _write_one(row, category):
     return "nonempty", len(props)
 
 def save_results_to_csv(pipeline, category):
+    logger = None
+    try:
+        from dataflow import get_logger
+        logger = get_logger()
+    except Exception:
+        logger = None
     try:
         df = _read_pipeline_df(pipeline)
     except Exception:
@@ -352,23 +423,39 @@ def save_results_to_csv(pipeline, category):
     total = len(df)
     if total == 0:
         return
+    try:
+        progress_every = int(os.getenv("PROPS_SAVE_PROGRESS_EVERY") or "50")
+    except Exception:
+        progress_every = 50
+    if progress_every <= 0:
+        progress_every = 0
+    if logger:
+        logger.info(f"Running save_results_to_csv category {category} total {total}")
     count = 0
     empty_written = 0
     nonempty_written = 0
-    for row in df.itertuples(index=False):
+    for i, row in enumerate(df.itertuples(index=False), 1):
         status, rows_written = _write_one(row, category=category)
         if status == "empty":
             empty_written += 1
         elif status == "nonempty":
             nonempty_written += 1
             count += 1
-    return {"nonempty": nonempty_written, "empty": empty_written, "rows": count}
+        if logger and progress_every and i % progress_every == 0:
+            logger.info(f"save_results_to_csv progress category {category} {i}/{total}")
+    res = {"nonempty": nonempty_written, "empty": empty_written, "rows": count}
+    if logger:
+        logger.info(f"save_results_to_csv complete category {category} total {total} nonempty {res['nonempty']} empty {res['empty']} rows {res['rows']}")
+    return res
 
 def main():
     _load_env_from_setup_env()
-    for upper, lower in [("HTTP_PROXY", "http_proxy"), ("HTTPS_PROXY", "https_proxy")]:
-        if upper in os.environ and lower not in os.environ:
-            os.environ[lower] = os.environ[upper]
+    logger = None
+    try:
+        from dataflow import get_logger
+        logger = get_logger()
+    except Exception:
+        logger = None
     parser = argparse.ArgumentParser()
     parser.add_argument("--category", required=True, help="单个类别或逗号分隔的多个类别，如: electrical,mechanical,thermal,optical,other")
     parser.add_argument("--categories", default=None, help="等价于 --category，逗号分隔多个类别")
@@ -386,6 +473,8 @@ def main():
     cats = [c for c in cats if c in allowed]
     if not cats:
         raise SystemExit(1)
+    if logger:
+        logger.info(f"Running property_extract_pipeline categories {','.join(cats)} base_dir {args.base_dir or ''} entry_file {args.entry_file or ''}")
     for category in cats:
         prompt_dir = args.prompt_dir or f"/share/lcc/prompt/{category}"
         schema_dir = args.schema_dir or f"/share/lcc/schema/{category}"
@@ -413,9 +502,14 @@ def main():
             max_chunk_len=args.max_chunk_len
         )
         pipeline.compile()
-        pipeline.forward()
-        save_results_to_csv(pipeline, category=category)
+        try:
+            pipeline.forward()
+            save_results_to_csv(pipeline, category=category)
+        except Exception as e:
+            if logger:
+                logger.info(f"property_extract_pipeline failed category {category} err {type(e).__name__}: {e}")
+            else:
+                raise
 
 if __name__ == "__main__":
     main()
-

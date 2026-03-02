@@ -105,6 +105,43 @@ from dataflow.utils.storage import LazyFileStorage, FileStorage
 from utils.format_utils import safe_parse_json
 
 class MonomerListProcessor:
+    def _clean_text(self, text):
+        if not text:
+            return ""
+        s = str(text).strip()
+        
+        # 1. 移除类似 <sep><r>0:NH2</r> 的后缀 (LLM 生成噪音)
+        if "<sep>" in s:
+            s = s.split("<sep>")[0]
+            
+        # 2. 移除 Python list 字符串表示的残留 (如 "['c1...")
+        if s.startswith("['") and "']" in s:
+            # 简单提取第一个元素
+            s = s[2:].split("',")[0].split("']")[0]
+        elif s.startswith('["') and '"]' in s:
+            s = s[2:].split('",')[0].split('"]')[0]
+            
+        # 3. 移除 | 和 < 字符 (LLM 分隔符或 HTML 标签残留)
+        if "|" in s:
+            s = s.split("|")[0]
+        if "<" in s:
+            s = s.split("<")[0]
+            
+        # 4. 移除 Markdown 代码块标记残留
+        s = s.replace("```json", "").replace("```csv", "").replace("```", "")
+        
+        # 5. 移除常见的行内干扰符号 (如冒号后跟随的无意义内容，需谨慎，仅移除特定模式)
+        # 例如 "SMILES: C=C..." -> "C=C..."
+        if s.lower().startswith("smiles:"):
+            s = s[7:].strip()
+        if s.lower().startswith("name:"):
+            s = s[5:].strip()
+            
+        # 6. 移除首尾引号 (如果未被之前的列表解析覆盖)
+        s = s.strip("'").strip('"')
+            
+        return s.strip()
+
     def _normalize_monomer(self, m):
         if not isinstance(m, dict):
             return None
@@ -114,13 +151,14 @@ class MonomerListProcessor:
         iupac_name = m.get("iupac_name")
         cas_no = m.get("cas_no") or []
         smiles = m.get("smiles") or ""
+        
         return {
             "doi": doi,
-            "abbreviation": [str(x).strip() for x in abbreviation if str(x).strip()],
-            "full_name": [str(x).strip() for x in full_name if str(x).strip()],
-            "iupac_name": (str(iupac_name).strip() if isinstance(iupac_name, str) and iupac_name.strip() else (None if iupac_name is None else str(iupac_name))),
-            "cas_no": [str(x).strip() for x in cas_no if str(x).strip()],
-            "smiles": str(smiles).strip(),
+            "abbreviation": [self._clean_text(x) for x in abbreviation if self._clean_text(x)],
+            "full_name": [self._clean_text(x) for x in full_name if self._clean_text(x)],
+            "iupac_name": (self._clean_text(iupac_name) if iupac_name else None),
+            "cas_no": [self._clean_text(x) for x in cas_no if self._clean_text(x)],
+            "smiles": self._clean_text(smiles),
         }
 
     def _merge_one(self, existing, incoming):
@@ -259,10 +297,17 @@ class MonomerSmilesEnrichStage:
             pass
         return None
 
-    def _normalize_smiles(self, s):
-        if not s:
+    def _clean_text(self, text):
+        if not text:
             return ""
-        return str(s).strip()
+        s = str(text).strip()
+        # 移除类似 <sep><r>0:NH2</r> 的后缀 (LLM 生成噪音)
+        if "<sep>" in s:
+            s = s.split("<sep>")[0]
+        return s.strip()
+
+    def _normalize_smiles(self, s):
+        return self._clean_text(s)
 
     def _throttle(self):
         if not self.sleep_every or self.sleep_every <= 0:
@@ -294,6 +339,9 @@ class MonomerSmilesEnrichStage:
             return None
 
     def _query_pubchem(self, name):
+        name = self._clean_text(name)
+        if not name:
+            return ""
         url = (
             "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/"
             f"{quote(name)}/property/"
@@ -328,6 +376,9 @@ class MonomerSmilesEnrichStage:
         return ""
 
     def _query_opsin(self, name):
+        name = self._clean_text(name)
+        if not name:
+            return ""
         url = f"https://opsin.ch.cam.ac.uk/opsin/{quote(name)}.json"
         data = self._get(url, as_json=True) or {}
         if data.get("status") != "SUCCESS":
@@ -335,6 +386,9 @@ class MonomerSmilesEnrichStage:
         return data.get("smiles", "") or ""
 
     def _query_cactus(self, name):
+        name = self._clean_text(name)
+        if not name:
+            return ""
         url = f"https://cactus.nci.nih.gov/chemical/structure/{quote(name)}/smiles"
         text = self._get(url, as_json=False) or ""
         text = text.strip()
@@ -417,22 +471,24 @@ class MonomerSmilesEnrichStage:
 
         # text_can 为空 -> Invalid (规则1 & 3)
         if not text_can:
-            monomer["smiles_final"] = text_smiles
+            monomer["smiles_final"] = ""
             monomer["smiles_valid"] = "invalid"
             return monomer
 
         # API 全为空 (canonical 后全空) -> Invalid (规则2)
         if not api_candidates:
-            monomer["smiles_final"] = text_can
+            monomer["smiles_final"] = ""
             monomer["smiles_valid"] = "invalid"
             return monomer
             
         # 规则 3: 正文 canonical 与任意一个非空 API canonical 一致 -> Valid
-        if text_can in api_candidates:
+        # 且仅当 smiles_can 与 smiles_api_can 一致时才生成 smiles_final
+        # smiles_api_can 已经在前面被填充为 api_candidates 中的一致项或首选项
+        if text_can and text_can == api_can:
             monomer["smiles_final"] = text_can
             monomer["smiles_valid"] = "valid"
         else:
-            monomer["smiles_final"] = text_can
+            monomer["smiles_final"] = ""
             monomer["smiles_valid"] = "invalid"
 
         return monomer
@@ -660,7 +716,7 @@ class ExtractMonomer:
         self.llm_serving = APIGoogleVertexAIServing(
             project=os.getenv("GOOGLE_CLOUD_PROJECT") or os.getenv("GCP_PROJECT_ID"),
             location='us-central1',
-            model_name="gemini-2.5-flash",
+            model_name="gemini-2.5-pro",
             max_workers=llm_max_workers,
             max_tokens=llm_max_tokens,
         )
