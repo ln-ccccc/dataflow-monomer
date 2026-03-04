@@ -5,7 +5,7 @@ __pycache__/
 .venv/
 .vscode/
 .idea/
-monomer.log
+*.log/
 logs/
 
 # Data outputs (keep directory structure)

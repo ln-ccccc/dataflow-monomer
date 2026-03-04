@@ -1,8 +1,8 @@
 import json
-from dataflow.core.prompt import DIYPromptABC
+from dataflow.core.prompt import PromptABC
 
 
-class MarkdownSchemaPrompt(DIYPromptABC):
+class MarkdownSchemaPrompt(PromptABC):
     def __init__(self, md_path: str, schema_path: str):
         self.md_path = md_path
         self.schema_path = schema_path

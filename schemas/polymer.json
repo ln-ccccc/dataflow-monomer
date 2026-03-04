@@ -1,0 +1,73 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "array",
+    "description": "List of synthesized or studied polymers extracted from the text.",
+    "items": {
+        "type": "object",
+        "properties": {
+            "polymer_name": {
+                "type": "string",
+                "description": "Primary identifier (e.g., 'PI-1', 'PU-a')."
+            },
+            "polymer_type": {
+                "type": "string",
+                "description": "Chemical class (e.g., 'Polyimide', 'Polyurethane')."
+            },
+            "components": {
+                "type": "array",
+                "description": "List of monomer abbreviations.",
+                "items": {"type": "string"}
+            },
+            "ratio_type": {
+                "type": ["string", "null"],
+                "enum": ["mole", "weight", "unknown", null],
+                "description": "The type of ratio presented (default is usually 'mole')."
+            },
+            "ratio_values_text": {
+                "type": ["string", "null"],
+                "description": "General representation of the ratio values (e.g., '50:50', '1:1')."
+            },
+            "feed_ratio_text": {
+                "type": "string",
+                "description": "Raw text of the feed ratio (e.g., 'MDI:BDO:PTMG = 2:1:1')."
+            },
+            "diamine_ratio": {
+                "type": ["string", "null"],
+                "description": "Molar ratio between diamines (e.g., '70:30')."
+            },
+            "dianhydride_ratio": {
+                "type": ["string", "null"],
+                "description": "Molar ratio between dianhydrides."
+            },
+            "diisocyanate_ratio": {
+                "type": ["string", "null"],
+                "description": "Molar ratio between diisocyanates (e.g., 'MDI:TDI = 80:20')."
+            },
+            "diol_ratio": {
+                "type": ["string", "null"],
+                "description": "Molar ratio between diols (e.g., 'BDO:PTMG = 1:1')."
+            },
+            "diacid_ratio": {
+                "type": ["string", "null"],
+                "description": "Molar ratio between diacids."
+            },
+            "mn_value": {
+                "type": ["string", "null"],
+                "description": "Number average MW ALONG WITH ITS UNIT (e.g., '25000 g/mol', '45.5 kDa')."
+            },
+            "mw_value": {
+                "type": ["string", "null"],
+                "description": "Weight average MW ALONG WITH ITS UNIT (e.g., '50000 g/mol', '89.2 kDa')."
+            },
+            "pdi_value": {
+                "type": ["string", "null"],
+                "description": "Polydispersity Index (PDI, Đ). String format to allow ranges."
+            },
+            "test_method": {
+                "type": ["string", "null"],
+                "description": "Method used (e.g., 'GPC', 'SEC', 'Viscosity')."
+            }
+        },
+        "required": ["polymer_name", "polymer_type", "components"]
+    }
+}

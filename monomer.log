@@ -1,0 +1,2998 @@
+/opt/mamba/envs/lcc/lib/python3.10/site-packages/google/api_core/_python_version_support.py:266: FutureWarning: You are using a Python version (3.10.19) which Google will stop supporting in new releases of google.api_core once it reaches its end of life (2026-10-04). Please upgrade to the latest Python version, or at least Python 3.11, to continue receiving updates for google.api_core past that date.
+  warnings.warn(message, FutureWarning)
+/opt/mamba/envs/lcc/lib/python3.10/site-packages/google/api_core/_python_version_support.py:266: FutureWarning: You are using a Python version (3.10.19) which Google will stop supporting in new releases of google.cloud.aiplatform_v1beta1 once it reaches its end of life (2026-10-04). Please upgrade to the latest Python version, or at least Python 3.11, to continue receiving updates for google.cloud.aiplatform_v1beta1 past that date.
+  warnings.warn(message, FutureWarning)
+/opt/mamba/envs/lcc/lib/python3.10/site-packages/google/api_core/_python_version_support.py:266: FutureWarning: You are using a Python version (3.10.19) which Google will stop supporting in new releases of google.cloud.aiplatform_v1 once it reaches its end of life (2026-10-04). Please upgrade to the latest Python version, or at least Python 3.11, to continue receiving updates for google.cloud.aiplatform_v1 past that date.
+  warnings.warn(message, FutureWarning)
+/opt/mamba/envs/lcc/lib/python3.10/site-packages/google/api_core/_python_version_support.py:266: FutureWarning: You are using a Python version (3.10.19) which Google will stop supporting in new releases of google.cloud.aiplatform.v1.schema.predict.instance_v1 once it reaches its end of life (2026-10-04). Please upgrade to the latest Python version, or at least Python 3.11, to continue receiving updates for google.cloud.aiplatform.v1.schema.predict.instance_v1 past that date.
+  warnings.warn(message, FutureWarning)
+/opt/mamba/envs/lcc/lib/python3.10/site-packages/google/api_core/_python_version_support.py:266: FutureWarning: You are using a Python version (3.10.19) which Google will stop supporting in new releases of google.cloud.aiplatform.v1.schema.predict.params_v1 once it reaches its end of life (2026-10-04). Please upgrade to the latest Python version, or at least Python 3.11, to continue receiving updates for google.cloud.aiplatform.v1.schema.predict.params_v1 past that date.
+  warnings.warn(message, FutureWarning)
+/opt/mamba/envs/lcc/lib/python3.10/site-packages/google/api_core/_python_version_support.py:266: FutureWarning: You are using a Python version (3.10.19) which Google will stop supporting in new releases of google.cloud.aiplatform.v1.schema.predict.prediction_v1 once it reaches its end of life (2026-10-04). Please upgrade to the latest Python version, or at least Python 3.11, to continue receiving updates for google.cloud.aiplatform.v1.schema.predict.prediction_v1 past that date.
+  warnings.warn(message, FutureWarning)
+/opt/mamba/envs/lcc/lib/python3.10/site-packages/google/api_core/_python_version_support.py:266: FutureWarning: You are using a Python version (3.10.19) which Google will stop supporting in new releases of google.cloud.aiplatform.v1.schema.trainingjob.definition_v1 once it reaches its end of life (2026-10-04). Please upgrade to the latest Python version, or at least Python 3.11, to continue receiving updates for google.cloud.aiplatform.v1.schema.trainingjob.definition_v1 past that date.
+  warnings.warn(message, FutureWarning)
+/opt/mamba/envs/lcc/lib/python3.10/site-packages/google/api_core/_python_version_support.py:266: FutureWarning: You are using a Python version (3.10.19) which Google will stop supporting in new releases of google.cloud.aiplatform.v1beta1.schema.predict.instance_v1beta1 once it reaches its end of life (2026-10-04). Please upgrade to the latest Python version, or at least Python 3.11, to continue receiving updates for google.cloud.aiplatform.v1beta1.schema.predict.instance_v1beta1 past that date.
+  warnings.warn(message, FutureWarning)
+/opt/mamba/envs/lcc/lib/python3.10/site-packages/google/api_core/_python_version_support.py:266: FutureWarning: You are using a Python version (3.10.19) which Google will stop supporting in new releases of google.cloud.aiplatform.v1beta1.schema.predict.params_v1beta1 once it reaches its end of life (2026-10-04). Please upgrade to the latest Python version, or at least Python 3.11, to continue receiving updates for google.cloud.aiplatform.v1beta1.schema.predict.params_v1beta1 past that date.
+  warnings.warn(message, FutureWarning)
+/opt/mamba/envs/lcc/lib/python3.10/site-packages/google/api_core/_python_version_support.py:266: FutureWarning: You are using a Python version (3.10.19) which Google will stop supporting in new releases of google.cloud.aiplatform.v1beta1.schema.predict.prediction_v1beta1 once it reaches its end of life (2026-10-04). Please upgrade to the latest Python version, or at least Python 3.11, to continue receiving updates for google.cloud.aiplatform.v1beta1.schema.predict.prediction_v1beta1 past that date.
+  warnings.warn(message, FutureWarning)
+/opt/mamba/envs/lcc/lib/python3.10/site-packages/google/api_core/_python_version_support.py:266: FutureWarning: You are using a Python version (3.10.19) which Google will stop supporting in new releases of google.cloud.aiplatform.v1beta1.schema.trainingjob.definition_v1beta1 once it reaches its end of life (2026-10-04). Please upgrade to the latest Python version, or at least Python 3.11, to continue receiving updates for google.cloud.aiplatform.v1beta1.schema.trainingjob.definition_v1beta1 past that date.
+  warnings.warn(message, FutureWarning)
+2026-03-02 10:41:27,221 INFO Running ChunkedPromptedGenerator...
+2026-03-02 10:41:29,403 INFO Loaded DataFrame with 2672 rows.
+2026-03-02 10:41:29,423 INFO Row 0: split into 1 chunks
+2026-03-02 10:41:29,430 INFO Row 1: split into 1 chunks
+2026-03-02 10:41:29,437 INFO Row 2: split into 1 chunks
+2026-03-02 10:41:29,450 INFO Row 3: split into 1 chunks
+2026-03-02 10:41:29,455 INFO Row 4: split into 1 chunks
+2026-03-02 10:41:29,465 INFO Row 5: split into 1 chunks
+2026-03-02 10:41:29,473 INFO Row 6: split into 1 chunks
+2026-03-02 10:41:29,480 INFO Row 7: split into 1 chunks
+2026-03-02 10:41:29,490 INFO Row 8: split into 1 chunks
+2026-03-02 10:41:29,499 INFO Row 9: split into 1 chunks
+2026-03-02 10:41:29,507 INFO Row 10: split into 1 chunks
+2026-03-02 10:41:29,513 INFO Row 11: split into 1 chunks
+2026-03-02 10:41:29,521 INFO Row 12: split into 1 chunks
+2026-03-02 10:41:29,527 INFO Row 13: split into 1 chunks
+2026-03-02 10:41:29,536 INFO Row 14: split into 1 chunks
+2026-03-02 10:41:29,543 INFO Row 15: split into 1 chunks
+2026-03-02 10:41:29,549 INFO Row 16: split into 1 chunks
+2026-03-02 10:41:29,555 INFO Row 17: split into 1 chunks
+2026-03-02 10:41:29,570 INFO Row 18: split into 1 chunks
+2026-03-02 10:41:29,579 INFO Row 19: split into 1 chunks
+2026-03-02 10:41:29,588 INFO Row 20: split into 1 chunks
+2026-03-02 10:41:29,597 INFO Row 21: split into 1 chunks
+2026-03-02 10:41:29,603 INFO Row 22: split into 1 chunks
+2026-03-02 10:41:29,614 INFO Row 23: split into 1 chunks
+2026-03-02 10:41:29,621 INFO Row 24: split into 1 chunks
+2026-03-02 10:41:29,637 INFO Row 25: split into 1 chunks
+2026-03-02 10:41:29,653 INFO Row 26: split into 1 chunks
+2026-03-02 10:41:29,670 INFO Row 27: split into 1 chunks
+2026-03-02 10:41:29,686 INFO Row 28: split into 1 chunks
+2026-03-02 10:41:29,696 INFO Row 29: split into 1 chunks
+2026-03-02 10:41:29,705 INFO Row 30: split into 1 chunks
+2026-03-02 10:41:29,714 INFO Row 31: split into 1 chunks
+2026-03-02 10:41:29,729 INFO Row 32: split into 1 chunks
+2026-03-02 10:41:29,740 INFO Row 33: split into 1 chunks
+2026-03-02 10:41:29,755 INFO Row 34: split into 1 chunks
+2026-03-02 10:41:29,764 INFO Row 35: split into 1 chunks
+2026-03-02 10:41:29,770 INFO Row 36: split into 1 chunks
+2026-03-02 10:41:29,776 INFO Row 37: split into 1 chunks
+2026-03-02 10:41:29,783 INFO Row 38: split into 1 chunks
+2026-03-02 10:41:29,793 INFO Row 39: split into 1 chunks
+2026-03-02 10:41:29,801 INFO Row 40: split into 1 chunks
+2026-03-02 10:41:29,808 INFO Row 41: split into 1 chunks
+2026-03-02 10:41:29,814 INFO Row 42: split into 1 chunks
+2026-03-02 10:41:29,835 INFO Row 43: split into 1 chunks
+2026-03-02 10:41:29,840 INFO Row 44: split into 1 chunks
+2026-03-02 10:41:29,848 INFO Row 45: split into 1 chunks
+2026-03-02 10:41:29,857 INFO Row 46: split into 1 chunks
+2026-03-02 10:41:29,870 INFO Row 47: split into 1 chunks
+2026-03-02 10:41:29,881 INFO Row 48: split into 1 chunks
+2026-03-02 10:41:29,888 INFO Row 49: split into 1 chunks
+2026-03-02 10:41:29,897 INFO Row 50: split into 1 chunks
+2026-03-02 10:41:29,910 INFO Row 51: split into 1 chunks
+2026-03-02 10:41:29,920 INFO Row 52: split into 1 chunks
+2026-03-02 10:41:29,932 INFO Row 53: split into 1 chunks
+2026-03-02 10:41:29,943 INFO Row 54: split into 1 chunks
+2026-03-02 10:41:29,953 INFO Row 55: split into 1 chunks
+2026-03-02 10:41:29,963 INFO Row 56: split into 1 chunks
+2026-03-02 10:41:29,976 INFO Row 57: split into 1 chunks
+2026-03-02 10:41:29,990 INFO Row 58: split into 1 chunks
+2026-03-02 10:41:30,004 INFO Row 59: split into 1 chunks
+2026-03-02 10:41:30,014 INFO Row 60: split into 1 chunks
+2026-03-02 10:41:30,029 INFO Row 61: split into 1 chunks
+2026-03-02 10:41:30,050 INFO Row 62: split into 1 chunks
+2026-03-02 10:41:30,056 INFO Row 63: split into 1 chunks
+2026-03-02 10:41:30,062 INFO Row 64: split into 1 chunks
+2026-03-02 10:41:30,070 INFO Row 65: split into 1 chunks
+2026-03-02 10:41:30,076 INFO Row 66: split into 1 chunks
+2026-03-02 10:41:30,082 INFO Row 67: split into 1 chunks
+2026-03-02 10:41:30,091 INFO Row 68: split into 1 chunks
+2026-03-02 10:41:30,098 INFO Row 69: split into 1 chunks
+2026-03-02 10:41:30,113 INFO Row 70: split into 1 chunks
+2026-03-02 10:41:30,123 INFO Row 71: split into 1 chunks
+2026-03-02 10:41:30,136 INFO Row 72: split into 1 chunks
+2026-03-02 10:41:30,144 INFO Row 73: split into 1 chunks
+2026-03-02 10:41:30,158 INFO Row 74: split into 1 chunks
+2026-03-02 10:41:30,166 INFO Row 75: split into 1 chunks
+2026-03-02 10:41:30,181 INFO Row 76: split into 1 chunks
+2026-03-02 10:41:30,189 INFO Row 77: split into 1 chunks
+2026-03-02 10:41:30,197 INFO Row 78: split into 1 chunks
+2026-03-02 10:41:30,222 INFO Row 79: split into 1 chunks
+2026-03-02 10:41:30,231 INFO Row 80: split into 1 chunks
+2026-03-02 10:41:30,241 INFO Row 81: split into 1 chunks
+2026-03-02 10:41:30,254 INFO Row 82: split into 1 chunks
+2026-03-02 10:41:30,260 INFO Row 83: split into 1 chunks
+2026-03-02 10:41:30,269 INFO Row 84: split into 1 chunks
+2026-03-02 10:41:30,280 INFO Row 85: split into 1 chunks
+2026-03-02 10:41:30,294 INFO Row 86: split into 1 chunks
+2026-03-02 10:41:30,302 INFO Row 87: split into 1 chunks
+2026-03-02 10:41:30,311 INFO Row 88: split into 1 chunks
+2026-03-02 10:41:30,324 INFO Row 89: split into 1 chunks
+2026-03-02 10:41:30,339 INFO Row 90: split into 1 chunks
+2026-03-02 10:41:30,347 INFO Row 91: split into 1 chunks
+2026-03-02 10:41:30,354 INFO Row 92: split into 1 chunks
+2026-03-02 10:41:30,361 INFO Row 93: split into 1 chunks
+2026-03-02 10:41:30,372 INFO Row 94: split into 1 chunks
+2026-03-02 10:41:30,381 INFO Row 95: split into 1 chunks
+2026-03-02 10:41:30,388 INFO Row 96: split into 1 chunks
+2026-03-02 10:41:30,394 INFO Row 97: split into 1 chunks
+2026-03-02 10:41:30,402 INFO Row 98: split into 1 chunks
+2026-03-02 10:41:30,413 INFO Row 99: split into 1 chunks
+2026-03-02 10:41:30,420 INFO Row 100: split into 1 chunks
+2026-03-02 10:41:30,429 INFO Row 101: split into 1 chunks
+2026-03-02 10:41:30,439 INFO Row 102: split into 1 chunks
+2026-03-02 10:41:30,455 INFO Row 103: split into 1 chunks
+2026-03-02 10:41:30,465 INFO Row 104: split into 1 chunks
+2026-03-02 10:41:30,474 INFO Row 105: split into 1 chunks
+2026-03-02 10:41:30,488 INFO Row 106: split into 1 chunks
+2026-03-02 10:41:30,498 INFO Row 107: split into 1 chunks
+2026-03-02 10:41:30,508 INFO Row 108: split into 1 chunks
+2026-03-02 10:41:30,527 INFO Row 109: split into 1 chunks
+2026-03-02 10:41:30,535 INFO Row 110: split into 1 chunks
+2026-03-02 10:41:30,551 INFO Row 111: split into 1 chunks
+2026-03-02 10:41:30,571 INFO Row 112: split into 1 chunks
+2026-03-02 10:41:30,579 INFO Row 113: split into 1 chunks
+2026-03-02 10:41:30,593 INFO Row 114: split into 1 chunks
+2026-03-02 10:41:30,602 INFO Row 115: split into 1 chunks
+2026-03-02 10:41:30,609 INFO Row 116: split into 1 chunks
+2026-03-02 10:41:30,618 INFO Row 117: split into 1 chunks
+2026-03-02 10:41:30,628 INFO Row 118: split into 1 chunks
+2026-03-02 10:41:30,641 INFO Row 119: split into 1 chunks
+2026-03-02 10:41:30,650 INFO Row 120: split into 1 chunks
+2026-03-02 10:41:30,657 INFO Row 121: split into 1 chunks
+2026-03-02 10:41:30,669 INFO Row 122: split into 1 chunks
+2026-03-02 10:41:30,677 INFO Row 123: split into 1 chunks
+2026-03-02 10:41:30,685 INFO Row 124: split into 1 chunks
+2026-03-02 10:41:30,692 INFO Row 125: split into 1 chunks
+2026-03-02 10:41:30,697 INFO Row 126: split into 1 chunks
+2026-03-02 10:41:30,703 INFO Row 127: split into 1 chunks
+2026-03-02 10:41:30,709 INFO Row 128: split into 1 chunks
+2026-03-02 10:41:30,716 INFO Row 129: split into 1 chunks
+2026-03-02 10:41:30,723 INFO Row 130: split into 1 chunks
+2026-03-02 10:41:30,733 INFO Row 131: split into 1 chunks
+2026-03-02 10:41:30,741 INFO Row 132: split into 1 chunks
+2026-03-02 10:41:30,748 INFO Row 133: split into 1 chunks
+2026-03-02 10:41:30,756 INFO Row 134: split into 1 chunks
+2026-03-02 10:41:30,771 INFO Row 135: split into 1 chunks
+2026-03-02 10:41:30,780 INFO Row 136: split into 1 chunks
+2026-03-02 10:41:30,793 INFO Row 137: split into 1 chunks
+2026-03-02 10:41:30,804 INFO Row 138: split into 1 chunks
+2026-03-02 10:41:30,817 INFO Row 139: split into 1 chunks
+2026-03-02 10:41:30,834 INFO Row 140: split into 1 chunks
+2026-03-02 10:41:30,841 INFO Row 141: split into 1 chunks
+2026-03-02 10:41:30,874 INFO Row 142: split into 1 chunks
+2026-03-02 10:41:30,887 INFO Row 143: split into 1 chunks
+2026-03-02 10:41:30,899 INFO Row 144: split into 1 chunks
+2026-03-02 10:41:30,909 INFO Row 145: split into 1 chunks
+2026-03-02 10:41:30,923 INFO Row 146: split into 1 chunks
+2026-03-02 10:41:30,932 INFO Row 147: split into 1 chunks
+2026-03-02 10:41:30,940 INFO Row 148: split into 1 chunks
+2026-03-02 10:41:30,950 INFO Row 149: split into 1 chunks
+2026-03-02 10:41:30,958 INFO Row 150: split into 1 chunks
+2026-03-02 10:41:30,968 INFO Row 151: split into 1 chunks
+2026-03-02 10:41:30,978 INFO Row 152: split into 1 chunks
+2026-03-02 10:41:30,999 INFO Row 153: split into 1 chunks
+2026-03-02 10:41:31,013 INFO Row 154: split into 1 chunks
+2026-03-02 10:41:31,023 INFO Row 155: split into 1 chunks
+2026-03-02 10:41:31,052 INFO Row 156: split into 1 chunks
+2026-03-02 10:41:31,064 INFO Row 157: split into 1 chunks
+2026-03-02 10:41:31,073 INFO Row 158: split into 1 chunks
+2026-03-02 10:41:31,085 INFO Row 159: split into 1 chunks
+2026-03-02 10:41:31,107 INFO Row 160: split into 1 chunks
+2026-03-02 10:41:31,129 INFO Row 161: split into 1 chunks
+2026-03-02 10:41:31,140 INFO Row 162: split into 1 chunks
+2026-03-02 10:41:31,168 INFO Row 163: split into 1 chunks
+2026-03-02 10:41:31,187 INFO Row 164: split into 1 chunks
+2026-03-02 10:41:31,193 INFO Row 165: split into 1 chunks
+2026-03-02 10:41:31,224 INFO Row 166: split into 1 chunks
+2026-03-02 10:41:31,243 INFO Row 167: split into 1 chunks
+2026-03-02 10:41:31,254 INFO Row 168: split into 1 chunks
+2026-03-02 10:41:31,287 INFO Row 169: split into 1 chunks
+2026-03-02 10:41:31,303 INFO Row 170: split into 1 chunks
+2026-03-02 10:41:31,328 INFO Row 171: split into 1 chunks
+2026-03-02 10:41:31,342 INFO Row 172: split into 1 chunks
+2026-03-02 10:41:31,386 INFO Row 173: split into 1 chunks
+2026-03-02 10:41:31,420 INFO Row 174: split into 1 chunks
+2026-03-02 10:41:31,453 INFO Row 175: split into 1 chunks
+2026-03-02 10:41:31,483 INFO Row 176: split into 1 chunks
+2026-03-02 10:41:31,501 INFO Row 177: split into 1 chunks
+2026-03-02 10:41:31,518 INFO Row 178: split into 1 chunks
+2026-03-02 10:41:31,538 INFO Row 179: split into 1 chunks
+2026-03-02 10:41:31,548 INFO Row 180: split into 1 chunks
+2026-03-02 10:41:31,574 INFO Row 181: split into 1 chunks
+2026-03-02 10:41:31,594 INFO Row 182: split into 1 chunks
+2026-03-02 10:41:31,612 INFO Row 183: split into 1 chunks
+2026-03-02 10:41:31,642 INFO Row 184: split into 1 chunks
+2026-03-02 10:41:31,661 INFO Row 185: split into 1 chunks
+2026-03-02 10:41:31,683 INFO Row 186: split into 1 chunks
+2026-03-02 10:41:31,713 INFO Row 187: split into 1 chunks
+2026-03-02 10:41:31,744 INFO Row 188: split into 1 chunks
+2026-03-02 10:41:31,764 INFO Row 189: split into 1 chunks
+2026-03-02 10:41:31,777 INFO Row 190: split into 1 chunks
+2026-03-02 10:41:31,793 INFO Row 191: split into 1 chunks
+2026-03-02 10:41:31,809 INFO Row 192: split into 1 chunks
+2026-03-02 10:41:31,820 INFO Row 193: split into 1 chunks
+2026-03-02 10:41:31,851 INFO Row 194: split into 1 chunks
+2026-03-02 10:41:31,860 INFO Row 195: split into 1 chunks
+2026-03-02 10:41:31,895 INFO Row 196: split into 1 chunks
+2026-03-02 10:41:31,916 INFO Row 197: split into 1 chunks
+2026-03-02 10:41:31,944 INFO Row 198: split into 1 chunks
+2026-03-02 10:41:31,953 INFO Row 199: split into 1 chunks
+2026-03-02 10:41:31,986 INFO Row 200: split into 1 chunks
+2026-03-02 10:41:32,006 INFO Row 201: split into 1 chunks
+2026-03-02 10:41:32,018 INFO Row 202: split into 1 chunks
+2026-03-02 10:41:32,033 INFO Row 203: split into 1 chunks
+2026-03-02 10:41:32,059 INFO Row 204: split into 1 chunks
+2026-03-02 10:41:32,083 INFO Row 205: split into 1 chunks
+2026-03-02 10:41:32,104 INFO Row 206: split into 1 chunks
+2026-03-02 10:41:32,115 INFO Row 207: split into 1 chunks
+2026-03-02 10:41:32,152 INFO Row 208: split into 1 chunks
+2026-03-02 10:41:32,164 INFO Row 209: split into 1 chunks
+2026-03-02 10:41:32,200 INFO Row 210: split into 1 chunks
+2026-03-02 10:41:32,228 INFO Row 211: split into 1 chunks
+2026-03-02 10:41:32,241 INFO Row 212: split into 1 chunks
+2026-03-02 10:41:32,255 INFO Row 213: split into 1 chunks
+2026-03-02 10:41:32,279 INFO Row 214: split into 1 chunks
+2026-03-02 10:41:32,295 INFO Row 215: split into 1 chunks
+2026-03-02 10:41:32,308 INFO Row 216: split into 1 chunks
+2026-03-02 10:41:32,347 INFO Row 217: split into 1 chunks
+2026-03-02 10:41:32,368 INFO Row 218: split into 1 chunks
+2026-03-02 10:41:32,394 INFO Row 219: split into 1 chunks
+2026-03-02 10:41:32,416 INFO Row 220: split into 1 chunks
+2026-03-02 10:41:32,435 INFO Row 221: split into 1 chunks
+2026-03-02 10:41:32,464 INFO Row 222: split into 1 chunks
+2026-03-02 10:41:32,473 INFO Row 223: split into 1 chunks
+2026-03-02 10:41:32,500 INFO Row 224: split into 1 chunks
+2026-03-02 10:41:32,515 INFO Row 225: split into 1 chunks
+2026-03-02 10:41:32,527 INFO Row 226: split into 1 chunks
+2026-03-02 10:41:32,580 INFO Row 227: split into 1 chunks
+2026-03-02 10:41:32,607 INFO Row 228: split into 1 chunks
+2026-03-02 10:41:32,659 INFO Row 229: split into 1 chunks
+2026-03-02 10:41:32,709 INFO Row 230: split into 1 chunks
+2026-03-02 10:41:32,731 INFO Row 231: split into 1 chunks
+2026-03-02 10:41:32,771 INFO Row 232: split into 1 chunks
+2026-03-02 10:41:32,800 INFO Row 233: split into 1 chunks
+2026-03-02 10:41:32,818 INFO Row 234: split into 1 chunks
+2026-03-02 10:41:32,834 INFO Row 235: split into 1 chunks
+2026-03-02 10:41:32,854 INFO Row 236: split into 1 chunks
+2026-03-02 10:41:32,865 INFO Row 237: split into 1 chunks
+2026-03-02 10:41:32,879 INFO Row 238: split into 1 chunks
+2026-03-02 10:41:32,896 INFO Row 239: split into 1 chunks
+2026-03-02 10:41:32,910 INFO Row 240: split into 1 chunks
+2026-03-02 10:41:32,930 INFO Row 241: split into 1 chunks
+2026-03-02 10:41:32,939 INFO Row 242: split into 1 chunks
+2026-03-02 10:41:32,962 INFO Row 243: split into 1 chunks
+2026-03-02 10:41:32,982 INFO Row 244: split into 1 chunks
+2026-03-02 10:41:33,016 INFO Row 245: split into 1 chunks
+2026-03-02 10:41:33,031 INFO Row 246: split into 1 chunks
+2026-03-02 10:41:33,049 INFO Row 247: split into 1 chunks
+2026-03-02 10:41:33,075 INFO Row 248: split into 1 chunks
+2026-03-02 10:41:33,105 INFO Row 249: split into 1 chunks
+2026-03-02 10:41:33,129 INFO Row 250: split into 1 chunks
+2026-03-02 10:41:33,166 INFO Row 251: split into 1 chunks
+2026-03-02 10:41:33,202 INFO Row 252: split into 1 chunks
+2026-03-02 10:41:33,219 INFO Row 253: split into 1 chunks
+2026-03-02 10:41:33,232 INFO Row 254: split into 1 chunks
+2026-03-02 10:41:33,260 INFO Row 255: split into 1 chunks
+2026-03-02 10:41:33,285 INFO Row 256: split into 1 chunks
+2026-03-02 10:41:33,313 INFO Row 257: split into 1 chunks
+2026-03-02 10:41:33,336 INFO Row 258: split into 1 chunks
+2026-03-02 10:41:33,358 INFO Row 259: split into 1 chunks
+2026-03-02 10:41:33,378 INFO Row 260: split into 1 chunks
+2026-03-02 10:41:33,442 INFO Row 261: split into 1 chunks
+2026-03-02 10:41:33,469 INFO Row 262: split into 1 chunks
+2026-03-02 10:41:33,486 INFO Row 263: split into 1 chunks
+2026-03-02 10:41:33,503 INFO Row 264: split into 1 chunks
+2026-03-02 10:41:33,517 INFO Row 265: split into 1 chunks
+2026-03-02 10:41:33,535 INFO Row 266: split into 1 chunks
+2026-03-02 10:41:33,556 INFO Row 267: split into 1 chunks
+2026-03-02 10:41:33,575 INFO Row 268: split into 1 chunks
+2026-03-02 10:41:33,596 INFO Row 269: split into 1 chunks
+2026-03-02 10:41:33,619 INFO Row 270: split into 1 chunks
+2026-03-02 10:41:33,636 INFO Row 271: split into 1 chunks
+2026-03-02 10:41:33,651 INFO Row 272: split into 1 chunks
+2026-03-02 10:41:33,676 INFO Row 273: split into 1 chunks
+2026-03-02 10:41:33,692 INFO Row 274: split into 1 chunks
+2026-03-02 10:41:33,710 INFO Row 275: split into 1 chunks
+2026-03-02 10:41:33,729 INFO Row 276: split into 1 chunks
+2026-03-02 10:41:33,743 INFO Row 277: split into 1 chunks
+2026-03-02 10:41:33,773 INFO Row 278: split into 1 chunks
+2026-03-02 10:41:33,790 INFO Row 279: split into 1 chunks
+2026-03-02 10:41:33,809 INFO Row 280: split into 1 chunks
+2026-03-02 10:41:33,833 INFO Row 281: split into 1 chunks
+2026-03-02 10:41:33,858 INFO Row 282: split into 1 chunks
+2026-03-02 10:41:33,886 INFO Row 283: split into 1 chunks
+2026-03-02 10:41:33,910 INFO Row 284: split into 1 chunks
+2026-03-02 10:41:33,936 INFO Row 285: split into 1 chunks
+2026-03-02 10:41:33,954 INFO Row 286: split into 1 chunks
+2026-03-02 10:41:33,972 INFO Row 287: split into 1 chunks
+2026-03-02 10:41:33,983 INFO Row 288: split into 1 chunks
+2026-03-02 10:41:34,001 INFO Row 289: split into 1 chunks
+2026-03-02 10:41:34,019 INFO Row 290: split into 1 chunks
+2026-03-02 10:41:34,036 INFO Row 291: split into 1 chunks
+2026-03-02 10:41:34,062 INFO Row 292: split into 1 chunks
+2026-03-02 10:41:34,125 INFO Row 293: split into 1 chunks
+2026-03-02 10:41:34,151 INFO Row 294: split into 1 chunks
+2026-03-02 10:41:34,180 INFO Row 295: split into 1 chunks
+2026-03-02 10:41:34,203 INFO Row 296: split into 1 chunks
+2026-03-02 10:41:34,226 INFO Row 297: split into 1 chunks
+2026-03-02 10:41:34,251 INFO Row 298: split into 1 chunks
+2026-03-02 10:41:34,267 INFO Row 299: split into 1 chunks
+2026-03-02 10:41:34,348 INFO Row 300: split into 1 chunks
+2026-03-02 10:41:34,366 INFO Row 301: split into 1 chunks
+2026-03-02 10:41:34,386 INFO Row 302: split into 1 chunks
+2026-03-02 10:41:34,408 INFO Row 303: split into 1 chunks
+2026-03-02 10:41:34,423 INFO Row 304: split into 1 chunks
+2026-03-02 10:41:34,451 INFO Row 305: split into 1 chunks
+2026-03-02 10:41:34,479 INFO Row 306: split into 1 chunks
+2026-03-02 10:41:34,572 INFO Row 307: split into 1 chunks
+2026-03-02 10:41:34,658 INFO Row 308: split into 1 chunks
+2026-03-02 10:41:34,685 INFO Row 309: split into 1 chunks
+2026-03-02 10:41:34,699 INFO Row 310: split into 1 chunks
+2026-03-02 10:41:34,725 INFO Row 311: split into 1 chunks
+2026-03-02 10:41:34,747 INFO Row 312: split into 1 chunks
+2026-03-02 10:41:34,758 INFO Row 313: split into 1 chunks
+2026-03-02 10:41:34,782 INFO Row 314: split into 1 chunks
+2026-03-02 10:41:34,811 INFO Row 315: split into 1 chunks
+2026-03-02 10:41:34,831 INFO Row 316: split into 1 chunks
+2026-03-02 10:41:34,850 INFO Row 317: split into 1 chunks
+2026-03-02 10:41:34,877 INFO Row 318: split into 1 chunks
+2026-03-02 10:41:34,906 INFO Row 319: split into 1 chunks
+2026-03-02 10:41:34,941 INFO Row 320: split into 1 chunks
+2026-03-02 10:41:34,964 INFO Row 321: split into 1 chunks
+2026-03-02 10:41:34,978 INFO Row 322: split into 1 chunks
+2026-03-02 10:41:35,002 INFO Row 323: split into 1 chunks
+2026-03-02 10:41:35,018 INFO Row 324: split into 1 chunks
+2026-03-02 10:41:35,031 INFO Row 325: split into 1 chunks
+2026-03-02 10:41:35,044 INFO Row 326: split into 1 chunks
+2026-03-02 10:41:35,059 INFO Row 327: split into 1 chunks
+2026-03-02 10:41:35,091 INFO Row 328: split into 1 chunks
+2026-03-02 10:41:35,117 INFO Row 329: split into 1 chunks
+2026-03-02 10:41:35,133 INFO Row 330: split into 1 chunks
+2026-03-02 10:41:35,146 INFO Row 331: split into 1 chunks
+2026-03-02 10:41:35,156 INFO Row 332: split into 1 chunks
+2026-03-02 10:41:35,170 INFO Row 333: split into 1 chunks
+2026-03-02 10:41:35,184 INFO Row 334: split into 1 chunks
+2026-03-02 10:41:35,205 INFO Row 335: split into 1 chunks
+2026-03-02 10:41:35,225 INFO Row 336: split into 1 chunks
+2026-03-02 10:41:35,240 INFO Row 337: split into 1 chunks
+2026-03-02 10:41:35,257 INFO Row 338: split into 1 chunks
+2026-03-02 10:41:35,284 INFO Row 339: split into 1 chunks
+2026-03-02 10:41:35,298 INFO Row 340: split into 1 chunks
+2026-03-02 10:41:35,319 INFO Row 341: split into 1 chunks
+2026-03-02 10:41:35,339 INFO Row 342: split into 1 chunks
+2026-03-02 10:41:35,353 INFO Row 343: split into 1 chunks
+2026-03-02 10:41:35,390 INFO Row 344: split into 1 chunks
+2026-03-02 10:41:35,405 INFO Row 345: split into 1 chunks
+2026-03-02 10:41:35,435 INFO Row 346: split into 1 chunks
+2026-03-02 10:41:35,463 INFO Row 347: split into 1 chunks
+2026-03-02 10:41:35,498 INFO Row 348: split into 1 chunks
+2026-03-02 10:41:35,512 INFO Row 349: split into 1 chunks
+2026-03-02 10:41:35,535 INFO Row 350: split into 1 chunks
+2026-03-02 10:41:35,563 INFO Row 351: split into 1 chunks
+2026-03-02 10:41:35,574 INFO Row 352: split into 1 chunks
+2026-03-02 10:41:35,589 INFO Row 353: split into 1 chunks
+2026-03-02 10:41:35,603 INFO Row 354: split into 1 chunks
+2026-03-02 10:41:35,619 INFO Row 355: split into 1 chunks
+2026-03-02 10:41:35,633 INFO Row 356: split into 1 chunks
+2026-03-02 10:41:35,654 INFO Row 357: split into 1 chunks
+2026-03-02 10:41:35,671 INFO Row 358: split into 1 chunks
+2026-03-02 10:41:35,683 INFO Row 359: split into 1 chunks
+2026-03-02 10:41:35,692 INFO Row 360: split into 1 chunks
+2026-03-02 10:41:35,748 INFO Row 361: split into 1 chunks
+2026-03-02 10:41:35,765 INFO Row 362: split into 1 chunks
+2026-03-02 10:41:35,795 INFO Row 363: split into 1 chunks
+2026-03-02 10:41:35,810 INFO Row 364: split into 1 chunks
+2026-03-02 10:41:35,839 INFO Row 365: split into 1 chunks
+2026-03-02 10:41:35,870 INFO Row 366: split into 1 chunks
+2026-03-02 10:41:35,881 INFO Row 367: split into 1 chunks
+2026-03-02 10:41:35,894 INFO Row 368: split into 1 chunks
+2026-03-02 10:41:35,923 INFO Row 369: split into 1 chunks
+2026-03-02 10:41:35,940 INFO Row 370: split into 1 chunks
+2026-03-02 10:41:35,949 INFO Row 371: split into 1 chunks
+2026-03-02 10:41:35,962 INFO Row 372: split into 1 chunks
+2026-03-02 10:41:35,975 INFO Row 373: split into 1 chunks
+2026-03-02 10:41:35,996 INFO Row 374: split into 1 chunks
+2026-03-02 10:41:36,007 INFO Row 375: split into 1 chunks
+2026-03-02 10:41:36,017 INFO Row 376: split into 1 chunks
+2026-03-02 10:41:36,035 INFO Row 377: split into 1 chunks
+2026-03-02 10:41:36,052 INFO Row 378: split into 1 chunks
+2026-03-02 10:41:36,068 INFO Row 379: split into 1 chunks
+2026-03-02 10:41:36,089 INFO Row 380: split into 1 chunks
+2026-03-02 10:41:36,106 INFO Row 381: split into 1 chunks
+2026-03-02 10:41:36,119 INFO Row 382: split into 1 chunks
+2026-03-02 10:41:36,138 INFO Row 383: split into 1 chunks
+2026-03-02 10:41:36,152 INFO Row 384: split into 1 chunks
+2026-03-02 10:41:36,167 INFO Row 385: split into 1 chunks
+2026-03-02 10:41:36,192 INFO Row 386: split into 1 chunks
+2026-03-02 10:41:36,211 INFO Row 387: split into 1 chunks
+2026-03-02 10:41:36,231 INFO Row 388: split into 1 chunks
+2026-03-02 10:41:36,251 INFO Row 389: split into 1 chunks
+2026-03-02 10:41:36,283 INFO Row 390: split into 1 chunks
+2026-03-02 10:41:36,302 INFO Row 391: split into 1 chunks
+2026-03-02 10:41:36,325 INFO Row 392: split into 1 chunks
+2026-03-02 10:41:36,340 INFO Row 393: split into 1 chunks
+2026-03-02 10:41:36,356 INFO Row 394: split into 1 chunks
+2026-03-02 10:41:36,373 INFO Row 395: split into 1 chunks
+2026-03-02 10:41:36,399 INFO Row 396: split into 1 chunks
+2026-03-02 10:41:36,411 INFO Row 397: split into 1 chunks
+2026-03-02 10:41:36,427 INFO Row 398: split into 1 chunks
+2026-03-02 10:41:36,449 INFO Row 399: split into 1 chunks
+2026-03-02 10:41:36,461 INFO Row 400: split into 1 chunks
+2026-03-02 10:41:36,476 INFO Row 401: split into 1 chunks
+2026-03-02 10:41:36,496 INFO Row 402: split into 1 chunks
+2026-03-02 10:41:36,511 INFO Row 403: split into 1 chunks
+2026-03-02 10:41:36,534 INFO Row 404: split into 1 chunks
+2026-03-02 10:41:36,546 INFO Row 405: split into 1 chunks
+2026-03-02 10:41:36,555 INFO Row 406: split into 1 chunks
+2026-03-02 10:41:36,575 INFO Row 407: split into 1 chunks
+2026-03-02 10:41:36,597 INFO Row 408: split into 1 chunks
+2026-03-02 10:41:36,612 INFO Row 409: split into 1 chunks
+2026-03-02 10:41:36,636 INFO Row 410: split into 1 chunks
+2026-03-02 10:41:36,656 INFO Row 411: split into 1 chunks
+2026-03-02 10:41:36,666 INFO Row 412: split into 1 chunks
+2026-03-02 10:41:36,681 INFO Row 413: split into 1 chunks
+2026-03-02 10:41:36,700 INFO Row 414: split into 1 chunks
+2026-03-02 10:41:36,729 INFO Row 415: split into 1 chunks
+2026-03-02 10:41:36,749 INFO Row 416: split into 1 chunks
+2026-03-02 10:41:36,777 INFO Row 417: split into 1 chunks
+2026-03-02 10:41:36,790 INFO Row 418: split into 1 chunks
+2026-03-02 10:41:36,807 INFO Row 419: split into 1 chunks
+2026-03-02 10:41:36,826 INFO Row 420: split into 1 chunks
+2026-03-02 10:41:36,845 INFO Row 421: split into 1 chunks
+2026-03-02 10:41:36,863 INFO Row 422: split into 1 chunks
+2026-03-02 10:41:36,877 INFO Row 423: split into 1 chunks
+2026-03-02 10:41:36,897 INFO Row 424: split into 1 chunks
+2026-03-02 10:41:36,910 INFO Row 425: split into 1 chunks
+2026-03-02 10:41:36,948 INFO Row 426: split into 1 chunks
+2026-03-02 10:41:36,970 INFO Row 427: split into 1 chunks
+2026-03-02 10:41:36,984 INFO Row 428: split into 1 chunks
+2026-03-02 10:41:37,005 INFO Row 429: split into 1 chunks
+2026-03-02 10:41:37,014 INFO Row 430: split into 1 chunks
+2026-03-02 10:41:37,034 INFO Row 431: split into 1 chunks
+2026-03-02 10:41:37,048 INFO Row 432: split into 1 chunks
+2026-03-02 10:41:37,056 INFO Row 433: split into 1 chunks
+2026-03-02 10:41:37,068 INFO Row 434: split into 1 chunks
+2026-03-02 10:41:37,078 INFO Row 435: split into 1 chunks
+2026-03-02 10:41:37,091 INFO Row 436: split into 1 chunks
+2026-03-02 10:41:37,102 INFO Row 437: split into 1 chunks
+2026-03-02 10:41:37,118 INFO Row 438: split into 1 chunks
+2026-03-02 10:41:37,127 INFO Row 439: split into 1 chunks
+2026-03-02 10:41:37,137 INFO Row 440: split into 1 chunks
+2026-03-02 10:41:37,146 INFO Row 441: split into 1 chunks
+2026-03-02 10:41:37,169 INFO Row 442: split into 1 chunks
+2026-03-02 10:41:37,188 INFO Row 443: split into 1 chunks
+2026-03-02 10:41:37,206 INFO Row 444: split into 1 chunks
+2026-03-02 10:41:37,226 INFO Row 445: split into 1 chunks
+2026-03-02 10:41:37,260 INFO Row 446: split into 1 chunks
+2026-03-02 10:41:37,278 INFO Row 447: split into 1 chunks
+2026-03-02 10:41:37,296 INFO Row 448: split into 1 chunks
+2026-03-02 10:41:37,316 INFO Row 449: split into 1 chunks
+2026-03-02 10:41:37,337 INFO Row 450: split into 1 chunks
+2026-03-02 10:41:37,358 INFO Row 451: split into 1 chunks
+2026-03-02 10:41:37,368 INFO Row 452: split into 1 chunks
+2026-03-02 10:41:37,380 INFO Row 453: split into 1 chunks
+2026-03-02 10:41:37,393 INFO Row 454: split into 1 chunks
+2026-03-02 10:41:37,403 INFO Row 455: split into 1 chunks
+2026-03-02 10:41:37,426 INFO Row 456: split into 1 chunks
+2026-03-02 10:41:37,441 INFO Row 457: split into 1 chunks
+2026-03-02 10:41:37,458 INFO Row 458: split into 1 chunks
+2026-03-02 10:41:37,483 INFO Row 459: split into 1 chunks
+2026-03-02 10:41:37,510 INFO Row 460: split into 1 chunks
+2026-03-02 10:41:37,527 INFO Row 461: split into 1 chunks
+2026-03-02 10:41:37,543 INFO Row 462: split into 1 chunks
+2026-03-02 10:41:37,578 INFO Row 463: split into 1 chunks
+2026-03-02 10:41:37,593 INFO Row 464: split into 1 chunks
+2026-03-02 10:41:37,612 INFO Row 465: split into 1 chunks
+2026-03-02 10:41:37,632 INFO Row 466: split into 1 chunks
+2026-03-02 10:41:37,653 INFO Row 467: split into 1 chunks
+2026-03-02 10:41:37,672 INFO Row 468: split into 1 chunks
+2026-03-02 10:41:37,693 INFO Row 469: split into 1 chunks
+2026-03-02 10:41:37,700 INFO Row 470: split into 1 chunks
+2026-03-02 10:41:37,739 INFO Row 471: split into 1 chunks
+2026-03-02 10:41:37,762 INFO Row 472: split into 1 chunks
+2026-03-02 10:41:37,775 INFO Row 473: split into 1 chunks
+2026-03-02 10:41:37,791 INFO Row 474: split into 1 chunks
+2026-03-02 10:41:37,797 INFO Row 475: split into 1 chunks
+2026-03-02 10:41:37,808 INFO Row 476: split into 1 chunks
+2026-03-02 10:41:37,824 INFO Row 477: split into 1 chunks
+2026-03-02 10:41:37,844 INFO Row 478: split into 1 chunks
+2026-03-02 10:41:37,855 INFO Row 479: split into 1 chunks
+2026-03-02 10:41:37,871 INFO Row 480: split into 1 chunks
+2026-03-02 10:41:37,888 INFO Row 481: split into 1 chunks
+2026-03-02 10:41:37,904 INFO Row 482: split into 1 chunks
+2026-03-02 10:41:37,925 INFO Row 483: split into 1 chunks
+2026-03-02 10:41:37,941 INFO Row 484: split into 1 chunks
+2026-03-02 10:41:37,953 INFO Row 485: split into 1 chunks
+2026-03-02 10:41:37,967 INFO Row 486: split into 1 chunks
+2026-03-02 10:41:37,993 INFO Row 487: split into 1 chunks
+2026-03-02 10:41:38,054 INFO Row 488: split into 1 chunks
+2026-03-02 10:41:38,086 INFO Row 489: split into 1 chunks
+2026-03-02 10:41:38,098 INFO Row 490: split into 1 chunks
+2026-03-02 10:41:38,107 INFO Row 491: split into 1 chunks
+2026-03-02 10:41:38,146 INFO Row 492: split into 1 chunks
+2026-03-02 10:41:38,154 INFO Row 493: split into 1 chunks
+2026-03-02 10:41:38,200 INFO Row 494: split into 1 chunks
+2026-03-02 10:41:38,215 INFO Row 495: split into 1 chunks
+2026-03-02 10:41:38,238 INFO Row 496: split into 1 chunks
+2026-03-02 10:41:38,261 INFO Row 497: split into 1 chunks
+2026-03-02 10:41:38,278 INFO Row 498: split into 1 chunks
+2026-03-02 10:41:38,304 INFO Row 499: split into 1 chunks
+2026-03-02 10:41:38,322 INFO Row 500: split into 1 chunks
+2026-03-02 10:41:38,336 INFO Row 501: split into 1 chunks
+2026-03-02 10:41:38,348 INFO Row 502: split into 1 chunks
+2026-03-02 10:41:38,358 INFO Row 503: split into 1 chunks
+2026-03-02 10:41:38,374 INFO Row 504: split into 1 chunks
+2026-03-02 10:41:38,385 INFO Row 505: split into 1 chunks
+2026-03-02 10:41:38,408 INFO Row 506: split into 1 chunks
+2026-03-02 10:41:38,422 INFO Row 507: split into 1 chunks
+2026-03-02 10:41:38,434 INFO Row 508: split into 1 chunks
+2026-03-02 10:41:38,441 INFO Row 509: split into 1 chunks
+2026-03-02 10:41:38,456 INFO Row 510: split into 1 chunks
+2026-03-02 10:41:38,463 INFO Row 511: split into 1 chunks
+2026-03-02 10:41:38,472 INFO Row 512: split into 1 chunks
+2026-03-02 10:41:38,479 INFO Row 513: split into 1 chunks
+2026-03-02 10:41:38,488 INFO Row 514: split into 1 chunks
+2026-03-02 10:41:38,499 INFO Row 515: split into 1 chunks
+2026-03-02 10:41:38,510 INFO Row 516: split into 1 chunks
+2026-03-02 10:41:38,526 INFO Row 517: split into 1 chunks
+2026-03-02 10:41:38,534 INFO Row 518: split into 1 chunks
+2026-03-02 10:41:38,544 INFO Row 519: split into 1 chunks
+2026-03-02 10:41:38,551 INFO Row 520: split into 1 chunks
+2026-03-02 10:41:38,560 INFO Row 521: split into 1 chunks
+2026-03-02 10:41:38,571 INFO Row 522: split into 1 chunks
+2026-03-02 10:41:38,580 INFO Row 523: split into 1 chunks
+2026-03-02 10:41:38,588 INFO Row 524: split into 1 chunks
+2026-03-02 10:41:38,599 INFO Row 525: split into 1 chunks
+2026-03-02 10:41:38,611 INFO Row 526: split into 1 chunks
+2026-03-02 10:41:38,619 INFO Row 527: split into 1 chunks
+2026-03-02 10:41:38,629 INFO Row 528: split into 1 chunks
+2026-03-02 10:41:38,641 INFO Row 529: split into 1 chunks
+2026-03-02 10:41:38,659 INFO Row 530: split into 1 chunks
+2026-03-02 10:41:38,682 INFO Row 531: split into 1 chunks
+2026-03-02 10:41:38,696 INFO Row 532: split into 1 chunks
+2026-03-02 10:41:38,711 INFO Row 533: split into 1 chunks
+2026-03-02 10:41:38,721 INFO Row 534: split into 1 chunks
+2026-03-02 10:41:38,727 INFO Row 535: split into 1 chunks
+2026-03-02 10:41:38,733 INFO Row 536: split into 1 chunks
+2026-03-02 10:41:38,738 INFO Row 537: split into 1 chunks
+2026-03-02 10:41:38,745 INFO Row 538: split into 1 chunks
+2026-03-02 10:41:38,751 INFO Row 539: split into 1 chunks
+2026-03-02 10:41:38,759 INFO Row 540: split into 1 chunks
+2026-03-02 10:41:38,769 INFO Row 541: split into 1 chunks
+2026-03-02 10:41:38,777 INFO Row 542: split into 1 chunks
+2026-03-02 10:41:38,785 INFO Row 543: split into 1 chunks
+2026-03-02 10:41:38,791 INFO Row 544: split into 1 chunks
+2026-03-02 10:41:38,796 INFO Row 545: split into 1 chunks
+2026-03-02 10:41:38,804 INFO Row 546: split into 1 chunks
+2026-03-02 10:41:38,811 INFO Row 547: split into 1 chunks
+2026-03-02 10:41:38,817 INFO Row 548: split into 1 chunks
+2026-03-02 10:41:38,832 INFO Row 549: split into 1 chunks
+2026-03-02 10:41:38,841 INFO Row 550: split into 1 chunks
+2026-03-02 10:41:38,847 INFO Row 551: split into 1 chunks
+2026-03-02 10:41:38,856 INFO Row 552: split into 1 chunks
+2026-03-02 10:41:38,867 INFO Row 553: split into 1 chunks
+2026-03-02 10:41:38,875 INFO Row 554: split into 1 chunks
+2026-03-02 10:41:38,884 INFO Row 555: split into 1 chunks
+2026-03-02 10:41:38,892 INFO Row 556: split into 1 chunks
+2026-03-02 10:41:38,900 INFO Row 557: split into 1 chunks
+2026-03-02 10:41:38,915 INFO Row 558: split into 1 chunks
+2026-03-02 10:41:38,922 INFO Row 559: split into 1 chunks
+2026-03-02 10:41:38,932 INFO Row 560: split into 1 chunks
+2026-03-02 10:41:38,943 INFO Row 561: split into 1 chunks
+2026-03-02 10:41:38,951 INFO Row 562: split into 1 chunks
+2026-03-02 10:41:38,963 INFO Row 563: split into 1 chunks
+2026-03-02 10:41:38,978 INFO Row 564: split into 1 chunks
+2026-03-02 10:41:38,987 INFO Row 565: split into 1 chunks
+2026-03-02 10:41:38,998 INFO Row 566: split into 1 chunks
+2026-03-02 10:41:39,008 INFO Row 567: split into 1 chunks
+2026-03-02 10:41:39,017 INFO Row 568: split into 1 chunks
+2026-03-02 10:41:39,026 INFO Row 569: split into 1 chunks
+2026-03-02 10:41:39,036 INFO Row 570: split into 1 chunks
+2026-03-02 10:41:39,048 INFO Row 571: split into 1 chunks
+2026-03-02 10:41:39,061 INFO Row 572: split into 1 chunks
+2026-03-02 10:41:39,073 INFO Row 573: split into 1 chunks
+2026-03-02 10:41:39,082 INFO Row 574: split into 1 chunks
+2026-03-02 10:41:39,097 INFO Row 575: split into 1 chunks
+2026-03-02 10:41:39,111 INFO Row 576: split into 1 chunks
+2026-03-02 10:41:39,122 INFO Row 577: split into 1 chunks
+2026-03-02 10:41:39,133 INFO Row 578: split into 1 chunks
+2026-03-02 10:41:39,141 INFO Row 579: split into 1 chunks
+2026-03-02 10:41:39,154 INFO Row 580: split into 1 chunks
+2026-03-02 10:41:39,164 INFO Row 581: split into 1 chunks
+2026-03-02 10:41:39,174 INFO Row 582: split into 1 chunks
+2026-03-02 10:41:39,186 INFO Row 583: split into 1 chunks
+2026-03-02 10:41:39,200 INFO Row 584: split into 1 chunks
+2026-03-02 10:41:39,213 INFO Row 585: split into 1 chunks
+2026-03-02 10:41:39,232 INFO Row 586: split into 1 chunks
+2026-03-02 10:41:39,245 INFO Row 587: split into 1 chunks
+2026-03-02 10:41:39,260 INFO Row 588: split into 1 chunks
+2026-03-02 10:41:39,275 INFO Row 589: split into 1 chunks
+2026-03-02 10:41:39,287 INFO Row 590: split into 1 chunks
+2026-03-02 10:41:39,296 INFO Row 591: split into 1 chunks
+2026-03-02 10:41:39,319 INFO Row 592: split into 1 chunks
+2026-03-02 10:41:39,335 INFO Row 593: split into 1 chunks
+2026-03-02 10:41:39,347 INFO Row 594: split into 1 chunks
+2026-03-02 10:41:39,359 INFO Row 595: split into 1 chunks
+2026-03-02 10:41:39,370 INFO Row 596: split into 1 chunks
+2026-03-02 10:41:39,382 INFO Row 597: split into 1 chunks
+2026-03-02 10:41:39,393 INFO Row 598: split into 1 chunks
+2026-03-02 10:41:39,406 INFO Row 599: split into 1 chunks
+2026-03-02 10:41:39,412 INFO Row 600: split into 1 chunks
+2026-03-02 10:41:39,419 INFO Row 601: split into 1 chunks
+2026-03-02 10:41:39,428 INFO Row 602: split into 1 chunks
+2026-03-02 10:41:39,434 INFO Row 603: split into 1 chunks
+2026-03-02 10:41:39,442 INFO Row 604: split into 1 chunks
+2026-03-02 10:41:39,458 INFO Row 605: split into 1 chunks
+2026-03-02 10:41:39,462 INFO Row 606: split into 1 chunks
+2026-03-02 10:41:39,469 INFO Row 607: split into 1 chunks
+2026-03-02 10:41:39,487 INFO Row 608: split into 1 chunks
+2026-03-02 10:41:39,505 INFO Row 609: split into 1 chunks
+2026-03-02 10:41:39,509 INFO Row 610: split into 1 chunks
+2026-03-02 10:41:39,519 INFO Row 611: split into 1 chunks
+2026-03-02 10:41:39,529 INFO Row 612: split into 1 chunks
+2026-03-02 10:41:39,539 INFO Row 613: split into 1 chunks
+2026-03-02 10:41:39,547 INFO Row 614: split into 1 chunks
+2026-03-02 10:41:39,565 INFO Row 615: split into 1 chunks
+2026-03-02 10:41:39,573 INFO Row 616: split into 1 chunks
+2026-03-02 10:41:39,586 INFO Row 617: split into 1 chunks
+2026-03-02 10:41:39,595 INFO Row 618: split into 1 chunks
+2026-03-02 10:41:39,603 INFO Row 619: split into 1 chunks
+2026-03-02 10:41:39,615 INFO Row 620: split into 1 chunks
+2026-03-02 10:41:39,623 INFO Row 621: split into 1 chunks
+2026-03-02 10:41:39,634 INFO Row 622: split into 1 chunks
+2026-03-02 10:41:39,640 INFO Row 623: split into 1 chunks
+2026-03-02 10:41:39,655 INFO Row 624: split into 1 chunks
+2026-03-02 10:41:39,666 INFO Row 625: split into 1 chunks
+2026-03-02 10:41:39,677 INFO Row 626: split into 1 chunks
+2026-03-02 10:41:39,686 INFO Row 627: split into 1 chunks
+2026-03-02 10:41:39,690 INFO Row 628: split into 1 chunks
+2026-03-02 10:41:39,698 INFO Row 629: split into 1 chunks
+2026-03-02 10:41:39,705 INFO Row 630: split into 1 chunks
+2026-03-02 10:41:39,715 INFO Row 631: split into 1 chunks
+2026-03-02 10:41:39,722 INFO Row 632: split into 1 chunks
+2026-03-02 10:41:39,727 INFO Row 633: split into 1 chunks
+2026-03-02 10:41:39,730 INFO Row 634: split into 1 chunks
+2026-03-02 10:41:39,735 INFO Row 635: split into 1 chunks
+2026-03-02 10:41:39,740 INFO Row 636: split into 1 chunks
+2026-03-02 10:41:39,765 INFO Row 637: split into 1 chunks
+2026-03-02 10:41:39,779 INFO Row 638: split into 1 chunks
+2026-03-02 10:41:39,797 INFO Row 639: split into 1 chunks
+2026-03-02 10:41:39,812 INFO Row 640: split into 1 chunks
+2026-03-02 10:41:39,822 INFO Row 641: split into 1 chunks
+2026-03-02 10:41:39,833 INFO Row 642: split into 1 chunks
+2026-03-02 10:41:39,845 INFO Row 643: split into 1 chunks
+2026-03-02 10:41:39,857 INFO Row 644: split into 1 chunks
+2026-03-02 10:41:39,873 INFO Row 645: split into 1 chunks
+2026-03-02 10:41:39,888 INFO Row 646: split into 1 chunks
+2026-03-02 10:41:39,901 INFO Row 647: split into 1 chunks
+2026-03-02 10:41:39,910 INFO Row 648: split into 1 chunks
+2026-03-02 10:41:39,921 INFO Row 649: split into 1 chunks
+2026-03-02 10:41:39,932 INFO Row 650: split into 1 chunks
+2026-03-02 10:41:39,941 INFO Row 651: split into 1 chunks
+2026-03-02 10:41:39,948 INFO Row 652: split into 1 chunks
+2026-03-02 10:41:39,962 INFO Row 653: split into 1 chunks
+2026-03-02 10:41:39,975 INFO Row 654: split into 1 chunks
+2026-03-02 10:41:39,989 INFO Row 655: split into 1 chunks
+2026-03-02 10:41:40,002 INFO Row 656: split into 1 chunks
+2026-03-02 10:41:40,017 INFO Row 657: split into 1 chunks
+2026-03-02 10:41:40,025 INFO Row 658: split into 1 chunks
+2026-03-02 10:41:40,036 INFO Row 659: split into 1 chunks
+2026-03-02 10:41:40,046 INFO Row 660: split into 1 chunks
+2026-03-02 10:41:40,055 INFO Row 661: split into 1 chunks
+2026-03-02 10:41:40,065 INFO Row 662: split into 1 chunks
+2026-03-02 10:41:40,076 INFO Row 663: split into 1 chunks
+2026-03-02 10:41:40,087 INFO Row 664: split into 1 chunks
+2026-03-02 10:41:40,098 INFO Row 665: split into 1 chunks
+2026-03-02 10:41:40,108 INFO Row 666: split into 1 chunks
+2026-03-02 10:41:40,117 INFO Row 667: split into 1 chunks
+2026-03-02 10:41:40,125 INFO Row 668: split into 1 chunks
+2026-03-02 10:41:40,132 INFO Row 669: split into 1 chunks
+2026-03-02 10:41:40,148 INFO Row 670: split into 1 chunks
+2026-03-02 10:41:40,158 INFO Row 671: split into 1 chunks
+2026-03-02 10:41:40,177 INFO Row 672: split into 1 chunks
+2026-03-02 10:41:40,186 INFO Row 673: split into 1 chunks
+2026-03-02 10:41:40,199 INFO Row 674: split into 1 chunks
+2026-03-02 10:41:40,214 INFO Row 675: split into 1 chunks
+2026-03-02 10:41:40,221 INFO Row 676: split into 1 chunks
+2026-03-02 10:41:40,234 INFO Row 677: split into 1 chunks
+2026-03-02 10:41:40,244 INFO Row 678: split into 1 chunks
+2026-03-02 10:41:40,254 INFO Row 679: split into 1 chunks
+2026-03-02 10:41:40,272 INFO Row 680: split into 1 chunks
+2026-03-02 10:41:40,280 INFO Row 681: split into 1 chunks
+2026-03-02 10:41:40,293 INFO Row 682: split into 1 chunks
+2026-03-02 10:41:40,304 INFO Row 683: split into 1 chunks
+2026-03-02 10:41:40,314 INFO Row 684: split into 1 chunks
+2026-03-02 10:41:40,325 INFO Row 685: split into 1 chunks
+2026-03-02 10:41:40,336 INFO Row 686: split into 1 chunks
+2026-03-02 10:41:40,348 INFO Row 687: split into 1 chunks
+2026-03-02 10:41:40,369 INFO Row 688: split into 1 chunks
+2026-03-02 10:41:40,382 INFO Row 689: split into 1 chunks
+2026-03-02 10:41:40,397 INFO Row 690: split into 1 chunks
+2026-03-02 10:41:40,402 INFO Row 691: split into 1 chunks
+2026-03-02 10:41:40,410 INFO Row 692: split into 1 chunks
+2026-03-02 10:41:40,420 INFO Row 693: split into 1 chunks
+2026-03-02 10:41:40,427 INFO Row 694: split into 1 chunks
+2026-03-02 10:41:40,436 INFO Row 695: split into 1 chunks
+2026-03-02 10:41:40,443 INFO Row 696: split into 1 chunks
+2026-03-02 10:41:40,455 INFO Row 697: split into 1 chunks
+2026-03-02 10:41:40,460 INFO Row 698: split into 1 chunks
+2026-03-02 10:41:40,484 INFO Row 699: split into 1 chunks
+2026-03-02 10:41:40,490 INFO Row 700: split into 1 chunks
+2026-03-02 10:41:40,498 INFO Row 701: split into 1 chunks
+2026-03-02 10:41:40,506 INFO Row 702: split into 1 chunks
+2026-03-02 10:41:40,516 INFO Row 703: split into 1 chunks
+2026-03-02 10:41:40,527 INFO Row 704: split into 1 chunks
+2026-03-02 10:41:40,534 INFO Row 705: split into 1 chunks
+2026-03-02 10:41:40,547 INFO Row 706: split into 1 chunks
+2026-03-02 10:41:40,553 INFO Row 707: split into 1 chunks
+2026-03-02 10:41:40,559 INFO Row 708: split into 1 chunks
+2026-03-02 10:41:40,575 INFO Row 709: split into 1 chunks
+2026-03-02 10:41:40,584 INFO Row 710: split into 1 chunks
+2026-03-02 10:41:40,597 INFO Row 711: split into 1 chunks
+2026-03-02 10:41:40,604 INFO Row 712: split into 1 chunks
+2026-03-02 10:41:40,611 INFO Row 713: split into 1 chunks
+2026-03-02 10:41:40,622 INFO Row 714: split into 1 chunks
+2026-03-02 10:41:40,629 INFO Row 715: split into 1 chunks
+2026-03-02 10:41:40,637 INFO Row 716: split into 1 chunks
+2026-03-02 10:41:40,650 INFO Row 717: split into 1 chunks
+2026-03-02 10:41:40,658 INFO Row 718: split into 1 chunks
+2026-03-02 10:41:40,665 INFO Row 719: split into 1 chunks
+2026-03-02 10:41:40,674 INFO Row 720: split into 1 chunks
+2026-03-02 10:41:40,683 INFO Row 721: split into 1 chunks
+2026-03-02 10:41:40,694 INFO Row 722: split into 1 chunks
+2026-03-02 10:41:40,703 INFO Row 723: split into 1 chunks
+2026-03-02 10:41:40,713 INFO Row 724: split into 1 chunks
+2026-03-02 10:41:40,726 INFO Row 725: split into 1 chunks
+2026-03-02 10:41:40,732 INFO Row 726: split into 1 chunks
+2026-03-02 10:41:40,739 INFO Row 727: split into 1 chunks
+2026-03-02 10:41:40,748 INFO Row 728: split into 1 chunks
+2026-03-02 10:41:40,756 INFO Row 729: split into 1 chunks
+2026-03-02 10:41:40,768 INFO Row 730: split into 1 chunks
+2026-03-02 10:41:40,789 INFO Row 731: split into 1 chunks
+2026-03-02 10:41:40,802 INFO Row 732: split into 1 chunks
+2026-03-02 10:41:40,813 INFO Row 733: split into 1 chunks
+2026-03-02 10:41:40,836 INFO Row 734: split into 1 chunks
+2026-03-02 10:41:40,846 INFO Row 735: split into 1 chunks
+2026-03-02 10:41:40,855 INFO Row 736: split into 1 chunks
+2026-03-02 10:41:40,874 INFO Row 737: split into 1 chunks
+2026-03-02 10:41:40,885 INFO Row 738: split into 1 chunks
+2026-03-02 10:41:40,893 INFO Row 739: split into 1 chunks
+2026-03-02 10:41:40,904 INFO Row 740: split into 1 chunks
+2026-03-02 10:41:40,911 INFO Row 741: split into 1 chunks
+2026-03-02 10:41:40,921 INFO Row 742: split into 1 chunks
+2026-03-02 10:41:40,934 INFO Row 743: split into 1 chunks
+2026-03-02 10:41:40,943 INFO Row 744: split into 1 chunks
+2026-03-02 10:41:40,956 INFO Row 745: split into 1 chunks
+2026-03-02 10:41:40,966 INFO Row 746: split into 1 chunks
+2026-03-02 10:41:40,975 INFO Row 747: split into 1 chunks
+2026-03-02 10:41:40,988 INFO Row 748: split into 1 chunks
+2026-03-02 10:41:41,007 INFO Row 749: split into 1 chunks
+2026-03-02 10:41:41,036 INFO Row 750: split into 1 chunks
+2026-03-02 10:41:41,056 INFO Row 751: split into 1 chunks
+2026-03-02 10:41:41,081 INFO Row 752: split into 1 chunks
+2026-03-02 10:41:41,095 INFO Row 753: split into 1 chunks
+2026-03-02 10:41:41,122 INFO Row 754: split into 1 chunks
+2026-03-02 10:41:41,139 INFO Row 755: split into 1 chunks
+2026-03-02 10:41:41,165 INFO Row 756: split into 1 chunks
+2026-03-02 10:41:41,179 INFO Row 757: split into 1 chunks
+2026-03-02 10:41:41,193 INFO Row 758: split into 1 chunks
+2026-03-02 10:41:41,217 INFO Row 759: split into 1 chunks
+2026-03-02 10:41:41,241 INFO Row 760: split into 1 chunks
+2026-03-02 10:41:41,257 INFO Row 761: split into 1 chunks
+2026-03-02 10:41:41,282 INFO Row 762: split into 1 chunks
+2026-03-02 10:41:41,310 INFO Row 763: split into 1 chunks
+2026-03-02 10:41:41,345 INFO Row 764: split into 1 chunks
+2026-03-02 10:41:41,377 INFO Row 765: split into 1 chunks
+2026-03-02 10:41:41,390 INFO Row 766: split into 1 chunks
+2026-03-02 10:41:41,415 INFO Row 767: split into 1 chunks
+2026-03-02 10:41:41,426 INFO Row 768: split into 1 chunks
+2026-03-02 10:41:41,461 INFO Row 769: split into 1 chunks
+2026-03-02 10:41:41,486 INFO Row 770: split into 1 chunks
+2026-03-02 10:41:41,502 INFO Row 771: split into 1 chunks
+2026-03-02 10:41:41,523 INFO Row 772: split into 1 chunks
+2026-03-02 10:41:41,542 INFO Row 773: split into 1 chunks
+2026-03-02 10:41:41,558 INFO Row 774: split into 1 chunks
+2026-03-02 10:41:41,574 INFO Row 775: split into 1 chunks
+2026-03-02 10:41:41,593 INFO Row 776: split into 1 chunks
+2026-03-02 10:41:41,613 INFO Row 777: split into 1 chunks
+2026-03-02 10:41:41,627 INFO Row 778: split into 1 chunks
+2026-03-02 10:41:41,643 INFO Row 779: split into 1 chunks
+2026-03-02 10:41:41,660 INFO Row 780: split into 1 chunks
+2026-03-02 10:41:41,679 INFO Row 781: split into 1 chunks
+2026-03-02 10:41:41,700 INFO Row 782: split into 1 chunks
+2026-03-02 10:41:41,713 INFO Row 783: split into 1 chunks
+2026-03-02 10:41:41,736 INFO Row 784: split into 1 chunks
+2026-03-02 10:41:41,754 INFO Row 785: split into 1 chunks
+2026-03-02 10:41:41,785 INFO Row 786: split into 1 chunks
+2026-03-02 10:41:41,809 INFO Row 787: split into 1 chunks
+2026-03-02 10:41:41,827 INFO Row 788: split into 1 chunks
+2026-03-02 10:41:41,842 INFO Row 789: split into 1 chunks
+2026-03-02 10:41:41,866 INFO Row 790: split into 1 chunks
+2026-03-02 10:41:41,890 INFO Row 791: split into 1 chunks
+2026-03-02 10:41:41,914 INFO Row 792: split into 1 chunks
+2026-03-02 10:41:41,937 INFO Row 793: split into 1 chunks
+2026-03-02 10:41:41,951 INFO Row 794: split into 1 chunks
+2026-03-02 10:41:41,972 INFO Row 795: split into 1 chunks
+2026-03-02 10:41:42,007 INFO Row 796: split into 1 chunks
+2026-03-02 10:41:42,021 INFO Row 797: split into 1 chunks
+2026-03-02 10:41:42,053 INFO Row 798: split into 1 chunks
+2026-03-02 10:41:42,081 INFO Row 799: split into 1 chunks
+2026-03-02 10:41:42,096 INFO Row 800: split into 1 chunks
+2026-03-02 10:41:42,116 INFO Row 801: split into 1 chunks
+2026-03-02 10:41:42,132 INFO Row 802: split into 1 chunks
+2026-03-02 10:41:42,163 INFO Row 803: split into 1 chunks
+2026-03-02 10:41:42,188 INFO Row 804: split into 1 chunks
+2026-03-02 10:41:42,203 INFO Row 805: split into 1 chunks
+2026-03-02 10:41:42,227 INFO Row 806: split into 1 chunks
+2026-03-02 10:41:42,244 INFO Row 807: split into 1 chunks
+2026-03-02 10:41:42,258 INFO Row 808: split into 1 chunks
+2026-03-02 10:41:42,281 INFO Row 809: split into 1 chunks
+2026-03-02 10:41:42,301 INFO Row 810: split into 1 chunks
+2026-03-02 10:41:42,326 INFO Row 811: split into 1 chunks
+2026-03-02 10:41:42,372 INFO Row 812: split into 1 chunks
+2026-03-02 10:41:42,404 INFO Row 813: split into 1 chunks
+2026-03-02 10:41:42,428 INFO Row 814: split into 1 chunks
+2026-03-02 10:41:42,455 INFO Row 815: split into 1 chunks
+2026-03-02 10:41:42,474 INFO Row 816: split into 1 chunks
+2026-03-02 10:41:42,502 INFO Row 817: split into 1 chunks
+2026-03-02 10:41:42,537 INFO Row 818: split into 1 chunks
+2026-03-02 10:41:42,561 INFO Row 819: split into 1 chunks
+2026-03-02 10:41:42,583 INFO Row 820: split into 1 chunks
+2026-03-02 10:41:42,607 INFO Row 821: split into 1 chunks
+2026-03-02 10:41:42,620 INFO Row 822: split into 1 chunks
+2026-03-02 10:41:42,647 INFO Row 823: split into 1 chunks
+2026-03-02 10:41:42,674 INFO Row 824: split into 1 chunks
+2026-03-02 10:41:42,685 INFO Row 825: split into 1 chunks
+2026-03-02 10:41:42,719 INFO Row 826: split into 1 chunks
+2026-03-02 10:41:42,735 INFO Row 827: split into 1 chunks
+2026-03-02 10:41:42,754 INFO Row 828: split into 1 chunks
+2026-03-02 10:41:42,780 INFO Row 829: split into 1 chunks
+2026-03-02 10:41:42,802 INFO Row 830: split into 1 chunks
+2026-03-02 10:41:42,831 INFO Row 831: split into 1 chunks
+2026-03-02 10:41:42,865 INFO Row 832: split into 1 chunks
+2026-03-02 10:41:42,884 INFO Row 833: split into 1 chunks
+2026-03-02 10:41:42,906 INFO Row 834: split into 1 chunks
+2026-03-02 10:41:42,928 INFO Row 835: split into 1 chunks
+2026-03-02 10:41:42,942 INFO Row 836: split into 1 chunks
+2026-03-02 10:41:42,952 INFO Row 837: split into 1 chunks
+2026-03-02 10:41:42,973 INFO Row 838: split into 1 chunks
+2026-03-02 10:41:42,990 INFO Row 839: split into 1 chunks
+2026-03-02 10:41:43,007 INFO Row 840: split into 1 chunks
+2026-03-02 10:41:43,025 INFO Row 841: split into 1 chunks
+2026-03-02 10:41:43,040 INFO Row 842: split into 1 chunks
+2026-03-02 10:41:43,066 INFO Row 843: split into 1 chunks
+2026-03-02 10:41:43,085 INFO Row 844: split into 1 chunks
+2026-03-02 10:41:43,110 INFO Row 845: split into 1 chunks
+2026-03-02 10:41:43,133 INFO Row 846: split into 1 chunks
+2026-03-02 10:41:43,150 INFO Row 847: split into 1 chunks
+2026-03-02 10:41:43,170 INFO Row 848: split into 1 chunks
+2026-03-02 10:41:43,202 INFO Row 849: split into 1 chunks
+2026-03-02 10:41:43,220 INFO Row 850: split into 1 chunks
+2026-03-02 10:41:43,247 INFO Row 851: split into 1 chunks
+2026-03-02 10:41:43,269 INFO Row 852: split into 1 chunks
+2026-03-02 10:41:43,280 INFO Row 853: split into 1 chunks
+2026-03-02 10:41:43,306 INFO Row 854: split into 1 chunks
+2026-03-02 10:41:43,326 INFO Row 855: split into 1 chunks
+2026-03-02 10:41:43,337 INFO Row 856: split into 1 chunks
+2026-03-02 10:41:43,350 INFO Row 857: split into 1 chunks
+2026-03-02 10:41:43,363 INFO Row 858: split into 1 chunks
+2026-03-02 10:41:43,377 INFO Row 859: split into 1 chunks
+2026-03-02 10:41:43,391 INFO Row 860: split into 1 chunks
+2026-03-02 10:41:43,411 INFO Row 861: split into 1 chunks
+2026-03-02 10:41:43,424 INFO Row 862: split into 1 chunks
+2026-03-02 10:41:43,445 INFO Row 863: split into 1 chunks
+2026-03-02 10:41:43,455 INFO Row 864: split into 1 chunks
+2026-03-02 10:41:43,476 INFO Row 865: split into 1 chunks
+2026-03-02 10:41:43,486 INFO Row 866: split into 1 chunks
+2026-03-02 10:41:43,504 INFO Row 867: split into 1 chunks
+2026-03-02 10:41:43,516 INFO Row 868: split into 1 chunks
+2026-03-02 10:41:43,536 INFO Row 869: split into 1 chunks
+2026-03-02 10:41:43,547 INFO Row 870: split into 1 chunks
+2026-03-02 10:41:43,565 INFO Row 871: split into 1 chunks
+2026-03-02 10:41:43,593 INFO Row 872: split into 1 chunks
+2026-03-02 10:41:43,605 INFO Row 873: split into 1 chunks
+2026-03-02 10:41:43,613 INFO Row 874: split into 1 chunks
+2026-03-02 10:41:43,622 INFO Row 875: split into 1 chunks
+2026-03-02 10:41:43,631 INFO Row 876: split into 1 chunks
+2026-03-02 10:41:43,642 INFO Row 877: split into 1 chunks
+2026-03-02 10:41:43,650 INFO Row 878: split into 1 chunks
+2026-03-02 10:41:43,659 INFO Row 879: split into 1 chunks
+2026-03-02 10:41:43,670 INFO Row 880: split into 1 chunks
+2026-03-02 10:41:43,682 INFO Row 881: split into 1 chunks
+2026-03-02 10:41:43,695 INFO Row 882: split into 1 chunks
+2026-03-02 10:41:43,711 INFO Row 883: split into 1 chunks
+2026-03-02 10:41:43,736 INFO Row 884: split into 1 chunks
+2026-03-02 10:41:43,749 INFO Row 885: split into 1 chunks
+2026-03-02 10:41:43,764 INFO Row 886: split into 1 chunks
+2026-03-02 10:41:43,784 INFO Row 887: split into 1 chunks
+2026-03-02 10:41:43,794 INFO Row 888: split into 1 chunks
+2026-03-02 10:41:43,823 INFO Row 889: split into 1 chunks
+2026-03-02 10:41:43,838 INFO Row 890: split into 1 chunks
+2026-03-02 10:41:43,848 INFO Row 891: split into 1 chunks
+2026-03-02 10:41:43,869 INFO Row 892: split into 1 chunks
+2026-03-02 10:41:43,899 INFO Row 893: split into 1 chunks
+2026-03-02 10:41:43,940 INFO Row 894: split into 1 chunks
+2026-03-02 10:41:43,955 INFO Row 895: split into 1 chunks
+2026-03-02 10:41:43,967 INFO Row 896: split into 1 chunks
+2026-03-02 10:41:43,993 INFO Row 897: split into 1 chunks
+2026-03-02 10:41:44,025 INFO Row 898: split into 1 chunks
+2026-03-02 10:41:44,062 INFO Row 899: split into 1 chunks
+2026-03-02 10:41:44,077 INFO Row 900: split into 1 chunks
+2026-03-02 10:41:44,092 INFO Row 901: split into 1 chunks
+2026-03-02 10:41:44,122 INFO Row 902: split into 1 chunks
+2026-03-02 10:41:44,148 INFO Row 903: split into 1 chunks
+2026-03-02 10:41:44,159 INFO Row 904: split into 1 chunks
+2026-03-02 10:41:44,179 INFO Row 905: split into 1 chunks
+2026-03-02 10:41:44,205 INFO Row 906: split into 1 chunks
+2026-03-02 10:41:44,219 INFO Row 907: split into 1 chunks
+2026-03-02 10:41:44,230 INFO Row 908: split into 1 chunks
+2026-03-02 10:41:44,244 INFO Row 909: split into 1 chunks
+2026-03-02 10:41:44,264 INFO Row 910: split into 1 chunks
+2026-03-02 10:41:44,281 INFO Row 911: split into 1 chunks
+2026-03-02 10:41:44,307 INFO Row 912: split into 1 chunks
+2026-03-02 10:41:44,315 INFO Row 913: split into 1 chunks
+2026-03-02 10:41:44,327 INFO Row 914: split into 1 chunks
+2026-03-02 10:41:44,362 INFO Row 915: split into 1 chunks
+2026-03-02 10:41:44,391 INFO Row 916: split into 1 chunks
+2026-03-02 10:41:44,407 INFO Row 917: split into 1 chunks
+2026-03-02 10:41:44,423 INFO Row 918: split into 1 chunks
+2026-03-02 10:41:44,437 INFO Row 919: split into 1 chunks
+2026-03-02 10:41:44,530 INFO Row 920: split into 1 chunks
+2026-03-02 10:41:44,560 INFO Row 921: split into 1 chunks
+2026-03-02 10:41:44,570 INFO Row 922: split into 1 chunks
+2026-03-02 10:41:44,611 INFO Row 923: split into 1 chunks
+2026-03-02 10:41:44,615 INFO Row 924: split into 1 chunks
+2026-03-02 10:41:44,625 INFO Row 925: split into 1 chunks
+2026-03-02 10:41:44,631 INFO Row 926: split into 1 chunks
+2026-03-02 10:41:44,638 INFO Row 927: split into 1 chunks
+2026-03-02 10:41:44,647 INFO Row 928: split into 1 chunks
+2026-03-02 10:41:44,664 INFO Row 929: split into 1 chunks
+2026-03-02 10:41:44,676 INFO Row 930: split into 1 chunks
+2026-03-02 10:41:44,690 INFO Row 931: split into 1 chunks
+2026-03-02 10:41:44,698 INFO Row 932: split into 1 chunks
+2026-03-02 10:41:44,718 INFO Row 933: split into 1 chunks
+2026-03-02 10:41:44,731 INFO Row 934: split into 1 chunks
+2026-03-02 10:41:44,741 INFO Row 935: split into 1 chunks
+2026-03-02 10:41:44,764 INFO Row 936: split into 1 chunks
+2026-03-02 10:41:44,787 INFO Row 937: split into 1 chunks
+2026-03-02 10:41:44,804 INFO Row 938: split into 1 chunks
+2026-03-02 10:41:44,817 INFO Row 939: split into 1 chunks
+2026-03-02 10:41:44,829 INFO Row 940: split into 1 chunks
+2026-03-02 10:41:44,855 INFO Row 941: split into 1 chunks
+2026-03-02 10:41:44,921 INFO Row 942: split into 1 chunks
+2026-03-02 10:41:44,933 INFO Row 943: split into 1 chunks
+2026-03-02 10:41:44,942 INFO Row 944: split into 1 chunks
+2026-03-02 10:41:44,951 INFO Row 945: split into 1 chunks
+2026-03-02 10:41:44,960 INFO Row 946: split into 1 chunks
+2026-03-02 10:41:44,969 INFO Row 947: split into 1 chunks
+2026-03-02 10:41:44,983 INFO Row 948: split into 1 chunks
+2026-03-02 10:41:44,991 INFO Row 949: split into 1 chunks
+2026-03-02 10:41:45,020 INFO Row 950: split into 1 chunks
+2026-03-02 10:41:45,041 INFO Row 951: split into 1 chunks
+2026-03-02 10:41:45,057 INFO Row 952: split into 1 chunks
+2026-03-02 10:41:45,068 INFO Row 953: split into 1 chunks
+2026-03-02 10:41:45,076 INFO Row 954: split into 1 chunks
+2026-03-02 10:41:45,089 INFO Row 955: split into 1 chunks
+2026-03-02 10:41:45,125 INFO Row 956: split into 1 chunks
+2026-03-02 10:41:45,139 INFO Row 957: split into 1 chunks
+2026-03-02 10:41:45,157 INFO Row 958: split into 1 chunks
+2026-03-02 10:41:45,170 INFO Row 959: split into 1 chunks
+2026-03-02 10:41:45,182 INFO Row 960: split into 1 chunks
+2026-03-02 10:41:45,197 INFO Row 961: split into 1 chunks
+2026-03-02 10:41:45,213 INFO Row 962: split into 1 chunks
+2026-03-02 10:41:45,221 INFO Row 963: split into 1 chunks
+2026-03-02 10:41:45,231 INFO Row 964: split into 1 chunks
+2026-03-02 10:41:45,251 INFO Row 965: split into 1 chunks
+2026-03-02 10:41:45,285 INFO Row 966: split into 1 chunks
+2026-03-02 10:41:45,294 INFO Row 967: split into 1 chunks
+2026-03-02 10:41:45,314 INFO Row 968: split into 1 chunks
+2026-03-02 10:41:45,344 INFO Row 969: split into 1 chunks
+2026-03-02 10:41:45,364 INFO Row 970: split into 1 chunks
+2026-03-02 10:41:45,396 INFO Row 971: split into 1 chunks
+2026-03-02 10:41:45,431 INFO Row 972: split into 1 chunks
+2026-03-02 10:41:45,457 INFO Row 973: split into 1 chunks
+2026-03-02 10:41:45,495 INFO Row 974: split into 1 chunks
+2026-03-02 10:41:45,510 INFO Row 975: split into 1 chunks
+2026-03-02 10:41:45,520 INFO Row 976: split into 1 chunks
+2026-03-02 10:41:45,529 INFO Row 977: split into 1 chunks
+2026-03-02 10:41:45,538 INFO Row 978: split into 1 chunks
+2026-03-02 10:41:45,555 INFO Row 979: split into 1 chunks
+2026-03-02 10:41:45,581 INFO Row 980: split into 1 chunks
+2026-03-02 10:41:45,596 INFO Row 981: split into 1 chunks
+2026-03-02 10:41:45,638 INFO Row 982: split into 1 chunks
+2026-03-02 10:41:45,654 INFO Row 983: split into 1 chunks
+2026-03-02 10:41:45,701 INFO Row 984: split into 1 chunks
+2026-03-02 10:41:45,718 INFO Row 985: split into 1 chunks
+2026-03-02 10:41:45,741 INFO Row 986: split into 1 chunks
+2026-03-02 10:41:45,754 INFO Row 987: split into 1 chunks
+2026-03-02 10:41:45,763 INFO Row 988: split into 1 chunks
+2026-03-02 10:41:45,779 INFO Row 989: split into 1 chunks
+2026-03-02 10:41:45,813 INFO Row 990: split into 1 chunks
+2026-03-02 10:41:45,839 INFO Row 991: split into 1 chunks
+2026-03-02 10:41:45,855 INFO Row 992: split into 1 chunks
+2026-03-02 10:41:45,877 INFO Row 993: split into 1 chunks
+2026-03-02 10:41:45,908 INFO Row 994: split into 1 chunks
+2026-03-02 10:41:45,925 INFO Row 995: split into 1 chunks
+2026-03-02 10:41:45,942 INFO Row 996: split into 1 chunks
+2026-03-02 10:41:45,966 INFO Row 997: split into 1 chunks
+2026-03-02 10:41:45,990 INFO Row 998: split into 1 chunks
+2026-03-02 10:41:46,013 INFO Row 999: split into 1 chunks
+2026-03-02 10:41:46,034 INFO Row 1000: split into 1 chunks
+2026-03-02 10:41:46,057 INFO Row 1001: split into 1 chunks
+2026-03-02 10:41:46,090 INFO Row 1002: split into 1 chunks
+2026-03-02 10:41:46,105 INFO Row 1003: split into 1 chunks
+2026-03-02 10:41:46,122 INFO Row 1004: split into 1 chunks
+2026-03-02 10:41:46,145 INFO Row 1005: split into 1 chunks
+2026-03-02 10:41:46,167 INFO Row 1006: split into 1 chunks
+2026-03-02 10:41:46,200 INFO Row 1007: split into 1 chunks
+2026-03-02 10:41:46,227 INFO Row 1008: split into 1 chunks
+2026-03-02 10:41:46,240 INFO Row 1009: split into 1 chunks
+2026-03-02 10:41:46,257 INFO Row 1010: split into 1 chunks
+2026-03-02 10:41:46,269 INFO Row 1011: split into 1 chunks
+2026-03-02 10:41:46,280 INFO Row 1012: split into 1 chunks
+2026-03-02 10:41:46,290 INFO Row 1013: split into 1 chunks
+2026-03-02 10:41:46,304 INFO Row 1014: split into 1 chunks
+2026-03-02 10:41:46,331 INFO Row 1015: split into 1 chunks
+2026-03-02 10:41:46,343 INFO Row 1016: split into 1 chunks
+2026-03-02 10:41:46,359 INFO Row 1017: split into 1 chunks
+2026-03-02 10:41:46,396 INFO Row 1018: split into 1 chunks
+2026-03-02 10:41:46,418 INFO Row 1019: split into 1 chunks
+2026-03-02 10:41:46,440 INFO Row 1020: split into 1 chunks
+2026-03-02 10:41:46,452 INFO Row 1021: split into 1 chunks
+2026-03-02 10:41:46,488 INFO Row 1022: split into 1 chunks
+2026-03-02 10:41:46,501 INFO Row 1023: split into 1 chunks
+2026-03-02 10:41:46,516 INFO Row 1024: split into 1 chunks
+2026-03-02 10:41:46,534 INFO Row 1025: split into 1 chunks
+2026-03-02 10:41:46,553 INFO Row 1026: split into 1 chunks
+2026-03-02 10:41:46,570 INFO Row 1027: split into 1 chunks
+2026-03-02 10:41:46,585 INFO Row 1028: split into 1 chunks
+2026-03-02 10:41:46,606 INFO Row 1029: split into 1 chunks
+2026-03-02 10:41:46,629 INFO Row 1030: split into 1 chunks
+2026-03-02 10:41:46,653 INFO Row 1031: split into 1 chunks
+2026-03-02 10:41:46,671 INFO Row 1032: split into 1 chunks
+2026-03-02 10:41:46,698 INFO Row 1033: split into 1 chunks
+2026-03-02 10:41:46,743 INFO Row 1034: split into 1 chunks
+2026-03-02 10:41:46,765 INFO Row 1035: split into 1 chunks
+2026-03-02 10:41:46,804 INFO Row 1036: split into 1 chunks
+2026-03-02 10:41:46,830 INFO Row 1037: split into 1 chunks
+2026-03-02 10:41:46,859 INFO Row 1038: split into 1 chunks
+2026-03-02 10:41:46,877 INFO Row 1039: split into 1 chunks
+2026-03-02 10:41:46,896 INFO Row 1040: split into 1 chunks
+2026-03-02 10:41:46,934 INFO Row 1041: split into 1 chunks
+2026-03-02 10:41:46,954 INFO Row 1042: split into 1 chunks
+2026-03-02 10:41:46,985 INFO Row 1043: split into 1 chunks
+2026-03-02 10:41:47,012 INFO Row 1044: split into 1 chunks
+2026-03-02 10:41:47,029 INFO Row 1045: split into 1 chunks
+2026-03-02 10:41:47,055 INFO Row 1046: split into 1 chunks
+2026-03-02 10:41:47,078 INFO Row 1047: split into 1 chunks
+2026-03-02 10:41:47,101 INFO Row 1048: split into 1 chunks
+2026-03-02 10:41:47,128 INFO Row 1049: split into 1 chunks
+2026-03-02 10:41:47,160 INFO Row 1050: split into 1 chunks
+2026-03-02 10:41:47,222 INFO Row 1051: split into 1 chunks
+2026-03-02 10:41:47,239 INFO Row 1052: split into 1 chunks
+2026-03-02 10:41:47,273 INFO Row 1053: split into 1 chunks
+2026-03-02 10:41:47,299 INFO Row 1054: split into 1 chunks
+2026-03-02 10:41:47,316 INFO Row 1055: split into 1 chunks
+2026-03-02 10:41:47,336 INFO Row 1056: split into 1 chunks
+2026-03-02 10:41:47,390 INFO Row 1057: split into 1 chunks
+2026-03-02 10:41:47,413 INFO Row 1058: split into 1 chunks
+2026-03-02 10:41:47,438 INFO Row 1059: split into 1 chunks
+2026-03-02 10:41:47,465 INFO Row 1060: split into 1 chunks
+2026-03-02 10:41:47,484 INFO Row 1061: split into 1 chunks
+2026-03-02 10:41:47,505 INFO Row 1062: split into 1 chunks
+2026-03-02 10:41:47,523 INFO Row 1063: split into 1 chunks
+2026-03-02 10:41:47,546 INFO Row 1064: split into 1 chunks
+2026-03-02 10:41:47,570 INFO Row 1065: split into 1 chunks
+2026-03-02 10:41:47,595 INFO Row 1066: split into 1 chunks
+2026-03-02 10:41:47,622 INFO Row 1067: split into 1 chunks
+2026-03-02 10:41:47,645 INFO Row 1068: split into 1 chunks
+2026-03-02 10:41:47,663 INFO Row 1069: split into 1 chunks
+2026-03-02 10:41:47,676 INFO Row 1070: split into 1 chunks
+2026-03-02 10:41:47,692 INFO Row 1071: split into 1 chunks
+2026-03-02 10:41:47,717 INFO Row 1072: split into 1 chunks
+2026-03-02 10:41:47,753 INFO Row 1073: split into 1 chunks
+2026-03-02 10:41:47,776 INFO Row 1074: split into 1 chunks
+2026-03-02 10:41:47,793 INFO Row 1075: split into 1 chunks
+2026-03-02 10:41:47,804 INFO Row 1076: split into 1 chunks
+2026-03-02 10:41:47,828 INFO Row 1077: split into 1 chunks
+2026-03-02 10:41:47,866 INFO Row 1078: split into 1 chunks
+2026-03-02 10:41:47,900 INFO Row 1079: split into 1 chunks
+2026-03-02 10:41:47,925 INFO Row 1080: split into 1 chunks
+2026-03-02 10:41:47,953 INFO Row 1081: split into 1 chunks
+2026-03-02 10:41:47,972 INFO Row 1082: split into 1 chunks
+2026-03-02 10:41:48,002 INFO Row 1083: split into 1 chunks
+2026-03-02 10:41:48,046 INFO Row 1084: split into 1 chunks
+2026-03-02 10:41:48,108 INFO Row 1085: split into 1 chunks
+2026-03-02 10:41:48,140 INFO Row 1086: split into 1 chunks
+2026-03-02 10:41:48,172 INFO Row 1087: split into 1 chunks
+2026-03-02 10:41:48,218 INFO Row 1088: split into 1 chunks
+2026-03-02 10:41:48,236 INFO Row 1089: split into 1 chunks
+2026-03-02 10:41:48,256 INFO Row 1090: split into 1 chunks
+2026-03-02 10:41:48,288 INFO Row 1091: split into 1 chunks
+2026-03-02 10:41:48,313 INFO Row 1092: split into 1 chunks
+2026-03-02 10:41:48,334 INFO Row 1093: split into 1 chunks
+2026-03-02 10:41:48,353 INFO Row 1094: split into 1 chunks
+2026-03-02 10:41:48,381 INFO Row 1095: split into 1 chunks
+2026-03-02 10:41:48,393 INFO Row 1096: split into 1 chunks
+2026-03-02 10:41:48,402 INFO Row 1097: split into 1 chunks
+2026-03-02 10:41:48,413 INFO Row 1098: split into 1 chunks
+2026-03-02 10:41:48,421 INFO Row 1099: split into 1 chunks
+2026-03-02 10:41:48,448 INFO Row 1100: split into 1 chunks
+2026-03-02 10:41:48,464 INFO Row 1101: split into 1 chunks
+2026-03-02 10:41:48,477 INFO Row 1102: split into 1 chunks
+2026-03-02 10:41:48,493 INFO Row 1103: split into 1 chunks
+2026-03-02 10:41:48,510 INFO Row 1104: split into 1 chunks
+2026-03-02 10:41:48,531 INFO Row 1105: split into 1 chunks
+2026-03-02 10:41:48,540 INFO Row 1106: split into 1 chunks
+2026-03-02 10:41:48,551 INFO Row 1107: split into 1 chunks
+2026-03-02 10:41:48,561 INFO Row 1108: split into 1 chunks
+2026-03-02 10:41:48,571 INFO Row 1109: split into 1 chunks
+2026-03-02 10:41:48,582 INFO Row 1110: split into 1 chunks
+2026-03-02 10:41:48,598 INFO Row 1111: split into 1 chunks
+2026-03-02 10:41:48,610 INFO Row 1112: split into 1 chunks
+2026-03-02 10:41:48,622 INFO Row 1113: split into 1 chunks
+2026-03-02 10:41:48,637 INFO Row 1114: split into 1 chunks
+2026-03-02 10:41:48,655 INFO Row 1115: split into 1 chunks
+2026-03-02 10:41:48,663 INFO Row 1116: split into 1 chunks
+2026-03-02 10:41:48,671 INFO Row 1117: split into 1 chunks
+2026-03-02 10:41:48,698 INFO Row 1118: split into 1 chunks
+2026-03-02 10:41:48,725 INFO Row 1119: split into 1 chunks
+2026-03-02 10:41:48,736 INFO Row 1120: split into 1 chunks
+2026-03-02 10:41:48,743 INFO Row 1121: split into 1 chunks
+2026-03-02 10:41:48,755 INFO Row 1122: split into 1 chunks
+2026-03-02 10:41:48,765 INFO Row 1123: split into 1 chunks
+2026-03-02 10:41:48,778 INFO Row 1124: split into 1 chunks
+2026-03-02 10:41:48,788 INFO Row 1125: split into 1 chunks
+2026-03-02 10:41:48,798 INFO Row 1126: split into 1 chunks
+2026-03-02 10:41:48,807 INFO Row 1127: split into 1 chunks
+2026-03-02 10:41:48,819 INFO Row 1128: split into 1 chunks
+2026-03-02 10:41:48,833 INFO Row 1129: split into 1 chunks
+2026-03-02 10:41:48,843 INFO Row 1130: split into 1 chunks
+2026-03-02 10:41:48,858 INFO Row 1131: split into 1 chunks
+2026-03-02 10:41:48,868 INFO Row 1132: split into 1 chunks
+2026-03-02 10:41:48,878 INFO Row 1133: split into 1 chunks
+2026-03-02 10:41:48,891 INFO Row 1134: split into 1 chunks
+2026-03-02 10:41:48,902 INFO Row 1135: split into 1 chunks
+2026-03-02 10:41:48,910 INFO Row 1136: split into 1 chunks
+2026-03-02 10:41:48,920 INFO Row 1137: split into 1 chunks
+2026-03-02 10:41:48,931 INFO Row 1138: split into 1 chunks
+2026-03-02 10:41:48,941 INFO Row 1139: split into 1 chunks
+2026-03-02 10:41:48,953 INFO Row 1140: split into 1 chunks
+2026-03-02 10:41:48,963 INFO Row 1141: split into 1 chunks
+2026-03-02 10:41:48,974 INFO Row 1142: split into 1 chunks
+2026-03-02 10:41:48,989 INFO Row 1143: split into 1 chunks
+2026-03-02 10:41:49,000 INFO Row 1144: split into 1 chunks
+2026-03-02 10:41:49,017 INFO Row 1145: split into 1 chunks
+2026-03-02 10:41:49,029 INFO Row 1146: split into 1 chunks
+2026-03-02 10:41:49,042 INFO Row 1147: split into 1 chunks
+2026-03-02 10:41:49,054 INFO Row 1148: split into 1 chunks
+2026-03-02 10:41:49,065 INFO Row 1149: split into 1 chunks
+2026-03-02 10:41:49,078 INFO Row 1150: split into 1 chunks
+2026-03-02 10:41:49,089 INFO Row 1151: split into 1 chunks
+2026-03-02 10:41:49,098 INFO Row 1152: split into 1 chunks
+2026-03-02 10:41:49,111 INFO Row 1153: split into 1 chunks
+2026-03-02 10:41:49,124 INFO Row 1154: split into 1 chunks
+2026-03-02 10:41:49,137 INFO Row 1155: split into 1 chunks
+2026-03-02 10:41:49,151 INFO Row 1156: split into 1 chunks
+2026-03-02 10:41:49,168 INFO Row 1157: split into 1 chunks
+2026-03-02 10:41:49,184 INFO Row 1158: split into 1 chunks
+2026-03-02 10:41:49,193 INFO Row 1159: split into 1 chunks
+2026-03-02 10:41:49,200 INFO Row 1160: split into 1 chunks
+2026-03-02 10:41:49,211 INFO Row 1161: split into 1 chunks
+2026-03-02 10:41:49,224 INFO Row 1162: split into 1 chunks
+2026-03-02 10:41:49,234 INFO Row 1163: split into 1 chunks
+2026-03-02 10:41:49,246 INFO Row 1164: split into 1 chunks
+2026-03-02 10:41:49,261 INFO Row 1165: split into 1 chunks
+2026-03-02 10:41:49,272 INFO Row 1166: split into 1 chunks
+2026-03-02 10:41:49,279 INFO Row 1167: split into 1 chunks
+2026-03-02 10:41:49,287 INFO Row 1168: split into 1 chunks
+2026-03-02 10:41:49,297 INFO Row 1169: split into 1 chunks
+2026-03-02 10:41:49,303 INFO Row 1170: split into 1 chunks
+2026-03-02 10:41:49,324 INFO Row 1171: split into 1 chunks
+2026-03-02 10:41:49,336 INFO Row 1172: split into 1 chunks
+2026-03-02 10:41:49,351 INFO Row 1173: split into 1 chunks
+2026-03-02 10:41:49,361 INFO Row 1174: split into 1 chunks
+2026-03-02 10:41:49,376 INFO Row 1175: split into 1 chunks
+2026-03-02 10:41:49,389 INFO Row 1176: split into 1 chunks
+2026-03-02 10:41:49,396 INFO Row 1177: split into 1 chunks
+2026-03-02 10:41:49,408 INFO Row 1178: split into 1 chunks
+2026-03-02 10:41:49,417 INFO Row 1179: split into 1 chunks
+2026-03-02 10:41:49,425 INFO Row 1180: split into 1 chunks
+2026-03-02 10:41:49,436 INFO Row 1181: split into 1 chunks
+2026-03-02 10:41:49,447 INFO Row 1182: split into 1 chunks
+2026-03-02 10:41:49,458 INFO Row 1183: split into 1 chunks
+2026-03-02 10:41:49,473 INFO Row 1184: split into 1 chunks
+2026-03-02 10:41:49,484 INFO Row 1185: split into 1 chunks
+2026-03-02 10:41:49,496 INFO Row 1186: split into 1 chunks
+2026-03-02 10:41:49,505 INFO Row 1187: split into 1 chunks
+2026-03-02 10:41:49,521 INFO Row 1188: split into 1 chunks
+2026-03-02 10:41:49,534 INFO Row 1189: split into 1 chunks
+2026-03-02 10:41:49,550 INFO Row 1190: split into 1 chunks
+2026-03-02 10:41:49,558 INFO Row 1191: split into 1 chunks
+2026-03-02 10:41:49,567 INFO Row 1192: split into 1 chunks
+2026-03-02 10:41:49,582 INFO Row 1193: split into 1 chunks
+2026-03-02 10:41:49,602 INFO Row 1194: split into 1 chunks
+2026-03-02 10:41:49,612 INFO Row 1195: split into 1 chunks
+2026-03-02 10:41:49,627 INFO Row 1196: split into 1 chunks
+2026-03-02 10:41:49,637 INFO Row 1197: split into 1 chunks
+2026-03-02 10:41:49,648 INFO Row 1198: split into 1 chunks
+2026-03-02 10:41:49,660 INFO Row 1199: split into 1 chunks
+2026-03-02 10:41:49,669 INFO Row 1200: split into 1 chunks
+2026-03-02 10:41:49,679 INFO Row 1201: split into 1 chunks
+2026-03-02 10:41:49,689 INFO Row 1202: split into 1 chunks
+2026-03-02 10:41:49,699 INFO Row 1203: split into 1 chunks
+2026-03-02 10:41:49,713 INFO Row 1204: split into 1 chunks
+2026-03-02 10:41:49,728 INFO Row 1205: split into 1 chunks
+2026-03-02 10:41:49,737 INFO Row 1206: split into 1 chunks
+2026-03-02 10:41:49,746 INFO Row 1207: split into 1 chunks
+2026-03-02 10:41:49,752 INFO Row 1208: split into 1 chunks
+2026-03-02 10:41:49,758 INFO Row 1209: split into 1 chunks
+2026-03-02 10:41:49,768 INFO Row 1210: split into 1 chunks
+2026-03-02 10:41:49,774 INFO Row 1211: split into 1 chunks
+2026-03-02 10:41:49,780 INFO Row 1212: split into 1 chunks
+2026-03-02 10:41:49,785 INFO Row 1213: split into 1 chunks
+2026-03-02 10:41:49,790 INFO Row 1214: split into 1 chunks
+2026-03-02 10:41:49,797 INFO Row 1215: split into 1 chunks
+2026-03-02 10:41:49,803 INFO Row 1216: split into 1 chunks
+2026-03-02 10:41:49,810 INFO Row 1217: split into 1 chunks
+2026-03-02 10:41:49,817 INFO Row 1218: split into 1 chunks
+2026-03-02 10:41:49,825 INFO Row 1219: split into 1 chunks
+2026-03-02 10:41:49,834 INFO Row 1220: split into 1 chunks
+2026-03-02 10:41:49,840 INFO Row 1221: split into 1 chunks
+2026-03-02 10:41:49,851 INFO Row 1222: split into 1 chunks
+2026-03-02 10:41:49,856 INFO Row 1223: split into 1 chunks
+2026-03-02 10:41:49,866 INFO Row 1224: split into 1 chunks
+2026-03-02 10:41:49,874 INFO Row 1225: split into 1 chunks
+2026-03-02 10:41:49,884 INFO Row 1226: split into 1 chunks
+2026-03-02 10:41:49,893 INFO Row 1227: split into 1 chunks
+2026-03-02 10:41:49,900 INFO Row 1228: split into 1 chunks
+2026-03-02 10:41:49,909 INFO Row 1229: split into 1 chunks
+2026-03-02 10:41:49,921 INFO Row 1230: split into 1 chunks
+2026-03-02 10:41:49,930 INFO Row 1231: split into 1 chunks
+2026-03-02 10:41:49,939 INFO Row 1232: split into 1 chunks
+2026-03-02 10:41:49,949 INFO Row 1233: split into 1 chunks
+2026-03-02 10:41:49,953 INFO Row 1234: split into 1 chunks
+2026-03-02 10:41:49,958 INFO Row 1235: split into 1 chunks
+2026-03-02 10:41:49,962 INFO Row 1236: split into 1 chunks
+2026-03-02 10:41:49,970 INFO Row 1237: split into 1 chunks
+2026-03-02 10:41:49,975 INFO Row 1238: split into 1 chunks
+2026-03-02 10:41:49,983 INFO Row 1239: split into 1 chunks
+2026-03-02 10:41:49,999 INFO Row 1240: split into 1 chunks
+2026-03-02 10:41:50,009 INFO Row 1241: split into 1 chunks
+2026-03-02 10:41:50,017 INFO Row 1242: split into 1 chunks
+2026-03-02 10:41:50,026 INFO Row 1243: split into 1 chunks
+2026-03-02 10:41:50,034 INFO Row 1244: split into 1 chunks
+2026-03-02 10:41:50,043 INFO Row 1245: split into 1 chunks
+2026-03-02 10:41:50,056 INFO Row 1246: split into 1 chunks
+2026-03-02 10:41:50,070 INFO Row 1247: split into 1 chunks
+2026-03-02 10:41:50,080 INFO Row 1248: split into 1 chunks
+2026-03-02 10:41:50,084 INFO Row 1249: split into 1 chunks
+2026-03-02 10:41:50,092 INFO Row 1250: split into 1 chunks
+2026-03-02 10:41:50,099 INFO Row 1251: split into 1 chunks
+2026-03-02 10:41:50,106 INFO Row 1252: split into 1 chunks
+2026-03-02 10:41:50,112 INFO Row 1253: split into 1 chunks
+2026-03-02 10:41:50,123 INFO Row 1254: split into 1 chunks
+2026-03-02 10:41:50,130 INFO Row 1255: split into 1 chunks
+2026-03-02 10:41:50,135 INFO Row 1256: split into 1 chunks
+2026-03-02 10:41:50,144 INFO Row 1257: split into 1 chunks
+2026-03-02 10:41:50,152 INFO Row 1258: split into 1 chunks
+2026-03-02 10:41:50,162 INFO Row 1259: split into 1 chunks
+2026-03-02 10:41:50,171 INFO Row 1260: split into 1 chunks
+2026-03-02 10:41:50,181 INFO Row 1261: split into 1 chunks
+2026-03-02 10:41:50,189 INFO Row 1262: split into 1 chunks
+2026-03-02 10:41:50,207 INFO Row 1263: split into 1 chunks
+2026-03-02 10:41:50,215 INFO Row 1264: split into 1 chunks
+2026-03-02 10:41:50,222 INFO Row 1265: split into 1 chunks
+2026-03-02 10:41:50,229 INFO Row 1266: split into 1 chunks
+2026-03-02 10:41:50,235 INFO Row 1267: split into 1 chunks
+2026-03-02 10:41:50,244 INFO Row 1268: split into 1 chunks
+2026-03-02 10:41:50,255 INFO Row 1269: split into 1 chunks
+2026-03-02 10:41:50,266 INFO Row 1270: split into 1 chunks
+2026-03-02 10:41:50,276 INFO Row 1271: split into 1 chunks
+2026-03-02 10:41:50,287 INFO Row 1272: split into 1 chunks
+2026-03-02 10:41:50,292 INFO Row 1273: split into 1 chunks
+2026-03-02 10:41:50,301 INFO Row 1274: split into 1 chunks
+2026-03-02 10:41:50,310 INFO Row 1275: split into 1 chunks
+2026-03-02 10:41:50,322 INFO Row 1276: split into 1 chunks
+2026-03-02 10:41:50,334 INFO Row 1277: split into 1 chunks
+2026-03-02 10:41:50,345 INFO Row 1278: split into 1 chunks
+2026-03-02 10:41:50,356 INFO Row 1279: split into 1 chunks
+2026-03-02 10:41:50,361 INFO Row 1280: split into 1 chunks
+2026-03-02 10:41:50,374 INFO Row 1281: split into 1 chunks
+2026-03-02 10:41:50,379 INFO Row 1282: split into 1 chunks
+2026-03-02 10:41:50,386 INFO Row 1283: split into 1 chunks
+2026-03-02 10:41:50,393 INFO Row 1284: split into 1 chunks
+2026-03-02 10:41:50,404 INFO Row 1285: split into 1 chunks
+2026-03-02 10:41:50,417 INFO Row 1286: split into 1 chunks
+2026-03-02 10:41:50,433 INFO Row 1287: split into 1 chunks
+2026-03-02 10:41:50,456 INFO Row 1288: split into 1 chunks
+2026-03-02 10:41:50,468 INFO Row 1289: split into 1 chunks
+2026-03-02 10:41:50,484 INFO Row 1290: split into 1 chunks
+2026-03-02 10:41:50,497 INFO Row 1291: split into 1 chunks
+2026-03-02 10:41:50,510 INFO Row 1292: split into 1 chunks
+2026-03-02 10:41:50,514 INFO Row 1293: split into 1 chunks
+2026-03-02 10:41:50,522 INFO Row 1294: split into 1 chunks
+2026-03-02 10:41:50,529 INFO Row 1295: split into 1 chunks
+2026-03-02 10:41:50,538 INFO Row 1296: split into 1 chunks
+2026-03-02 10:41:50,548 INFO Row 1297: split into 1 chunks
+2026-03-02 10:41:50,561 INFO Row 1298: split into 1 chunks
+2026-03-02 10:41:50,571 INFO Row 1299: split into 1 chunks
+2026-03-02 10:41:50,586 INFO Row 1300: split into 1 chunks
+2026-03-02 10:41:50,596 INFO Row 1301: split into 1 chunks
+2026-03-02 10:41:50,612 INFO Row 1302: split into 1 chunks
+2026-03-02 10:41:50,627 INFO Row 1303: split into 1 chunks
+2026-03-02 10:41:50,639 INFO Row 1304: split into 1 chunks
+2026-03-02 10:41:50,647 INFO Row 1305: split into 1 chunks
+2026-03-02 10:41:50,658 INFO Row 1306: split into 1 chunks
+2026-03-02 10:41:50,668 INFO Row 1307: split into 1 chunks
+2026-03-02 10:41:50,678 INFO Row 1308: split into 1 chunks
+2026-03-02 10:41:50,690 INFO Row 1309: split into 1 chunks
+2026-03-02 10:41:50,698 INFO Row 1310: split into 1 chunks
+2026-03-02 10:41:50,715 INFO Row 1311: split into 1 chunks
+2026-03-02 10:41:50,729 INFO Row 1312: split into 1 chunks
+2026-03-02 10:41:50,739 INFO Row 1313: split into 1 chunks
+2026-03-02 10:41:50,752 INFO Row 1314: split into 1 chunks
+2026-03-02 10:41:50,762 INFO Row 1315: split into 1 chunks
+2026-03-02 10:41:50,771 INFO Row 1316: split into 1 chunks
+2026-03-02 10:41:50,782 INFO Row 1317: split into 1 chunks
+2026-03-02 10:41:50,792 INFO Row 1318: split into 1 chunks
+2026-03-02 10:41:50,806 INFO Row 1319: split into 1 chunks
+2026-03-02 10:41:50,814 INFO Row 1320: split into 1 chunks
+2026-03-02 10:41:50,826 INFO Row 1321: split into 1 chunks
+2026-03-02 10:41:50,836 INFO Row 1322: split into 1 chunks
+2026-03-02 10:41:50,849 INFO Row 1323: split into 1 chunks
+2026-03-02 10:41:50,859 INFO Row 1324: split into 1 chunks
+2026-03-02 10:41:50,870 INFO Row 1325: split into 1 chunks
+2026-03-02 10:41:50,882 INFO Row 1326: split into 1 chunks
+2026-03-02 10:41:50,895 INFO Row 1327: split into 1 chunks
+2026-03-02 10:41:50,920 INFO Row 1328: split into 1 chunks
+2026-03-02 10:41:50,935 INFO Row 1329: split into 1 chunks
+2026-03-02 10:41:50,947 INFO Row 1330: split into 1 chunks
+2026-03-02 10:41:50,957 INFO Row 1331: split into 1 chunks
+2026-03-02 10:41:50,973 INFO Row 1332: split into 1 chunks
+2026-03-02 10:41:50,990 INFO Row 1333: split into 1 chunks
+2026-03-02 10:41:51,007 INFO Row 1334: split into 1 chunks
+2026-03-02 10:41:51,026 INFO Row 1335: split into 1 chunks
+2026-03-02 10:41:51,042 INFO Row 1336: split into 1 chunks
+2026-03-02 10:41:51,096 INFO Row 1337: split into 1 chunks
+2026-03-02 10:41:51,116 INFO Row 1338: split into 1 chunks
+2026-03-02 10:41:51,145 INFO Row 1339: split into 1 chunks
+2026-03-02 10:41:51,159 INFO Row 1340: split into 1 chunks
+2026-03-02 10:41:51,195 INFO Row 1341: split into 1 chunks
+2026-03-02 10:41:51,228 INFO Row 1342: split into 1 chunks
+2026-03-02 10:41:51,258 INFO Row 1343: split into 1 chunks
+2026-03-02 10:41:51,267 INFO Row 1344: split into 1 chunks
+2026-03-02 10:41:51,302 INFO Row 1345: split into 1 chunks
+2026-03-02 10:41:51,337 INFO Row 1346: split into 1 chunks
+2026-03-02 10:41:51,363 INFO Row 1347: split into 1 chunks
+2026-03-02 10:41:51,379 INFO Row 1348: split into 1 chunks
+2026-03-02 10:41:51,412 INFO Row 1349: split into 1 chunks
+2026-03-02 10:41:51,438 INFO Row 1350: split into 1 chunks
+2026-03-02 10:41:51,457 INFO Row 1351: split into 1 chunks
+2026-03-02 10:41:51,482 INFO Row 1352: split into 1 chunks
+2026-03-02 10:41:51,508 INFO Row 1353: split into 1 chunks
+2026-03-02 10:41:51,531 INFO Row 1354: split into 1 chunks
+2026-03-02 10:41:51,544 INFO Row 1355: split into 1 chunks
+2026-03-02 10:41:51,570 INFO Row 1356: split into 1 chunks
+2026-03-02 10:41:51,588 INFO Row 1357: split into 1 chunks
+2026-03-02 10:41:51,621 INFO Row 1358: split into 1 chunks
+2026-03-02 10:41:51,650 INFO Row 1359: split into 1 chunks
+2026-03-02 10:41:51,670 INFO Row 1360: split into 1 chunks
+2026-03-02 10:41:51,691 INFO Row 1361: split into 1 chunks
+2026-03-02 10:41:51,712 INFO Row 1362: split into 1 chunks
+2026-03-02 10:41:51,727 INFO Row 1363: split into 1 chunks
+2026-03-02 10:41:51,749 INFO Row 1364: split into 1 chunks
+2026-03-02 10:41:51,776 INFO Row 1365: split into 1 chunks
+2026-03-02 10:41:51,802 INFO Row 1366: split into 1 chunks
+2026-03-02 10:41:51,825 INFO Row 1367: split into 1 chunks
+2026-03-02 10:41:51,843 INFO Row 1368: split into 1 chunks
+2026-03-02 10:41:51,872 INFO Row 1369: split into 1 chunks
+2026-03-02 10:41:51,885 INFO Row 1370: split into 1 chunks
+2026-03-02 10:41:51,903 INFO Row 1371: split into 1 chunks
+2026-03-02 10:41:51,919 INFO Row 1372: split into 1 chunks
+2026-03-02 10:41:51,934 INFO Row 1373: split into 1 chunks
+2026-03-02 10:41:51,951 INFO Row 1374: split into 1 chunks
+2026-03-02 10:41:51,960 INFO Row 1375: split into 1 chunks
+2026-03-02 10:41:51,980 INFO Row 1376: split into 1 chunks
+2026-03-02 10:41:51,995 INFO Row 1377: split into 1 chunks
+2026-03-02 10:41:52,022 INFO Row 1378: split into 1 chunks
+2026-03-02 10:41:52,040 INFO Row 1379: split into 1 chunks
+2026-03-02 10:41:52,056 INFO Row 1380: split into 1 chunks
+2026-03-02 10:41:52,070 INFO Row 1381: split into 1 chunks
+2026-03-02 10:41:52,118 INFO Row 1382: split into 1 chunks
+2026-03-02 10:41:52,150 INFO Row 1383: split into 1 chunks
+2026-03-02 10:41:52,166 INFO Row 1384: split into 1 chunks
+2026-03-02 10:41:52,180 INFO Row 1385: split into 1 chunks
+2026-03-02 10:41:52,199 INFO Row 1386: split into 1 chunks
+2026-03-02 10:41:52,210 INFO Row 1387: split into 1 chunks
+2026-03-02 10:41:52,230 INFO Row 1388: split into 1 chunks
+2026-03-02 10:41:52,253 INFO Row 1389: split into 1 chunks
+2026-03-02 10:41:52,260 INFO Row 1390: split into 1 chunks
+2026-03-02 10:41:52,276 INFO Row 1391: split into 1 chunks
+2026-03-02 10:41:52,293 INFO Row 1392: split into 1 chunks
+2026-03-02 10:41:52,305 INFO Row 1393: split into 1 chunks
+2026-03-02 10:41:52,328 INFO Row 1394: split into 1 chunks
+2026-03-02 10:41:52,346 INFO Row 1395: split into 1 chunks
+2026-03-02 10:41:52,361 INFO Row 1396: split into 1 chunks
+2026-03-02 10:41:52,377 INFO Row 1397: split into 1 chunks
+2026-03-02 10:41:52,395 INFO Row 1398: split into 1 chunks
+2026-03-02 10:41:52,411 INFO Row 1399: split into 1 chunks
+2026-03-02 10:41:52,428 INFO Row 1400: split into 1 chunks
+2026-03-02 10:41:52,444 INFO Row 1401: split into 1 chunks
+2026-03-02 10:41:52,461 INFO Row 1402: split into 1 chunks
+2026-03-02 10:41:52,489 INFO Row 1403: split into 1 chunks
+2026-03-02 10:41:52,517 INFO Row 1404: split into 1 chunks
+2026-03-02 10:41:52,557 INFO Row 1405: split into 1 chunks
+2026-03-02 10:41:52,588 INFO Row 1406: split into 1 chunks
+2026-03-02 10:41:52,605 INFO Row 1407: split into 1 chunks
+2026-03-02 10:41:52,625 INFO Row 1408: split into 1 chunks
+2026-03-02 10:41:52,644 INFO Row 1409: split into 1 chunks
+2026-03-02 10:41:52,655 INFO Row 1410: split into 1 chunks
+2026-03-02 10:41:52,667 INFO Row 1411: split into 1 chunks
+2026-03-02 10:41:52,688 INFO Row 1412: split into 1 chunks
+2026-03-02 10:41:52,710 INFO Row 1413: split into 1 chunks
+2026-03-02 10:41:52,739 INFO Row 1414: split into 1 chunks
+2026-03-02 10:41:52,761 INFO Row 1415: split into 1 chunks
+2026-03-02 10:41:52,795 INFO Row 1416: split into 1 chunks
+2026-03-02 10:41:52,816 INFO Row 1417: split into 1 chunks
+2026-03-02 10:41:52,836 INFO Row 1418: split into 1 chunks
+2026-03-02 10:41:52,855 INFO Row 1419: split into 1 chunks
+2026-03-02 10:41:52,874 INFO Row 1420: split into 1 chunks
+2026-03-02 10:41:52,893 INFO Row 1421: split into 1 chunks
+2026-03-02 10:41:52,917 INFO Row 1422: split into 1 chunks
+2026-03-02 10:41:52,934 INFO Row 1423: split into 1 chunks
+2026-03-02 10:41:52,956 INFO Row 1424: split into 1 chunks
+2026-03-02 10:41:52,973 INFO Row 1425: split into 1 chunks
+2026-03-02 10:41:52,983 INFO Row 1426: split into 1 chunks
+2026-03-02 10:41:53,001 INFO Row 1427: split into 1 chunks
+2026-03-02 10:41:53,014 INFO Row 1428: split into 1 chunks
+2026-03-02 10:41:53,036 INFO Row 1429: split into 1 chunks
+2026-03-02 10:41:53,061 INFO Row 1430: split into 1 chunks
+2026-03-02 10:41:53,082 INFO Row 1431: split into 1 chunks
+2026-03-02 10:41:53,097 INFO Row 1432: split into 1 chunks
+2026-03-02 10:41:53,121 INFO Row 1433: split into 1 chunks
+2026-03-02 10:41:53,138 INFO Row 1434: split into 1 chunks
+2026-03-02 10:41:53,154 INFO Row 1435: split into 1 chunks
+2026-03-02 10:41:53,173 INFO Row 1436: split into 1 chunks
+2026-03-02 10:41:53,187 INFO Row 1437: split into 1 chunks
+2026-03-02 10:41:53,205 INFO Row 1438: split into 1 chunks
+2026-03-02 10:41:53,220 INFO Row 1439: split into 1 chunks
+2026-03-02 10:41:53,233 INFO Row 1440: split into 1 chunks
+2026-03-02 10:41:53,244 INFO Row 1441: split into 1 chunks
+2026-03-02 10:41:53,270 INFO Row 1442: split into 1 chunks
+2026-03-02 10:41:53,293 INFO Row 1443: split into 1 chunks
+2026-03-02 10:41:53,310 INFO Row 1444: split into 1 chunks
+2026-03-02 10:41:53,333 INFO Row 1445: split into 1 chunks
+2026-03-02 10:41:53,346 INFO Row 1446: split into 1 chunks
+2026-03-02 10:41:53,360 INFO Row 1447: split into 1 chunks
+2026-03-02 10:41:53,376 INFO Row 1448: split into 1 chunks
+2026-03-02 10:41:53,388 INFO Row 1449: split into 1 chunks
+2026-03-02 10:41:53,405 INFO Row 1450: split into 1 chunks
+2026-03-02 10:41:53,423 INFO Row 1451: split into 1 chunks
+2026-03-02 10:41:53,437 INFO Row 1452: split into 1 chunks
+2026-03-02 10:41:53,453 INFO Row 1453: split into 1 chunks
+2026-03-02 10:41:53,474 INFO Row 1454: split into 1 chunks
+2026-03-02 10:41:53,489 INFO Row 1455: split into 1 chunks
+2026-03-02 10:41:53,523 INFO Row 1456: split into 1 chunks
+2026-03-02 10:41:53,543 INFO Row 1457: split into 1 chunks
+2026-03-02 10:41:53,559 INFO Row 1458: split into 1 chunks
+2026-03-02 10:41:53,576 INFO Row 1459: split into 1 chunks
+2026-03-02 10:41:53,592 INFO Row 1460: split into 1 chunks
+2026-03-02 10:41:53,602 INFO Row 1461: split into 1 chunks
+2026-03-02 10:41:53,616 INFO Row 1462: split into 1 chunks
+2026-03-02 10:41:53,632 INFO Row 1463: split into 1 chunks
+2026-03-02 10:41:53,658 INFO Row 1464: split into 1 chunks
+2026-03-02 10:41:53,670 INFO Row 1465: split into 1 chunks
+2026-03-02 10:41:53,688 INFO Row 1466: split into 1 chunks
+2026-03-02 10:41:53,722 INFO Row 1467: split into 1 chunks
+2026-03-02 10:41:53,741 INFO Row 1468: split into 1 chunks
+2026-03-02 10:41:53,761 INFO Row 1469: split into 1 chunks
+2026-03-02 10:41:53,776 INFO Row 1470: split into 1 chunks
+2026-03-02 10:41:53,815 INFO Row 1471: split into 1 chunks
+2026-03-02 10:41:53,844 INFO Row 1472: split into 1 chunks
+2026-03-02 10:41:53,864 INFO Row 1473: split into 1 chunks
+2026-03-02 10:41:53,891 INFO Row 1474: split into 1 chunks
+2026-03-02 10:41:53,913 INFO Row 1475: split into 1 chunks
+2026-03-02 10:41:53,936 INFO Row 1476: split into 1 chunks
+2026-03-02 10:41:53,953 INFO Row 1477: split into 1 chunks
+2026-03-02 10:41:53,979 INFO Row 1478: split into 1 chunks
+2026-03-02 10:41:53,991 INFO Row 1479: split into 1 chunks
+2026-03-02 10:41:54,017 INFO Row 1480: split into 1 chunks
+2026-03-02 10:41:54,043 INFO Row 1481: split into 1 chunks
+2026-03-02 10:41:54,068 INFO Row 1482: split into 1 chunks
+2026-03-02 10:41:54,097 INFO Row 1483: split into 1 chunks
+2026-03-02 10:41:54,124 INFO Row 1484: split into 1 chunks
+2026-03-02 10:41:54,188 INFO Row 1485: split into 1 chunks
+2026-03-02 10:41:54,211 INFO Row 1486: split into 1 chunks
+2026-03-02 10:41:54,236 INFO Row 1487: split into 1 chunks
+2026-03-02 10:41:54,251 INFO Row 1488: split into 1 chunks
+2026-03-02 10:41:54,277 INFO Row 1489: split into 1 chunks
+2026-03-02 10:41:54,296 INFO Row 1490: split into 1 chunks
+2026-03-02 10:41:54,312 INFO Row 1491: split into 1 chunks
+2026-03-02 10:41:54,327 INFO Row 1492: split into 1 chunks
+2026-03-02 10:41:54,377 INFO Row 1493: split into 1 chunks
+2026-03-02 10:41:54,398 INFO Row 1494: split into 1 chunks
+2026-03-02 10:41:54,421 INFO Row 1495: split into 1 chunks
+2026-03-02 10:41:54,442 INFO Row 1496: split into 1 chunks
+2026-03-02 10:41:54,459 INFO Row 1497: split into 1 chunks
+2026-03-02 10:41:54,486 INFO Row 1498: split into 1 chunks
+2026-03-02 10:41:54,501 INFO Row 1499: split into 1 chunks
+2026-03-02 10:41:54,538 INFO Row 1500: split into 1 chunks
+2026-03-02 10:41:54,555 INFO Row 1501: split into 1 chunks
+2026-03-02 10:41:54,580 INFO Row 1502: split into 1 chunks
+2026-03-02 10:41:54,603 INFO Row 1503: split into 1 chunks
+2026-03-02 10:41:54,619 INFO Row 1504: split into 1 chunks
+2026-03-02 10:41:54,651 INFO Row 1505: split into 1 chunks
+2026-03-02 10:41:54,693 INFO Row 1506: split into 1 chunks
+2026-03-02 10:41:54,712 INFO Row 1507: split into 1 chunks
+2026-03-02 10:41:54,730 INFO Row 1508: split into 1 chunks
+2026-03-02 10:41:54,747 INFO Row 1509: split into 1 chunks
+2026-03-02 10:41:54,775 INFO Row 1510: split into 1 chunks
+2026-03-02 10:41:54,794 INFO Row 1511: split into 1 chunks
+2026-03-02 10:41:54,821 INFO Row 1512: split into 1 chunks
+2026-03-02 10:41:54,844 INFO Row 1513: split into 1 chunks
+2026-03-02 10:41:54,869 INFO Row 1514: split into 1 chunks
+2026-03-02 10:41:54,885 INFO Row 1515: split into 1 chunks
+2026-03-02 10:41:54,910 INFO Row 1516: split into 1 chunks
+2026-03-02 10:41:54,929 INFO Row 1517: split into 1 chunks
+2026-03-02 10:41:54,954 INFO Row 1518: split into 1 chunks
+2026-03-02 10:41:54,973 INFO Row 1519: split into 1 chunks
+2026-03-02 10:41:54,991 INFO Row 1520: split into 1 chunks
+2026-03-02 10:41:55,023 INFO Row 1521: split into 1 chunks
+2026-03-02 10:41:55,040 INFO Row 1522: split into 1 chunks
+2026-03-02 10:41:55,058 INFO Row 1523: split into 1 chunks
+2026-03-02 10:41:55,074 INFO Row 1524: split into 1 chunks
+2026-03-02 10:41:55,092 INFO Row 1525: split into 1 chunks
+2026-03-02 10:41:55,110 INFO Row 1526: split into 1 chunks
+2026-03-02 10:41:55,136 INFO Row 1527: split into 1 chunks
+2026-03-02 10:41:55,159 INFO Row 1528: split into 1 chunks
+2026-03-02 10:41:55,178 INFO Row 1529: split into 1 chunks
+2026-03-02 10:41:55,197 INFO Row 1530: split into 1 chunks
+2026-03-02 10:41:55,209 INFO Row 1531: split into 1 chunks
+2026-03-02 10:41:55,239 INFO Row 1532: split into 1 chunks
+2026-03-02 10:41:55,263 INFO Row 1533: split into 1 chunks
+2026-03-02 10:41:55,279 INFO Row 1534: split into 1 chunks
+2026-03-02 10:41:55,296 INFO Row 1535: split into 1 chunks
+2026-03-02 10:41:55,315 INFO Row 1536: split into 1 chunks
+2026-03-02 10:41:55,338 INFO Row 1537: split into 1 chunks
+2026-03-02 10:41:55,363 INFO Row 1538: split into 1 chunks
+2026-03-02 10:41:55,390 INFO Row 1539: split into 1 chunks
+2026-03-02 10:41:55,422 INFO Row 1540: split into 1 chunks
+2026-03-02 10:41:55,446 INFO Row 1541: split into 1 chunks
+2026-03-02 10:41:55,467 INFO Row 1542: split into 1 chunks
+2026-03-02 10:41:55,488 INFO Row 1543: split into 1 chunks
+2026-03-02 10:41:55,511 INFO Row 1544: split into 1 chunks
+2026-03-02 10:41:55,542 INFO Row 1545: split into 1 chunks
+2026-03-02 10:41:55,566 INFO Row 1546: split into 1 chunks
+2026-03-02 10:41:55,580 INFO Row 1547: split into 1 chunks
+2026-03-02 10:41:55,600 INFO Row 1548: split into 1 chunks
+2026-03-02 10:41:55,613 INFO Row 1549: split into 1 chunks
+2026-03-02 10:41:55,625 INFO Row 1550: split into 1 chunks
+2026-03-02 10:41:55,649 INFO Row 1551: split into 1 chunks
+2026-03-02 10:41:55,662 INFO Row 1552: split into 1 chunks
+2026-03-02 10:41:55,674 INFO Row 1553: split into 1 chunks
+2026-03-02 10:41:55,695 INFO Row 1554: split into 1 chunks
+2026-03-02 10:41:55,705 INFO Row 1555: split into 1 chunks
+2026-03-02 10:41:55,718 INFO Row 1556: split into 1 chunks
+2026-03-02 10:41:55,741 INFO Row 1557: split into 1 chunks
+2026-03-02 10:41:55,753 INFO Row 1558: split into 1 chunks
+2026-03-02 10:41:55,770 INFO Row 1559: split into 1 chunks
+2026-03-02 10:41:55,801 INFO Row 1560: split into 1 chunks
+2026-03-02 10:41:55,827 INFO Row 1561: split into 1 chunks
+2026-03-02 10:41:55,849 INFO Row 1562: split into 1 chunks
+2026-03-02 10:41:55,878 INFO Row 1563: split into 1 chunks
+2026-03-02 10:41:55,896 INFO Row 1564: split into 1 chunks
+2026-03-02 10:41:55,919 INFO Row 1565: split into 1 chunks
+2026-03-02 10:41:55,927 INFO Row 1566: split into 1 chunks
+2026-03-02 10:41:55,935 INFO Row 1567: split into 1 chunks
+2026-03-02 10:41:55,945 INFO Row 1568: split into 1 chunks
+2026-03-02 10:41:55,954 INFO Row 1569: split into 1 chunks
+2026-03-02 10:41:55,975 INFO Row 1570: split into 1 chunks
+2026-03-02 10:41:55,985 INFO Row 1571: split into 1 chunks
+2026-03-02 10:41:56,003 INFO Row 1572: split into 1 chunks
+2026-03-02 10:41:56,010 INFO Row 1573: split into 1 chunks
+2026-03-02 10:41:56,023 INFO Row 1574: split into 1 chunks
+2026-03-02 10:41:56,062 INFO Row 1575: split into 1 chunks
+2026-03-02 10:41:56,082 INFO Row 1576: split into 1 chunks
+2026-03-02 10:41:56,107 INFO Row 1577: split into 1 chunks
+2026-03-02 10:41:56,131 INFO Row 1578: split into 1 chunks
+2026-03-02 10:41:56,150 INFO Row 1579: split into 1 chunks
+2026-03-02 10:41:56,179 INFO Row 1580: split into 1 chunks
+2026-03-02 10:41:56,193 INFO Row 1581: split into 1 chunks
+2026-03-02 10:41:56,206 INFO Row 1582: split into 1 chunks
+2026-03-02 10:41:56,226 INFO Row 1583: split into 1 chunks
+2026-03-02 10:41:56,236 INFO Row 1584: split into 1 chunks
+2026-03-02 10:41:56,253 INFO Row 1585: split into 1 chunks
+2026-03-02 10:41:56,263 INFO Row 1586: split into 1 chunks
+2026-03-02 10:41:56,292 INFO Row 1587: split into 1 chunks
+2026-03-02 10:41:56,305 INFO Row 1588: split into 1 chunks
+2026-03-02 10:41:56,323 INFO Row 1589: split into 1 chunks
+2026-03-02 10:41:56,344 INFO Row 1590: split into 1 chunks
+2026-03-02 10:41:56,359 INFO Row 1591: split into 1 chunks
+2026-03-02 10:41:56,378 INFO Row 1592: split into 1 chunks
+2026-03-02 10:41:56,455 INFO Row 1593: split into 1 chunks
+2026-03-02 10:41:56,470 INFO Row 1594: split into 1 chunks
+2026-03-02 10:41:56,505 INFO Row 1595: split into 1 chunks
+2026-03-02 10:41:56,520 INFO Row 1596: split into 1 chunks
+2026-03-02 10:41:56,536 INFO Row 1597: split into 1 chunks
+2026-03-02 10:41:56,550 INFO Row 1598: split into 1 chunks
+2026-03-02 10:41:56,569 INFO Row 1599: split into 1 chunks
+2026-03-02 10:41:56,587 INFO Row 1600: split into 1 chunks
+2026-03-02 10:41:56,603 INFO Row 1601: split into 1 chunks
+2026-03-02 10:41:56,626 INFO Row 1602: split into 1 chunks
+2026-03-02 10:41:56,645 INFO Row 1603: split into 1 chunks
+2026-03-02 10:41:56,665 INFO Row 1604: split into 1 chunks
+2026-03-02 10:41:56,685 INFO Row 1605: split into 1 chunks
+2026-03-02 10:41:56,693 INFO Row 1606: split into 1 chunks
+2026-03-02 10:41:56,705 INFO Row 1607: split into 1 chunks
+2026-03-02 10:41:56,716 INFO Row 1608: split into 1 chunks
+2026-03-02 10:41:56,729 INFO Row 1609: split into 1 chunks
+2026-03-02 10:41:56,738 INFO Row 1610: split into 1 chunks
+2026-03-02 10:41:56,753 INFO Row 1611: split into 1 chunks
+2026-03-02 10:41:56,762 INFO Row 1612: split into 1 chunks
+2026-03-02 10:41:56,776 INFO Row 1613: split into 1 chunks
+2026-03-02 10:41:56,797 INFO Row 1614: split into 1 chunks
+2026-03-02 10:41:56,825 INFO Row 1615: split into 1 chunks
+2026-03-02 10:41:56,837 INFO Row 1616: split into 1 chunks
+2026-03-02 10:41:56,903 INFO Row 1617: split into 1 chunks
+2026-03-02 10:41:56,936 INFO Row 1618: split into 1 chunks
+2026-03-02 10:41:56,940 INFO Row 1619: split into 1 chunks
+2026-03-02 10:41:56,963 INFO Row 1620: split into 1 chunks
+2026-03-02 10:41:56,985 INFO Row 1621: split into 1 chunks
+2026-03-02 10:41:57,001 INFO Row 1622: split into 1 chunks
+2026-03-02 10:41:57,005 INFO Row 1623: split into 1 chunks
+2026-03-02 10:41:57,036 INFO Row 1624: split into 1 chunks
+2026-03-02 10:41:57,055 INFO Row 1625: split into 1 chunks
+2026-03-02 10:41:57,076 INFO Row 1626: split into 1 chunks
+2026-03-02 10:41:57,097 INFO Row 1627: split into 1 chunks
+2026-03-02 10:41:57,117 INFO Row 1628: split into 1 chunks
+2026-03-02 10:41:57,143 INFO Row 1629: split into 1 chunks
+2026-03-02 10:41:57,180 INFO Row 1630: split into 1 chunks
+2026-03-02 10:41:57,223 INFO Row 1631: split into 1 chunks
+2026-03-02 10:41:57,257 INFO Row 1632: split into 1 chunks
+2026-03-02 10:41:57,280 INFO Row 1633: split into 1 chunks
+2026-03-02 10:41:57,305 INFO Row 1634: split into 1 chunks
+2026-03-02 10:41:57,399 INFO Row 1635: split into 1 chunks
+2026-03-02 10:41:57,429 INFO Row 1636: split into 1 chunks
+2026-03-02 10:41:57,460 INFO Row 1637: split into 1 chunks
+2026-03-02 10:41:57,501 INFO Row 1638: split into 1 chunks
+2026-03-02 10:41:57,524 INFO Row 1639: split into 1 chunks
+2026-03-02 10:41:57,571 INFO Row 1640: split into 1 chunks
+2026-03-02 10:41:57,607 INFO Row 1641: split into 1 chunks
+2026-03-02 10:41:57,637 INFO Row 1642: split into 1 chunks
+2026-03-02 10:41:57,662 INFO Row 1643: split into 1 chunks
+2026-03-02 10:41:57,680 INFO Row 1644: split into 1 chunks
+2026-03-02 10:41:57,712 INFO Row 1645: split into 1 chunks
+2026-03-02 10:41:57,730 INFO Row 1646: split into 1 chunks
+2026-03-02 10:41:57,768 INFO Row 1647: split into 1 chunks
+2026-03-02 10:41:57,798 INFO Row 1648: split into 1 chunks
+2026-03-02 10:41:57,831 INFO Row 1649: split into 1 chunks
+2026-03-02 10:41:57,860 INFO Row 1650: split into 1 chunks
+2026-03-02 10:41:57,878 INFO Row 1651: split into 1 chunks
+2026-03-02 10:41:57,907 INFO Row 1652: split into 1 chunks
+2026-03-02 10:41:57,929 INFO Row 1653: split into 1 chunks
+2026-03-02 10:41:57,954 INFO Row 1654: split into 1 chunks
+2026-03-02 10:41:57,983 INFO Row 1655: split into 1 chunks
+2026-03-02 10:41:58,012 INFO Row 1656: split into 1 chunks
+2026-03-02 10:41:58,034 INFO Row 1657: split into 1 chunks
+2026-03-02 10:41:58,055 INFO Row 1658: split into 1 chunks
+2026-03-02 10:41:58,075 INFO Row 1659: split into 1 chunks
+2026-03-02 10:41:58,097 INFO Row 1660: split into 1 chunks
+2026-03-02 10:41:58,124 INFO Row 1661: split into 1 chunks
+2026-03-02 10:41:58,139 INFO Row 1662: split into 1 chunks
+2026-03-02 10:41:58,157 INFO Row 1663: split into 1 chunks
+2026-03-02 10:41:58,179 INFO Row 1664: split into 1 chunks
+2026-03-02 10:41:58,197 INFO Row 1665: split into 1 chunks
+2026-03-02 10:41:58,203 INFO Row 1666: split into 1 chunks
+2026-03-02 10:41:58,219 INFO Row 1667: split into 1 chunks
+2026-03-02 10:41:58,233 INFO Row 1668: split into 1 chunks
+2026-03-02 10:41:58,245 INFO Row 1669: split into 1 chunks
+2026-03-02 10:41:58,277 INFO Row 1670: split into 1 chunks
+2026-03-02 10:41:58,298 INFO Row 1671: split into 1 chunks
+2026-03-02 10:41:58,317 INFO Row 1672: split into 1 chunks
+2026-03-02 10:41:58,334 INFO Row 1673: split into 1 chunks
+2026-03-02 10:41:58,350 INFO Row 1674: split into 1 chunks
+2026-03-02 10:41:58,382 INFO Row 1675: split into 1 chunks
+2026-03-02 10:41:58,400 INFO Row 1676: split into 1 chunks
+2026-03-02 10:41:58,423 INFO Row 1677: split into 1 chunks
+2026-03-02 10:41:58,438 INFO Row 1678: split into 1 chunks
+2026-03-02 10:41:58,459 INFO Row 1679: split into 1 chunks
+2026-03-02 10:41:58,483 INFO Row 1680: split into 1 chunks
+2026-03-02 10:41:58,497 INFO Row 1681: split into 1 chunks
+2026-03-02 10:41:58,523 INFO Row 1682: split into 1 chunks
+2026-03-02 10:41:58,547 INFO Row 1683: split into 1 chunks
+2026-03-02 10:41:58,554 INFO Row 1684: split into 1 chunks
+2026-03-02 10:41:58,578 INFO Row 1685: split into 1 chunks
+2026-03-02 10:41:58,596 INFO Row 1686: split into 1 chunks
+2026-03-02 10:41:58,609 INFO Row 1687: split into 1 chunks
+2026-03-02 10:41:58,637 INFO Row 1688: split into 1 chunks
+2026-03-02 10:41:58,662 INFO Row 1689: split into 1 chunks
+2026-03-02 10:41:58,681 INFO Row 1690: split into 1 chunks
+2026-03-02 10:41:58,695 INFO Row 1691: split into 1 chunks
+2026-03-02 10:41:58,719 INFO Row 1692: split into 1 chunks
+2026-03-02 10:41:58,733 INFO Row 1693: split into 1 chunks
+2026-03-02 10:41:58,753 INFO Row 1694: split into 1 chunks
+2026-03-02 10:41:58,766 INFO Row 1695: split into 1 chunks
+2026-03-02 10:41:58,777 INFO Row 1696: split into 1 chunks
+2026-03-02 10:41:58,787 INFO Row 1697: split into 1 chunks
+2026-03-02 10:41:58,798 INFO Row 1698: split into 1 chunks
+2026-03-02 10:41:58,808 INFO Row 1699: split into 1 chunks
+2026-03-02 10:41:58,819 INFO Row 1700: split into 1 chunks
+2026-03-02 10:41:58,832 INFO Row 1701: split into 1 chunks
+2026-03-02 10:41:58,846 INFO Row 1702: split into 1 chunks
+2026-03-02 10:41:58,859 INFO Row 1703: split into 1 chunks
+2026-03-02 10:41:58,871 INFO Row 1704: split into 1 chunks
+2026-03-02 10:41:58,880 INFO Row 1705: split into 1 chunks
+2026-03-02 10:41:58,886 INFO Row 1706: split into 1 chunks
+2026-03-02 10:41:58,895 INFO Row 1707: split into 1 chunks
+2026-03-02 10:41:58,903 INFO Row 1708: split into 1 chunks
+2026-03-02 10:41:58,910 INFO Row 1709: split into 1 chunks
+2026-03-02 10:41:58,917 INFO Row 1710: split into 1 chunks
+2026-03-02 10:41:58,924 INFO Row 1711: split into 1 chunks
+2026-03-02 10:41:58,931 INFO Row 1712: split into 1 chunks
+2026-03-02 10:41:58,942 INFO Row 1713: split into 1 chunks
+2026-03-02 10:41:58,949 INFO Row 1714: split into 1 chunks
+2026-03-02 10:41:58,956 INFO Row 1715: split into 1 chunks
+2026-03-02 10:41:58,963 INFO Row 1716: split into 1 chunks
+2026-03-02 10:41:58,971 INFO Row 1717: split into 1 chunks
+2026-03-02 10:41:58,981 INFO Row 1718: split into 1 chunks
+2026-03-02 10:41:58,994 INFO Row 1719: split into 1 chunks
+2026-03-02 10:41:59,009 INFO Row 1720: split into 1 chunks
+2026-03-02 10:41:59,019 INFO Row 1721: split into 1 chunks
+2026-03-02 10:41:59,027 INFO Row 1722: split into 1 chunks
+2026-03-02 10:41:59,035 INFO Row 1723: split into 1 chunks
+2026-03-02 10:41:59,044 INFO Row 1724: split into 1 chunks
+2026-03-02 10:41:59,059 INFO Row 1725: split into 1 chunks
+2026-03-02 10:41:59,069 INFO Row 1726: split into 1 chunks
+2026-03-02 10:41:59,077 INFO Row 1727: split into 1 chunks
+2026-03-02 10:41:59,086 INFO Row 1728: split into 1 chunks
+2026-03-02 10:41:59,092 INFO Row 1729: split into 1 chunks
+2026-03-02 10:41:59,102 INFO Row 1730: split into 1 chunks
+2026-03-02 10:41:59,117 INFO Row 1731: split into 1 chunks
+2026-03-02 10:41:59,133 INFO Row 1732: split into 1 chunks
+2026-03-02 10:41:59,139 INFO Row 1733: split into 1 chunks
+2026-03-02 10:41:59,143 INFO Row 1734: split into 1 chunks
+2026-03-02 10:41:59,152 INFO Row 1735: split into 1 chunks
+2026-03-02 10:41:59,158 INFO Row 1736: split into 1 chunks
+2026-03-02 10:41:59,164 INFO Row 1737: split into 1 chunks
+2026-03-02 10:41:59,181 INFO Row 1738: split into 1 chunks
+2026-03-02 10:41:59,198 INFO Row 1739: split into 1 chunks
+2026-03-02 10:41:59,211 INFO Row 1740: split into 1 chunks
+2026-03-02 10:41:59,225 INFO Row 1741: split into 1 chunks
+2026-03-02 10:41:59,228 INFO Row 1742: split into 1 chunks
+2026-03-02 10:41:59,240 INFO Row 1743: split into 1 chunks
+2026-03-02 10:41:59,270 INFO Row 1744: split into 1 chunks
+2026-03-02 10:41:59,284 INFO Row 1745: split into 1 chunks
+2026-03-02 10:41:59,301 INFO Row 1746: split into 1 chunks
+2026-03-02 10:41:59,315 INFO Row 1747: split into 1 chunks
+2026-03-02 10:41:59,335 INFO Row 1748: split into 1 chunks
+2026-03-02 10:41:59,350 INFO Row 1749: split into 1 chunks
+2026-03-02 10:41:59,361 INFO Row 1750: split into 1 chunks
+2026-03-02 10:41:59,375 INFO Row 1751: split into 1 chunks
+2026-03-02 10:41:59,386 INFO Row 1752: split into 1 chunks
+2026-03-02 10:41:59,392 INFO Row 1753: split into 1 chunks
+2026-03-02 10:41:59,409 INFO Row 1754: split into 1 chunks
+2026-03-02 10:41:59,420 INFO Row 1755: split into 1 chunks
+2026-03-02 10:41:59,434 INFO Row 1756: split into 1 chunks
+2026-03-02 10:41:59,442 INFO Row 1757: split into 1 chunks
+2026-03-02 10:41:59,455 INFO Row 1758: split into 1 chunks
+2026-03-02 10:41:59,475 INFO Row 1759: split into 1 chunks
+2026-03-02 10:41:59,484 INFO Row 1760: split into 1 chunks
+2026-03-02 10:41:59,499 INFO Row 1761: split into 1 chunks
+2026-03-02 10:41:59,513 INFO Row 1762: split into 1 chunks
+2026-03-02 10:41:59,530 INFO Row 1763: split into 1 chunks
+2026-03-02 10:41:59,544 INFO Row 1764: split into 1 chunks
+2026-03-02 10:41:59,553 INFO Row 1765: split into 1 chunks
+2026-03-02 10:41:59,565 INFO Row 1766: split into 1 chunks
+2026-03-02 10:41:59,574 INFO Row 1767: split into 1 chunks
+2026-03-02 10:41:59,586 INFO Row 1768: split into 1 chunks
+2026-03-02 10:41:59,602 INFO Row 1769: split into 1 chunks
+2026-03-02 10:41:59,617 INFO Row 1770: split into 1 chunks
+2026-03-02 10:41:59,630 INFO Row 1771: split into 1 chunks
+2026-03-02 10:41:59,650 INFO Row 1772: split into 1 chunks
+2026-03-02 10:41:59,668 INFO Row 1773: split into 1 chunks
+2026-03-02 10:41:59,686 INFO Row 1774: split into 1 chunks
+2026-03-02 10:41:59,706 INFO Row 1775: split into 1 chunks
+2026-03-02 10:41:59,725 INFO Row 1776: split into 1 chunks
+2026-03-02 10:41:59,733 INFO Row 1777: split into 1 chunks
+2026-03-02 10:41:59,746 INFO Row 1778: split into 1 chunks
+2026-03-02 10:41:59,761 INFO Row 1779: split into 1 chunks
+2026-03-02 10:41:59,787 INFO Row 1780: split into 1 chunks
+2026-03-02 10:41:59,798 INFO Row 1781: split into 1 chunks
+2026-03-02 10:41:59,815 INFO Row 1782: split into 1 chunks
+2026-03-02 10:41:59,838 INFO Row 1783: split into 1 chunks
+2026-03-02 10:41:59,861 INFO Row 1784: split into 1 chunks
+2026-03-02 10:41:59,876 INFO Row 1785: split into 1 chunks
+2026-03-02 10:41:59,887 INFO Row 1786: split into 1 chunks
+2026-03-02 10:41:59,898 INFO Row 1787: split into 1 chunks
+2026-03-02 10:41:59,909 INFO Row 1788: split into 1 chunks
+2026-03-02 10:41:59,936 INFO Row 1789: split into 1 chunks
+2026-03-02 10:41:59,960 INFO Row 1790: split into 1 chunks
+2026-03-02 10:41:59,975 INFO Row 1791: split into 1 chunks
+2026-03-02 10:41:59,984 INFO Row 1792: split into 1 chunks
+2026-03-02 10:42:00,000 INFO Row 1793: split into 1 chunks
+2026-03-02 10:42:00,015 INFO Row 1794: split into 1 chunks
+2026-03-02 10:42:00,032 INFO Row 1795: split into 1 chunks
+2026-03-02 10:42:00,044 INFO Row 1796: split into 1 chunks
+2026-03-02 10:42:00,062 INFO Row 1797: split into 1 chunks
+2026-03-02 10:42:00,081 INFO Row 1798: split into 1 chunks
+2026-03-02 10:42:00,092 INFO Row 1799: split into 1 chunks
+2026-03-02 10:42:00,130 INFO Row 1800: split into 1 chunks
+2026-03-02 10:42:00,143 INFO Row 1801: split into 1 chunks
+2026-03-02 10:42:00,188 INFO Row 1802: split into 1 chunks
+2026-03-02 10:42:00,200 INFO Row 1803: split into 1 chunks
+2026-03-02 10:42:00,214 INFO Row 1804: split into 1 chunks
+2026-03-02 10:42:00,233 INFO Row 1805: split into 1 chunks
+2026-03-02 10:42:00,240 INFO Row 1806: split into 1 chunks
+2026-03-02 10:42:00,256 INFO Row 1807: split into 1 chunks
+2026-03-02 10:42:00,269 INFO Row 1808: split into 1 chunks
+2026-03-02 10:42:00,285 INFO Row 1809: split into 1 chunks
+2026-03-02 10:42:00,292 INFO Row 1810: split into 1 chunks
+2026-03-02 10:42:00,302 INFO Row 1811: split into 1 chunks
+2026-03-02 10:42:00,314 INFO Row 1812: split into 1 chunks
+2026-03-02 10:42:00,325 INFO Row 1813: split into 1 chunks
+2026-03-02 10:42:00,333 INFO Row 1814: split into 1 chunks
+2026-03-02 10:42:00,348 INFO Row 1815: split into 1 chunks
+2026-03-02 10:42:00,364 INFO Row 1816: split into 1 chunks
+2026-03-02 10:42:00,370 INFO Row 1817: split into 1 chunks
+2026-03-02 10:42:00,378 INFO Row 1818: split into 1 chunks
+2026-03-02 10:42:00,387 INFO Row 1819: split into 1 chunks
+2026-03-02 10:42:00,398 INFO Row 1820: split into 1 chunks
+2026-03-02 10:42:00,409 INFO Row 1821: split into 1 chunks
+2026-03-02 10:42:00,422 INFO Row 1822: split into 1 chunks
+2026-03-02 10:42:00,432 INFO Row 1823: split into 1 chunks
+2026-03-02 10:42:00,442 INFO Row 1824: split into 1 chunks
+2026-03-02 10:42:00,457 INFO Row 1825: split into 1 chunks
+2026-03-02 10:42:00,466 INFO Row 1826: split into 1 chunks
+2026-03-02 10:42:00,480 INFO Row 1827: split into 1 chunks
+2026-03-02 10:42:00,492 INFO Row 1828: split into 1 chunks
+2026-03-02 10:42:00,503 INFO Row 1829: split into 1 chunks
+2026-03-02 10:42:00,520 INFO Row 1830: split into 1 chunks
+2026-03-02 10:42:00,535 INFO Row 1831: split into 1 chunks
+2026-03-02 10:42:00,543 INFO Row 1832: split into 1 chunks
+2026-03-02 10:42:00,554 INFO Row 1833: split into 1 chunks
+2026-03-02 10:42:00,571 INFO Row 1834: split into 1 chunks
+2026-03-02 10:42:00,601 INFO Row 1835: split into 1 chunks
+2026-03-02 10:42:00,617 INFO Row 1836: split into 1 chunks
+2026-03-02 10:42:00,627 INFO Row 1837: split into 1 chunks
+2026-03-02 10:42:00,651 INFO Row 1838: split into 1 chunks
+2026-03-02 10:42:00,661 INFO Row 1839: split into 1 chunks
+2026-03-02 10:42:00,677 INFO Row 1840: split into 1 chunks
+2026-03-02 10:42:00,690 INFO Row 1841: split into 1 chunks
+2026-03-02 10:42:00,703 INFO Row 1842: split into 1 chunks
+2026-03-02 10:42:00,711 INFO Row 1843: split into 1 chunks
+2026-03-02 10:42:00,722 INFO Row 1844: split into 1 chunks
+2026-03-02 10:42:00,731 INFO Row 1845: split into 1 chunks
+2026-03-02 10:42:00,746 INFO Row 1846: split into 1 chunks
+2026-03-02 10:42:00,775 INFO Row 1847: split into 1 chunks
+2026-03-02 10:42:00,793 INFO Row 1848: split into 1 chunks
+2026-03-02 10:42:00,804 INFO Row 1849: split into 1 chunks
+2026-03-02 10:42:00,813 INFO Row 1850: split into 1 chunks
+2026-03-02 10:42:00,822 INFO Row 1851: split into 1 chunks
+2026-03-02 10:42:00,836 INFO Row 1852: split into 1 chunks
+2026-03-02 10:42:00,846 INFO Row 1853: split into 1 chunks
+2026-03-02 10:42:00,861 INFO Row 1854: split into 1 chunks
+2026-03-02 10:42:00,870 INFO Row 1855: split into 1 chunks
+2026-03-02 10:42:00,878 INFO Row 1856: split into 1 chunks
+2026-03-02 10:42:00,882 INFO Row 1857: split into 1 chunks
+2026-03-02 10:42:00,894 INFO Row 1858: split into 1 chunks
+2026-03-02 10:42:00,907 INFO Row 1859: split into 1 chunks
+2026-03-02 10:42:00,917 INFO Row 1860: split into 1 chunks
+2026-03-02 10:42:00,925 INFO Row 1861: split into 1 chunks
+2026-03-02 10:42:00,931 INFO Row 1862: split into 1 chunks
+2026-03-02 10:42:00,946 INFO Row 1863: split into 1 chunks
+2026-03-02 10:42:00,951 INFO Row 1864: split into 1 chunks
+2026-03-02 10:42:00,962 INFO Row 1865: split into 1 chunks
+2026-03-02 10:42:00,975 INFO Row 1866: split into 1 chunks
+2026-03-02 10:42:01,000 INFO Row 1867: split into 1 chunks
+2026-03-02 10:42:01,027 INFO Row 1868: split into 1 chunks
+2026-03-02 10:42:01,068 INFO Row 1869: split into 1 chunks
+2026-03-02 10:42:01,090 INFO Row 1870: split into 1 chunks
+2026-03-02 10:42:01,104 INFO Row 1871: split into 1 chunks
+2026-03-02 10:42:01,159 INFO Row 1872: split into 1 chunks
+2026-03-02 10:42:01,216 INFO Row 1873: split into 1 chunks
+2026-03-02 10:42:01,258 INFO Row 1874: split into 1 chunks
+2026-03-02 10:42:01,308 INFO Row 1875: split into 1 chunks
+2026-03-02 10:42:01,320 INFO Row 1876: split into 1 chunks
+2026-03-02 10:42:01,348 INFO Row 1877: split into 1 chunks
+2026-03-02 10:42:01,357 INFO Row 1878: split into 1 chunks
+2026-03-02 10:42:01,382 INFO Row 1879: split into 1 chunks
+2026-03-02 10:42:01,412 INFO Row 1880: split into 1 chunks
+2026-03-02 10:42:01,440 INFO Row 1881: split into 1 chunks
+2026-03-02 10:42:01,454 INFO Row 1882: split into 1 chunks
+2026-03-02 10:42:01,473 INFO Row 1883: split into 1 chunks
+2026-03-02 10:42:01,494 INFO Row 1884: split into 1 chunks
+2026-03-02 10:42:01,542 INFO Row 1885: split into 1 chunks
+2026-03-02 10:42:01,559 INFO Row 1886: split into 1 chunks
+2026-03-02 10:42:01,586 INFO Row 1887: split into 1 chunks
+2026-03-02 10:42:01,600 INFO Row 1888: split into 1 chunks
+2026-03-02 10:42:01,632 INFO Row 1889: split into 1 chunks
+2026-03-02 10:42:01,649 INFO Row 1890: split into 1 chunks
+2026-03-02 10:42:01,664 INFO Row 1891: split into 1 chunks
+2026-03-02 10:42:01,693 INFO Row 1892: split into 1 chunks
+2026-03-02 10:42:01,714 INFO Row 1893: split into 1 chunks
+2026-03-02 10:42:01,744 INFO Row 1894: split into 1 chunks
+2026-03-02 10:42:01,775 INFO Row 1895: split into 1 chunks
+2026-03-02 10:42:01,794 INFO Row 1896: split into 1 chunks
+2026-03-02 10:42:01,810 INFO Row 1897: split into 1 chunks
+2026-03-02 10:42:01,849 INFO Row 1898: split into 1 chunks
+2026-03-02 10:42:01,896 INFO Row 1899: split into 1 chunks
+2026-03-02 10:42:01,914 INFO Row 1900: split into 1 chunks
+2026-03-02 10:42:01,929 INFO Row 1901: split into 1 chunks
+2026-03-02 10:42:01,946 INFO Row 1902: split into 1 chunks
+2026-03-02 10:42:01,969 INFO Row 1903: split into 1 chunks
+2026-03-02 10:42:01,992 INFO Row 1904: split into 1 chunks
+2026-03-02 10:42:02,022 INFO Row 1905: split into 1 chunks
+2026-03-02 10:42:02,044 INFO Row 1906: split into 1 chunks
+2026-03-02 10:42:02,058 INFO Row 1907: split into 1 chunks
+2026-03-02 10:42:02,091 INFO Row 1908: split into 1 chunks
+2026-03-02 10:42:02,124 INFO Row 1909: split into 1 chunks
+2026-03-02 10:42:02,147 INFO Row 1910: split into 1 chunks
+2026-03-02 10:42:02,214 INFO Row 1911: split into 1 chunks
+2026-03-02 10:42:02,247 INFO Row 1912: split into 1 chunks
+2026-03-02 10:42:02,264 INFO Row 1913: split into 1 chunks
+2026-03-02 10:42:02,298 INFO Row 1914: split into 1 chunks
+2026-03-02 10:42:02,322 INFO Row 1915: split into 1 chunks
+2026-03-02 10:42:02,339 INFO Row 1916: split into 1 chunks
+2026-03-02 10:42:02,359 INFO Row 1917: split into 1 chunks
+2026-03-02 10:42:02,404 INFO Row 1918: split into 1 chunks
+2026-03-02 10:42:02,424 INFO Row 1919: split into 1 chunks
+2026-03-02 10:42:02,454 INFO Row 1920: split into 1 chunks
+2026-03-02 10:42:02,479 INFO Row 1921: split into 1 chunks
+2026-03-02 10:42:02,515 INFO Row 1922: split into 1 chunks
+2026-03-02 10:42:02,550 INFO Row 1923: split into 1 chunks
+2026-03-02 10:42:02,575 INFO Row 1924: split into 1 chunks
+2026-03-02 10:42:02,600 INFO Row 1925: split into 1 chunks
+2026-03-02 10:42:02,627 INFO Row 1926: split into 1 chunks
+2026-03-02 10:42:02,659 INFO Row 1927: split into 1 chunks
+2026-03-02 10:42:02,673 INFO Row 1928: split into 1 chunks
+2026-03-02 10:42:02,699 INFO Row 1929: split into 1 chunks
+2026-03-02 10:42:02,730 INFO Row 1930: split into 1 chunks
+2026-03-02 10:42:02,772 INFO Row 1931: split into 1 chunks
+2026-03-02 10:42:02,794 INFO Row 1932: split into 1 chunks
+2026-03-02 10:42:02,816 INFO Row 1933: split into 1 chunks
+2026-03-02 10:42:02,866 INFO Row 1934: split into 1 chunks
+2026-03-02 10:42:02,880 INFO Row 1935: split into 1 chunks
+2026-03-02 10:42:02,942 INFO Row 1936: split into 1 chunks
+2026-03-02 10:42:02,960 INFO Row 1937: split into 1 chunks
+2026-03-02 10:42:02,973 INFO Row 1938: split into 1 chunks
+2026-03-02 10:42:03,001 INFO Row 1939: split into 1 chunks
+2026-03-02 10:42:03,020 INFO Row 1940: split into 1 chunks
+2026-03-02 10:42:03,042 INFO Row 1941: split into 1 chunks
+2026-03-02 10:42:03,053 INFO Row 1942: split into 1 chunks
+2026-03-02 10:42:03,065 INFO Row 1943: split into 1 chunks
+2026-03-02 10:42:03,097 INFO Row 1944: split into 1 chunks
+2026-03-02 10:42:03,121 INFO Row 1945: split into 1 chunks
+2026-03-02 10:42:03,150 INFO Row 1946: split into 1 chunks
+2026-03-02 10:42:03,173 INFO Row 1947: split into 1 chunks
+2026-03-02 10:42:03,183 INFO Row 1948: split into 1 chunks
+2026-03-02 10:42:03,197 INFO Row 1949: split into 1 chunks
+2026-03-02 10:42:03,205 INFO Row 1950: split into 1 chunks
+2026-03-02 10:42:03,221 INFO Row 1951: split into 1 chunks
+2026-03-02 10:42:03,235 INFO Row 1952: split into 1 chunks
+2026-03-02 10:42:03,310 INFO Row 1953: split into 1 chunks
+2026-03-02 10:42:03,342 INFO Row 1954: split into 1 chunks
+2026-03-02 10:42:03,366 INFO Row 1955: split into 1 chunks
+2026-03-02 10:42:03,386 INFO Row 1956: split into 1 chunks
+2026-03-02 10:42:03,399 INFO Row 1957: split into 1 chunks
+2026-03-02 10:42:03,414 INFO Row 1958: split into 1 chunks
+2026-03-02 10:42:03,426 INFO Row 1959: split into 1 chunks
+2026-03-02 10:42:03,449 INFO Row 1960: split into 1 chunks
+2026-03-02 10:42:03,469 INFO Row 1961: split into 1 chunks
+2026-03-02 10:42:03,508 INFO Row 1962: split into 1 chunks
+2026-03-02 10:42:03,522 INFO Row 1963: split into 1 chunks
+2026-03-02 10:42:03,540 INFO Row 1964: split into 1 chunks
+2026-03-02 10:42:03,556 INFO Row 1965: split into 1 chunks
+2026-03-02 10:42:03,579 INFO Row 1966: split into 1 chunks
+2026-03-02 10:42:03,697 INFO Row 1967: split into 1 chunks
+2026-03-02 10:42:03,711 INFO Row 1968: split into 1 chunks
+2026-03-02 10:42:03,728 INFO Row 1969: split into 1 chunks
+2026-03-02 10:42:03,743 INFO Row 1970: split into 1 chunks
+2026-03-02 10:42:03,761 INFO Row 1971: split into 1 chunks
+2026-03-02 10:42:03,787 INFO Row 1972: split into 1 chunks
+2026-03-02 10:42:03,809 INFO Row 1973: split into 1 chunks
+2026-03-02 10:42:03,827 INFO Row 1974: split into 1 chunks
+2026-03-02 10:42:03,839 INFO Row 1975: split into 1 chunks
+2026-03-02 10:42:03,857 INFO Row 1976: split into 1 chunks
+2026-03-02 10:42:03,884 INFO Row 1977: split into 1 chunks
+2026-03-02 10:42:03,903 INFO Row 1978: split into 1 chunks
+2026-03-02 10:42:03,940 INFO Row 1979: split into 1 chunks
+2026-03-02 10:42:03,958 INFO Row 1980: split into 1 chunks
+2026-03-02 10:42:03,978 INFO Row 1981: split into 1 chunks
+2026-03-02 10:42:03,998 INFO Row 1982: split into 1 chunks
+2026-03-02 10:42:04,028 INFO Row 1983: split into 1 chunks
+2026-03-02 10:42:04,052 INFO Row 1984: split into 1 chunks
+2026-03-02 10:42:04,075 INFO Row 1985: split into 1 chunks
+2026-03-02 10:42:04,095 INFO Row 1986: split into 1 chunks
+2026-03-02 10:42:04,113 INFO Row 1987: split into 1 chunks
+2026-03-02 10:42:04,136 INFO Row 1988: split into 1 chunks
+2026-03-02 10:42:04,158 INFO Row 1989: split into 1 chunks
+2026-03-02 10:42:04,176 INFO Row 1990: split into 1 chunks
+2026-03-02 10:42:04,202 INFO Row 1991: split into 1 chunks
+2026-03-02 10:42:04,213 INFO Row 1992: split into 1 chunks
+2026-03-02 10:42:04,239 INFO Row 1993: split into 1 chunks
+2026-03-02 10:42:04,263 INFO Row 1994: split into 1 chunks
+2026-03-02 10:42:04,317 INFO Row 1995: split into 1 chunks
+2026-03-02 10:42:04,333 INFO Row 1996: split into 1 chunks
+2026-03-02 10:42:04,355 INFO Row 1997: split into 1 chunks
+2026-03-02 10:42:04,373 INFO Row 1998: split into 1 chunks
+2026-03-02 10:42:04,394 INFO Row 1999: split into 1 chunks
+2026-03-02 10:42:04,411 INFO Row 2000: split into 1 chunks
+2026-03-02 10:42:04,429 INFO Row 2001: split into 1 chunks
+2026-03-02 10:42:04,439 INFO Row 2002: split into 1 chunks
+2026-03-02 10:42:04,510 INFO Row 2003: split into 1 chunks
+2026-03-02 10:42:04,531 INFO Row 2004: split into 1 chunks
+2026-03-02 10:42:04,540 INFO Row 2005: split into 1 chunks
+2026-03-02 10:42:04,571 INFO Row 2006: split into 1 chunks
+2026-03-02 10:42:04,587 INFO Row 2007: split into 1 chunks
+2026-03-02 10:42:04,607 INFO Row 2008: split into 1 chunks
+2026-03-02 10:42:04,627 INFO Row 2009: split into 1 chunks
+2026-03-02 10:42:04,643 INFO Row 2010: split into 1 chunks
+2026-03-02 10:42:04,665 INFO Row 2011: split into 1 chunks
+2026-03-02 10:42:04,681 INFO Row 2012: split into 1 chunks
+2026-03-02 10:42:04,694 INFO Row 2013: split into 1 chunks
+2026-03-02 10:42:04,707 INFO Row 2014: split into 1 chunks
+2026-03-02 10:42:04,720 INFO Row 2015: split into 1 chunks
+2026-03-02 10:42:04,735 INFO Row 2016: split into 1 chunks
+2026-03-02 10:42:04,756 INFO Row 2017: split into 1 chunks
+2026-03-02 10:42:04,775 INFO Row 2018: split into 1 chunks
+2026-03-02 10:42:04,790 INFO Row 2019: split into 1 chunks
+2026-03-02 10:42:04,806 INFO Row 2020: split into 1 chunks
+2026-03-02 10:42:04,829 INFO Row 2021: split into 1 chunks
+2026-03-02 10:42:04,846 INFO Row 2022: split into 1 chunks
+2026-03-02 10:42:04,867 INFO Row 2023: split into 1 chunks
+2026-03-02 10:42:04,882 INFO Row 2024: split into 1 chunks
+2026-03-02 10:42:04,904 INFO Row 2025: split into 1 chunks
+2026-03-02 10:42:04,924 INFO Row 2026: split into 1 chunks
+2026-03-02 10:42:04,944 INFO Row 2027: split into 1 chunks
+2026-03-02 10:42:04,968 INFO Row 2028: split into 1 chunks
+2026-03-02 10:42:04,982 INFO Row 2029: split into 1 chunks
+2026-03-02 10:42:05,006 INFO Row 2030: split into 1 chunks
+2026-03-02 10:42:05,020 INFO Row 2031: split into 1 chunks
+2026-03-02 10:42:05,035 INFO Row 2032: split into 1 chunks
+2026-03-02 10:42:05,055 INFO Row 2033: split into 1 chunks
+2026-03-02 10:42:05,074 INFO Row 2034: split into 1 chunks
+2026-03-02 10:42:05,093 INFO Row 2035: split into 1 chunks
+2026-03-02 10:42:05,110 INFO Row 2036: split into 1 chunks
+2026-03-02 10:42:05,128 INFO Row 2037: split into 1 chunks
+2026-03-02 10:42:05,146 INFO Row 2038: split into 1 chunks
+2026-03-02 10:42:05,160 INFO Row 2039: split into 1 chunks
+2026-03-02 10:42:05,179 INFO Row 2040: split into 1 chunks
+2026-03-02 10:42:05,203 INFO Row 2041: split into 1 chunks
+2026-03-02 10:42:05,235 INFO Row 2042: split into 1 chunks
+2026-03-02 10:42:05,254 INFO Row 2043: split into 1 chunks
+2026-03-02 10:42:05,271 INFO Row 2044: split into 1 chunks
+2026-03-02 10:42:05,293 INFO Row 2045: split into 1 chunks
+2026-03-02 10:42:05,312 INFO Row 2046: split into 1 chunks
+2026-03-02 10:42:05,339 INFO Row 2047: split into 1 chunks
+2026-03-02 10:42:05,364 INFO Row 2048: split into 1 chunks
+2026-03-02 10:42:05,390 INFO Row 2049: split into 1 chunks
+2026-03-02 10:42:05,418 INFO Row 2050: split into 1 chunks
+2026-03-02 10:42:05,566 INFO Row 2051: split into 1 chunks
+2026-03-02 10:42:05,613 INFO Row 2052: split into 1 chunks
+2026-03-02 10:42:05,639 INFO Row 2053: split into 1 chunks
+2026-03-02 10:42:05,658 INFO Row 2054: split into 1 chunks
+2026-03-02 10:42:05,672 INFO Row 2055: split into 1 chunks
+2026-03-02 10:42:05,684 INFO Row 2056: split into 1 chunks
+2026-03-02 10:42:05,709 INFO Row 2057: split into 1 chunks
+2026-03-02 10:42:05,733 INFO Row 2058: split into 1 chunks
+2026-03-02 10:42:05,793 INFO Row 2059: split into 1 chunks
+2026-03-02 10:42:05,819 INFO Row 2060: split into 1 chunks
+2026-03-02 10:42:05,833 INFO Row 2061: split into 1 chunks
+2026-03-02 10:42:05,858 INFO Row 2062: split into 1 chunks
+2026-03-02 10:42:05,905 INFO Row 2063: split into 1 chunks
+2026-03-02 10:42:05,922 INFO Row 2064: split into 1 chunks
+2026-03-02 10:42:05,939 INFO Row 2065: split into 1 chunks
+2026-03-02 10:42:05,967 INFO Row 2066: split into 1 chunks
+2026-03-02 10:42:05,996 INFO Row 2067: split into 1 chunks
+2026-03-02 10:42:06,009 INFO Row 2068: split into 1 chunks
+2026-03-02 10:42:06,030 INFO Row 2069: split into 1 chunks
+2026-03-02 10:42:06,048 INFO Row 2070: split into 1 chunks
+2026-03-02 10:42:06,067 INFO Row 2071: split into 1 chunks
+2026-03-02 10:42:06,081 INFO Row 2072: split into 1 chunks
+2026-03-02 10:42:06,102 INFO Row 2073: split into 1 chunks
+2026-03-02 10:42:06,121 INFO Row 2074: split into 1 chunks
+2026-03-02 10:42:06,148 INFO Row 2075: split into 1 chunks
+2026-03-02 10:42:06,171 INFO Row 2076: split into 1 chunks
+2026-03-02 10:42:06,200 INFO Row 2077: split into 1 chunks
+2026-03-02 10:42:06,220 INFO Row 2078: split into 1 chunks
+2026-03-02 10:42:06,239 INFO Row 2079: split into 1 chunks
+2026-03-02 10:42:06,258 INFO Row 2080: split into 1 chunks
+2026-03-02 10:42:06,272 INFO Row 2081: split into 1 chunks
+2026-03-02 10:42:06,288 INFO Row 2082: split into 1 chunks
+2026-03-02 10:42:06,313 INFO Row 2083: split into 1 chunks
+2026-03-02 10:42:06,350 INFO Row 2084: split into 1 chunks
+2026-03-02 10:42:06,369 INFO Row 2085: split into 1 chunks
+2026-03-02 10:42:06,392 INFO Row 2086: split into 1 chunks
+2026-03-02 10:42:06,409 INFO Row 2087: split into 1 chunks
+2026-03-02 10:42:06,432 INFO Row 2088: split into 1 chunks
+2026-03-02 10:42:06,452 INFO Row 2089: split into 1 chunks
+2026-03-02 10:42:06,469 INFO Row 2090: split into 1 chunks
+2026-03-02 10:42:06,491 INFO Row 2091: split into 1 chunks
+2026-03-02 10:42:06,513 INFO Row 2092: split into 1 chunks
+2026-03-02 10:42:06,535 INFO Row 2093: split into 1 chunks
+2026-03-02 10:42:06,554 INFO Row 2094: split into 1 chunks
+2026-03-02 10:42:06,576 INFO Row 2095: split into 1 chunks
+2026-03-02 10:42:06,603 INFO Row 2096: split into 1 chunks
+2026-03-02 10:42:06,630 INFO Row 2097: split into 1 chunks
+2026-03-02 10:42:06,659 INFO Row 2098: split into 1 chunks
+2026-03-02 10:42:06,673 INFO Row 2099: split into 1 chunks
+2026-03-02 10:42:06,693 INFO Row 2100: split into 1 chunks
+2026-03-02 10:42:06,720 INFO Row 2101: split into 1 chunks
+2026-03-02 10:42:06,735 INFO Row 2102: split into 1 chunks
+2026-03-02 10:42:06,751 INFO Row 2103: split into 1 chunks
+2026-03-02 10:42:06,768 INFO Row 2104: split into 1 chunks
+2026-03-02 10:42:06,783 INFO Row 2105: split into 1 chunks
+2026-03-02 10:42:06,808 INFO Row 2106: split into 1 chunks
+2026-03-02 10:42:06,814 INFO Row 2107: split into 1 chunks
+2026-03-02 10:42:06,869 INFO Row 2108: split into 1 chunks
+2026-03-02 10:42:06,886 INFO Row 2109: split into 1 chunks
+2026-03-02 10:42:06,926 INFO Row 2110: split into 1 chunks
+2026-03-02 10:42:06,940 INFO Row 2111: split into 1 chunks
+2026-03-02 10:42:06,967 INFO Row 2112: split into 1 chunks
+2026-03-02 10:42:07,002 INFO Row 2113: split into 1 chunks
+2026-03-02 10:42:07,040 INFO Row 2114: split into 1 chunks
+2026-03-02 10:42:07,068 INFO Row 2115: split into 1 chunks
+2026-03-02 10:42:07,102 INFO Row 2116: split into 1 chunks
+2026-03-02 10:42:07,115 INFO Row 2117: split into 1 chunks
+2026-03-02 10:42:07,144 INFO Row 2118: split into 1 chunks
+2026-03-02 10:42:07,159 INFO Row 2119: split into 1 chunks
+2026-03-02 10:42:07,179 INFO Row 2120: split into 1 chunks
+2026-03-02 10:42:07,206 INFO Row 2121: split into 1 chunks
+2026-03-02 10:42:07,254 INFO Row 2122: split into 1 chunks
+2026-03-02 10:42:07,262 INFO Row 2123: split into 1 chunks
+2026-03-02 10:42:07,280 INFO Row 2124: split into 1 chunks
+2026-03-02 10:42:07,297 INFO Row 2125: split into 1 chunks
+2026-03-02 10:42:07,303 INFO Row 2126: split into 1 chunks
+2026-03-02 10:42:07,311 INFO Row 2127: split into 1 chunks
+2026-03-02 10:42:07,339 INFO Row 2128: split into 1 chunks
+2026-03-02 10:42:07,345 INFO Row 2129: split into 1 chunks
+2026-03-02 10:42:07,350 INFO Row 2130: split into 1 chunks
+2026-03-02 10:42:07,377 INFO Row 2131: split into 1 chunks
+2026-03-02 10:42:07,394 INFO Row 2132: split into 1 chunks
+2026-03-02 10:42:07,411 INFO Row 2133: split into 1 chunks
+2026-03-02 10:42:07,421 INFO Row 2134: split into 1 chunks
+2026-03-02 10:42:07,433 INFO Row 2135: split into 1 chunks
+2026-03-02 10:42:07,440 INFO Row 2136: split into 1 chunks
+2026-03-02 10:42:07,451 INFO Row 2137: split into 1 chunks
+2026-03-02 10:42:07,464 INFO Row 2138: split into 1 chunks
+2026-03-02 10:42:07,487 INFO Row 2139: split into 1 chunks
+2026-03-02 10:42:07,499 INFO Row 2140: split into 1 chunks
+2026-03-02 10:42:07,523 INFO Row 2141: split into 1 chunks
+2026-03-02 10:42:07,535 INFO Row 2142: split into 1 chunks
+2026-03-02 10:42:07,542 INFO Row 2143: split into 1 chunks
+2026-03-02 10:42:07,561 INFO Row 2144: split into 1 chunks
+2026-03-02 10:42:07,595 INFO Row 2145: split into 1 chunks
+2026-03-02 10:42:07,610 INFO Row 2146: split into 1 chunks
+2026-03-02 10:42:07,631 INFO Row 2147: split into 1 chunks
+2026-03-02 10:42:07,646 INFO Row 2148: split into 1 chunks
+2026-03-02 10:42:07,656 INFO Row 2149: split into 1 chunks
+2026-03-02 10:42:07,668 INFO Row 2150: split into 1 chunks
+2026-03-02 10:42:07,681 INFO Row 2151: split into 1 chunks
+2026-03-02 10:42:07,698 INFO Row 2152: split into 1 chunks
+2026-03-02 10:42:07,718 INFO Row 2153: split into 1 chunks
+2026-03-02 10:42:07,732 INFO Row 2154: split into 1 chunks
+2026-03-02 10:42:07,742 INFO Row 2155: split into 1 chunks
+2026-03-02 10:42:07,770 INFO Row 2156: split into 1 chunks
+2026-03-02 10:42:07,784 INFO Row 2157: split into 1 chunks
+2026-03-02 10:42:07,791 INFO Row 2158: split into 1 chunks
+2026-03-02 10:42:07,811 INFO Row 2159: split into 1 chunks
+2026-03-02 10:42:07,834 INFO Row 2160: split into 1 chunks
+2026-03-02 10:42:07,857 INFO Row 2161: split into 1 chunks
+2026-03-02 10:42:07,886 INFO Row 2162: split into 1 chunks
+2026-03-02 10:42:07,906 INFO Row 2163: split into 1 chunks
+2026-03-02 10:42:07,929 INFO Row 2164: split into 1 chunks
+2026-03-02 10:42:07,941 INFO Row 2165: split into 1 chunks
+2026-03-02 10:42:07,952 INFO Row 2166: split into 1 chunks
+2026-03-02 10:42:07,982 INFO Row 2167: split into 1 chunks
+2026-03-02 10:42:08,031 INFO Row 2168: split into 1 chunks
+2026-03-02 10:42:08,039 INFO Row 2169: split into 1 chunks
+2026-03-02 10:42:08,068 INFO Row 2170: split into 1 chunks
+2026-03-02 10:42:08,089 INFO Row 2171: split into 1 chunks
+2026-03-02 10:42:08,118 INFO Row 2172: split into 1 chunks
+2026-03-02 10:42:08,129 INFO Row 2173: split into 1 chunks
+2026-03-02 10:42:08,137 INFO Row 2174: split into 1 chunks
+2026-03-02 10:42:08,144 INFO Row 2175: split into 1 chunks
+2026-03-02 10:42:08,158 INFO Row 2176: split into 1 chunks
+2026-03-02 10:42:08,167 INFO Row 2177: split into 1 chunks
+2026-03-02 10:42:08,177 INFO Row 2178: split into 1 chunks
+2026-03-02 10:42:08,187 INFO Row 2179: split into 1 chunks
+2026-03-02 10:42:08,205 INFO Row 2180: split into 1 chunks
+2026-03-02 10:42:08,223 INFO Row 2181: split into 1 chunks
+2026-03-02 10:42:08,236 INFO Row 2182: split into 1 chunks
+2026-03-02 10:42:08,261 INFO Row 2183: split into 1 chunks
+2026-03-02 10:42:08,275 INFO Row 2184: split into 1 chunks
+2026-03-02 10:42:08,290 INFO Row 2185: split into 1 chunks
+2026-03-02 10:42:08,298 INFO Row 2186: split into 1 chunks
+2026-03-02 10:42:08,314 INFO Row 2187: split into 1 chunks
+2026-03-02 10:42:08,338 INFO Row 2188: split into 1 chunks
+2026-03-02 10:42:08,356 INFO Row 2189: split into 1 chunks
+2026-03-02 10:42:08,362 INFO Row 2190: split into 1 chunks
+2026-03-02 10:42:08,369 INFO Row 2191: split into 1 chunks
+2026-03-02 10:42:08,376 INFO Row 2192: split into 1 chunks
+2026-03-02 10:42:08,383 INFO Row 2193: split into 1 chunks
+2026-03-02 10:42:08,394 INFO Row 2194: split into 1 chunks
+2026-03-02 10:42:08,405 INFO Row 2195: split into 1 chunks
+2026-03-02 10:42:08,413 INFO Row 2196: split into 1 chunks
+2026-03-02 10:42:08,424 INFO Row 2197: split into 1 chunks
+2026-03-02 10:42:08,436 INFO Row 2198: split into 1 chunks
+2026-03-02 10:42:08,448 INFO Row 2199: split into 1 chunks
+2026-03-02 10:42:08,467 INFO Row 2200: split into 1 chunks
+2026-03-02 10:42:08,481 INFO Row 2201: split into 1 chunks
+2026-03-02 10:42:08,497 INFO Row 2202: split into 1 chunks
+2026-03-02 10:42:08,506 INFO Row 2203: split into 1 chunks
+2026-03-02 10:42:08,516 INFO Row 2204: split into 1 chunks
+2026-03-02 10:42:08,525 INFO Row 2205: split into 1 chunks
+2026-03-02 10:42:08,540 INFO Row 2206: split into 1 chunks
+2026-03-02 10:42:08,547 INFO Row 2207: split into 1 chunks
+2026-03-02 10:42:08,558 INFO Row 2208: split into 1 chunks
+2026-03-02 10:42:08,566 INFO Row 2209: split into 1 chunks
+2026-03-02 10:42:08,573 INFO Row 2210: split into 1 chunks
+2026-03-02 10:42:08,583 INFO Row 2211: split into 1 chunks
+2026-03-02 10:42:08,594 INFO Row 2212: split into 1 chunks
+2026-03-02 10:42:08,600 INFO Row 2213: split into 1 chunks
+2026-03-02 10:42:08,615 INFO Row 2214: split into 1 chunks
+2026-03-02 10:42:08,624 INFO Row 2215: split into 1 chunks
+2026-03-02 10:42:08,632 INFO Row 2216: split into 1 chunks
+2026-03-02 10:42:08,645 INFO Row 2217: split into 1 chunks
+2026-03-02 10:42:08,660 INFO Row 2218: split into 1 chunks
+2026-03-02 10:42:08,670 INFO Row 2219: split into 1 chunks
+2026-03-02 10:42:08,684 INFO Row 2220: split into 1 chunks
+2026-03-02 10:42:08,698 INFO Row 2221: split into 1 chunks
+2026-03-02 10:42:08,709 INFO Row 2222: split into 1 chunks
+2026-03-02 10:42:08,721 INFO Row 2223: split into 1 chunks
+2026-03-02 10:42:08,729 INFO Row 2224: split into 1 chunks
+2026-03-02 10:42:08,744 INFO Row 2225: split into 1 chunks
+2026-03-02 10:42:08,759 INFO Row 2226: split into 1 chunks
+2026-03-02 10:42:08,770 INFO Row 2227: split into 1 chunks
+2026-03-02 10:42:08,782 INFO Row 2228: split into 1 chunks
+2026-03-02 10:42:08,788 INFO Row 2229: split into 1 chunks
+2026-03-02 10:42:08,798 INFO Row 2230: split into 1 chunks
+2026-03-02 10:42:08,810 INFO Row 2231: split into 1 chunks
+2026-03-02 10:42:08,819 INFO Row 2232: split into 1 chunks
+2026-03-02 10:42:08,831 INFO Row 2233: split into 1 chunks
+2026-03-02 10:42:08,842 INFO Row 2234: split into 1 chunks
+2026-03-02 10:42:08,850 INFO Row 2235: split into 1 chunks
+2026-03-02 10:42:08,864 INFO Row 2236: split into 1 chunks
+2026-03-02 10:42:08,874 INFO Row 2237: split into 1 chunks
+2026-03-02 10:42:08,888 INFO Row 2238: split into 1 chunks
+2026-03-02 10:42:08,903 INFO Row 2239: split into 1 chunks
+2026-03-02 10:42:08,917 INFO Row 2240: split into 1 chunks
+2026-03-02 10:42:08,931 INFO Row 2241: split into 1 chunks
+2026-03-02 10:42:08,941 INFO Row 2242: split into 1 chunks
+2026-03-02 10:42:08,950 INFO Row 2243: split into 1 chunks
+2026-03-02 10:42:08,963 INFO Row 2244: split into 1 chunks
+2026-03-02 10:42:08,976 INFO Row 2245: split into 1 chunks
+2026-03-02 10:42:08,985 INFO Row 2246: split into 1 chunks
+2026-03-02 10:42:08,991 INFO Row 2247: split into 1 chunks
+2026-03-02 10:42:08,997 INFO Row 2248: split into 1 chunks
+2026-03-02 10:42:09,005 INFO Row 2249: split into 1 chunks
+2026-03-02 10:42:09,015 INFO Row 2250: split into 1 chunks
+2026-03-02 10:42:09,024 INFO Row 2251: split into 1 chunks
+2026-03-02 10:42:09,036 INFO Row 2252: split into 1 chunks
+2026-03-02 10:42:09,047 INFO Row 2253: split into 1 chunks
+2026-03-02 10:42:09,056 INFO Row 2254: split into 1 chunks
+2026-03-02 10:42:09,066 INFO Row 2255: split into 1 chunks
+2026-03-02 10:42:09,077 INFO Row 2256: split into 1 chunks
+2026-03-02 10:42:09,088 INFO Row 2257: split into 1 chunks
+2026-03-02 10:42:09,098 INFO Row 2258: split into 1 chunks
+2026-03-02 10:42:09,111 INFO Row 2259: split into 1 chunks
+2026-03-02 10:42:09,118 INFO Row 2260: split into 1 chunks
+2026-03-02 10:42:09,135 INFO Row 2261: split into 1 chunks
+2026-03-02 10:42:09,149 INFO Row 2262: split into 1 chunks
+2026-03-02 10:42:09,161 INFO Row 2263: split into 1 chunks
+2026-03-02 10:42:09,181 INFO Row 2264: split into 1 chunks
+2026-03-02 10:42:09,189 INFO Row 2265: split into 1 chunks
+2026-03-02 10:42:09,209 INFO Row 2266: split into 1 chunks
+2026-03-02 10:42:09,219 INFO Row 2267: split into 1 chunks
+2026-03-02 10:42:09,236 INFO Row 2268: split into 1 chunks
+2026-03-02 10:42:09,250 INFO Row 2269: split into 1 chunks
+2026-03-02 10:42:09,256 INFO Row 2270: split into 1 chunks
+2026-03-02 10:42:09,264 INFO Row 2271: split into 1 chunks
+2026-03-02 10:42:09,272 INFO Row 2272: split into 1 chunks
+2026-03-02 10:42:09,286 INFO Row 2273: split into 1 chunks
+2026-03-02 10:42:09,293 INFO Row 2274: split into 1 chunks
+2026-03-02 10:42:09,307 INFO Row 2275: split into 1 chunks
+2026-03-02 10:42:09,315 INFO Row 2276: split into 1 chunks
+2026-03-02 10:42:09,332 INFO Row 2277: split into 1 chunks
+2026-03-02 10:42:09,340 INFO Row 2278: split into 1 chunks
+2026-03-02 10:42:09,354 INFO Row 2279: split into 1 chunks
+2026-03-02 10:42:09,363 INFO Row 2280: split into 1 chunks
+2026-03-02 10:42:09,367 INFO Row 2281: split into 1 chunks
+2026-03-02 10:42:09,370 INFO Row 2282: split into 1 chunks
+2026-03-02 10:42:09,382 INFO Row 2283: split into 1 chunks
+2026-03-02 10:42:09,389 INFO Row 2284: split into 1 chunks
+2026-03-02 10:42:09,394 INFO Row 2285: split into 1 chunks
+2026-03-02 10:42:09,404 INFO Row 2286: split into 1 chunks
+2026-03-02 10:42:09,411 INFO Row 2287: split into 1 chunks
+2026-03-02 10:42:09,418 INFO Row 2288: split into 1 chunks
+2026-03-02 10:42:09,428 INFO Row 2289: split into 1 chunks
+2026-03-02 10:42:09,441 INFO Row 2290: split into 1 chunks
+2026-03-02 10:42:09,449 INFO Row 2291: split into 1 chunks
+2026-03-02 10:42:09,459 INFO Row 2292: split into 1 chunks
+2026-03-02 10:42:09,463 INFO Row 2293: split into 1 chunks
+2026-03-02 10:42:09,468 INFO Row 2294: split into 1 chunks
+2026-03-02 10:42:09,475 INFO Row 2295: split into 1 chunks
+2026-03-02 10:42:09,483 INFO Row 2296: split into 1 chunks
+2026-03-02 10:42:09,488 INFO Row 2297: split into 1 chunks
+2026-03-02 10:42:09,494 INFO Row 2298: split into 1 chunks
+2026-03-02 10:42:09,505 INFO Row 2299: split into 1 chunks
+2026-03-02 10:42:09,512 INFO Row 2300: split into 1 chunks
+2026-03-02 10:42:09,518 INFO Row 2301: split into 1 chunks
+2026-03-02 10:42:09,524 INFO Row 2302: split into 1 chunks
+2026-03-02 10:42:09,529 INFO Row 2303: split into 1 chunks
+2026-03-02 10:42:09,540 INFO Row 2304: split into 1 chunks
+2026-03-02 10:42:09,547 INFO Row 2305: split into 1 chunks
+2026-03-02 10:42:09,554 INFO Row 2306: split into 1 chunks
+2026-03-02 10:42:09,561 INFO Row 2307: split into 1 chunks
+2026-03-02 10:42:09,569 INFO Row 2308: split into 1 chunks
+2026-03-02 10:42:09,582 INFO Row 2309: split into 1 chunks
+2026-03-02 10:42:09,593 INFO Row 2310: split into 1 chunks
+2026-03-02 10:42:09,599 INFO Row 2311: split into 1 chunks
+2026-03-02 10:42:09,607 INFO Row 2312: split into 1 chunks
+2026-03-02 10:42:09,611 INFO Row 2313: split into 1 chunks
+2026-03-02 10:42:09,617 INFO Row 2314: split into 1 chunks
+2026-03-02 10:42:09,625 INFO Row 2315: split into 1 chunks
+2026-03-02 10:42:09,635 INFO Row 2316: split into 1 chunks
+2026-03-02 10:42:09,643 INFO Row 2317: split into 1 chunks
+2026-03-02 10:42:09,654 INFO Row 2318: split into 1 chunks
+2026-03-02 10:42:09,662 INFO Row 2319: split into 1 chunks
+2026-03-02 10:42:09,672 INFO Row 2320: split into 1 chunks
+2026-03-02 10:42:09,679 INFO Row 2321: split into 1 chunks
+2026-03-02 10:42:09,685 INFO Row 2322: split into 1 chunks
+2026-03-02 10:42:09,691 INFO Row 2323: split into 1 chunks
+2026-03-02 10:42:09,699 INFO Row 2324: split into 1 chunks
+2026-03-02 10:42:09,705 INFO Row 2325: split into 1 chunks
+2026-03-02 10:42:09,711 INFO Row 2326: split into 1 chunks
+2026-03-02 10:42:09,718 INFO Row 2327: split into 1 chunks
+2026-03-02 10:42:09,723 INFO Row 2328: split into 1 chunks
+2026-03-02 10:42:09,731 INFO Row 2329: split into 1 chunks
+2026-03-02 10:42:09,735 INFO Row 2330: split into 1 chunks
+2026-03-02 10:42:09,740 INFO Row 2331: split into 1 chunks
+2026-03-02 10:42:09,747 INFO Row 2332: split into 1 chunks
+2026-03-02 10:42:09,757 INFO Row 2333: split into 1 chunks
+2026-03-02 10:42:09,766 INFO Row 2334: split into 1 chunks
+2026-03-02 10:42:09,776 INFO Row 2335: split into 1 chunks
+2026-03-02 10:42:09,781 INFO Row 2336: split into 1 chunks
+2026-03-02 10:42:09,791 INFO Row 2337: split into 1 chunks
+2026-03-02 10:42:09,798 INFO Row 2338: split into 1 chunks
+2026-03-02 10:42:09,807 INFO Row 2339: split into 1 chunks
+2026-03-02 10:42:09,821 INFO Row 2340: split into 1 chunks
+2026-03-02 10:42:09,828 INFO Row 2341: split into 1 chunks
+2026-03-02 10:42:09,840 INFO Row 2342: split into 1 chunks
+2026-03-02 10:42:09,849 INFO Row 2343: split into 1 chunks
+2026-03-02 10:42:09,858 INFO Row 2344: split into 1 chunks
+2026-03-02 10:42:09,871 INFO Row 2345: split into 1 chunks
+2026-03-02 10:42:09,878 INFO Row 2346: split into 1 chunks
+2026-03-02 10:42:09,890 INFO Row 2347: split into 1 chunks
+2026-03-02 10:42:09,896 INFO Row 2348: split into 1 chunks
+2026-03-02 10:42:09,905 INFO Row 2349: split into 1 chunks
+2026-03-02 10:42:09,916 INFO Row 2350: split into 1 chunks
+2026-03-02 10:42:09,926 INFO Row 2351: split into 1 chunks
+2026-03-02 10:42:09,933 INFO Row 2352: split into 1 chunks
+2026-03-02 10:42:09,940 INFO Row 2353: split into 1 chunks
+2026-03-02 10:42:09,958 INFO Row 2354: split into 1 chunks
+2026-03-02 10:42:09,966 INFO Row 2355: split into 1 chunks
+2026-03-02 10:42:09,973 INFO Row 2356: split into 1 chunks
+2026-03-02 10:42:09,980 INFO Row 2357: split into 1 chunks
+2026-03-02 10:42:09,989 INFO Row 2358: split into 1 chunks
+2026-03-02 10:42:09,998 INFO Row 2359: split into 1 chunks
+2026-03-02 10:42:10,008 INFO Row 2360: split into 1 chunks
+2026-03-02 10:42:10,016 INFO Row 2361: split into 1 chunks
+2026-03-02 10:42:10,025 INFO Row 2362: split into 1 chunks
+2026-03-02 10:42:10,033 INFO Row 2363: split into 1 chunks
+2026-03-02 10:42:10,042 INFO Row 2364: split into 1 chunks
+2026-03-02 10:42:10,050 INFO Row 2365: split into 1 chunks
+2026-03-02 10:42:10,063 INFO Row 2366: split into 1 chunks
+2026-03-02 10:42:10,075 INFO Row 2367: split into 1 chunks
+2026-03-02 10:42:10,081 INFO Row 2368: split into 1 chunks
+2026-03-02 10:42:10,088 INFO Row 2369: split into 1 chunks
+2026-03-02 10:42:10,095 INFO Row 2370: split into 1 chunks
+2026-03-02 10:42:10,103 INFO Row 2371: split into 1 chunks
+2026-03-02 10:42:10,109 INFO Row 2372: split into 1 chunks
+2026-03-02 10:42:10,121 INFO Row 2373: split into 1 chunks
+2026-03-02 10:42:10,133 INFO Row 2374: split into 1 chunks
+2026-03-02 10:42:10,142 INFO Row 2375: split into 1 chunks
+2026-03-02 10:42:10,153 INFO Row 2376: split into 1 chunks
+2026-03-02 10:42:10,160 INFO Row 2377: split into 1 chunks
+2026-03-02 10:42:10,170 INFO Row 2378: split into 1 chunks
+2026-03-02 10:42:10,184 INFO Row 2379: split into 1 chunks
+2026-03-02 10:42:10,196 INFO Row 2380: split into 1 chunks
+2026-03-02 10:42:10,206 INFO Row 2381: split into 1 chunks
+2026-03-02 10:42:10,218 INFO Row 2382: split into 1 chunks
+2026-03-02 10:42:10,230 INFO Row 2383: split into 1 chunks
+2026-03-02 10:42:10,241 INFO Row 2384: split into 1 chunks
+2026-03-02 10:42:10,254 INFO Row 2385: split into 1 chunks
+2026-03-02 10:42:10,262 INFO Row 2386: split into 1 chunks
+2026-03-02 10:42:10,276 INFO Row 2387: split into 1 chunks
+2026-03-02 10:42:10,284 INFO Row 2388: split into 1 chunks
+2026-03-02 10:42:10,296 INFO Row 2389: split into 1 chunks
+2026-03-02 10:42:10,310 INFO Row 2390: split into 1 chunks
+2026-03-02 10:42:10,329 INFO Row 2391: split into 1 chunks
+2026-03-02 10:42:10,342 INFO Row 2392: split into 1 chunks
+2026-03-02 10:42:10,349 INFO Row 2393: split into 1 chunks
+2026-03-02 10:42:10,364 INFO Row 2394: split into 1 chunks
+2026-03-02 10:42:10,380 INFO Row 2395: split into 1 chunks
+2026-03-02 10:42:10,397 INFO Row 2396: split into 1 chunks
+2026-03-02 10:42:10,404 INFO Row 2397: split into 1 chunks
+2026-03-02 10:42:10,414 INFO Row 2398: split into 1 chunks
+2026-03-02 10:42:10,419 INFO Row 2399: split into 1 chunks
+2026-03-02 10:42:10,434 INFO Row 2400: split into 1 chunks
+2026-03-02 10:42:10,445 INFO Row 2401: split into 1 chunks
+2026-03-02 10:42:10,457 INFO Row 2402: split into 1 chunks
+2026-03-02 10:42:10,469 INFO Row 2403: split into 1 chunks
+2026-03-02 10:42:10,479 INFO Row 2404: split into 1 chunks
+2026-03-02 10:42:10,495 INFO Row 2405: split into 1 chunks
+2026-03-02 10:42:10,507 INFO Row 2406: split into 1 chunks
+2026-03-02 10:42:10,520 INFO Row 2407: split into 1 chunks
+2026-03-02 10:42:10,536 INFO Row 2408: split into 1 chunks
+2026-03-02 10:42:10,552 INFO Row 2409: split into 1 chunks
+2026-03-02 10:42:10,571 INFO Row 2410: split into 1 chunks
+2026-03-02 10:42:10,585 INFO Row 2411: split into 1 chunks
+2026-03-02 10:42:10,596 INFO Row 2412: split into 1 chunks
+2026-03-02 10:42:10,605 INFO Row 2413: split into 1 chunks
+2026-03-02 10:42:10,615 INFO Row 2414: split into 1 chunks
+2026-03-02 10:42:10,626 INFO Row 2415: split into 1 chunks
+2026-03-02 10:42:10,641 INFO Row 2416: split into 1 chunks
+2026-03-02 10:42:10,651 INFO Row 2417: split into 1 chunks
+2026-03-02 10:42:10,663 INFO Row 2418: split into 1 chunks
+2026-03-02 10:42:10,670 INFO Row 2419: split into 1 chunks
+2026-03-02 10:42:10,682 INFO Row 2420: split into 1 chunks
+2026-03-02 10:42:10,692 INFO Row 2421: split into 1 chunks
+2026-03-02 10:42:10,704 INFO Row 2422: split into 1 chunks
+2026-03-02 10:42:10,711 INFO Row 2423: split into 1 chunks
+2026-03-02 10:42:10,724 INFO Row 2424: split into 1 chunks
+2026-03-02 10:42:10,733 INFO Row 2425: split into 1 chunks
+2026-03-02 10:42:10,743 INFO Row 2426: split into 1 chunks
+2026-03-02 10:42:10,753 INFO Row 2427: split into 1 chunks
+2026-03-02 10:42:10,760 INFO Row 2428: split into 1 chunks
+2026-03-02 10:42:10,775 INFO Row 2429: split into 1 chunks
+2026-03-02 10:42:10,787 INFO Row 2430: split into 1 chunks
+2026-03-02 10:42:10,796 INFO Row 2431: split into 1 chunks
+2026-03-02 10:42:10,804 INFO Row 2432: split into 1 chunks
+2026-03-02 10:42:10,819 INFO Row 2433: split into 1 chunks
+2026-03-02 10:42:10,832 INFO Row 2434: split into 1 chunks
+2026-03-02 10:42:10,844 INFO Row 2435: split into 1 chunks
+2026-03-02 10:42:10,860 INFO Row 2436: split into 1 chunks
+2026-03-02 10:42:10,869 INFO Row 2437: split into 1 chunks
+2026-03-02 10:42:10,882 INFO Row 2438: split into 1 chunks
+2026-03-02 10:42:10,893 INFO Row 2439: split into 1 chunks
+2026-03-02 10:42:10,904 INFO Row 2440: split into 1 chunks
+2026-03-02 10:42:10,914 INFO Row 2441: split into 1 chunks
+2026-03-02 10:42:10,926 INFO Row 2442: split into 1 chunks
+2026-03-02 10:42:10,936 INFO Row 2443: split into 1 chunks
+2026-03-02 10:42:10,944 INFO Row 2444: split into 1 chunks
+2026-03-02 10:42:10,953 INFO Row 2445: split into 1 chunks
+2026-03-02 10:42:10,965 INFO Row 2446: split into 1 chunks
+2026-03-02 10:42:10,986 INFO Row 2447: split into 1 chunks
+2026-03-02 10:42:10,998 INFO Row 2448: split into 1 chunks
+2026-03-02 10:42:11,013 INFO Row 2449: split into 1 chunks
+2026-03-02 10:42:11,042 INFO Row 2450: split into 1 chunks
+2026-03-02 10:42:11,056 INFO Row 2451: split into 1 chunks
+2026-03-02 10:42:11,078 INFO Row 2452: split into 1 chunks
+2026-03-02 10:42:11,094 INFO Row 2453: split into 1 chunks
+2026-03-02 10:42:11,112 INFO Row 2454: split into 1 chunks
+2026-03-02 10:42:11,129 INFO Row 2455: split into 1 chunks
+2026-03-02 10:42:11,150 INFO Row 2456: split into 1 chunks
+2026-03-02 10:42:11,174 INFO Row 2457: split into 1 chunks
+2026-03-02 10:42:11,192 INFO Row 2458: split into 1 chunks
+2026-03-02 10:42:11,209 INFO Row 2459: split into 1 chunks
+2026-03-02 10:42:11,225 INFO Row 2460: split into 1 chunks
+2026-03-02 10:42:11,240 INFO Row 2461: split into 1 chunks
+2026-03-02 10:42:11,261 INFO Row 2462: split into 1 chunks
+2026-03-02 10:42:11,280 INFO Row 2463: split into 1 chunks
+2026-03-02 10:42:11,302 INFO Row 2464: split into 1 chunks
+2026-03-02 10:42:11,322 INFO Row 2465: split into 1 chunks
+2026-03-02 10:42:11,339 INFO Row 2466: split into 1 chunks
+2026-03-02 10:42:11,360 INFO Row 2467: split into 1 chunks
+2026-03-02 10:42:11,392 INFO Row 2468: split into 1 chunks
+2026-03-02 10:42:11,409 INFO Row 2469: split into 1 chunks
+2026-03-02 10:42:11,422 INFO Row 2470: split into 1 chunks
+2026-03-02 10:42:11,446 INFO Row 2471: split into 1 chunks
+2026-03-02 10:42:11,463 INFO Row 2472: split into 1 chunks
+2026-03-02 10:42:11,482 INFO Row 2473: split into 1 chunks
+2026-03-02 10:42:11,511 INFO Row 2474: split into 1 chunks
+2026-03-02 10:42:11,529 INFO Row 2475: split into 1 chunks
+2026-03-02 10:42:11,544 INFO Row 2476: split into 1 chunks
+2026-03-02 10:42:11,580 INFO Row 2477: split into 1 chunks
+2026-03-02 10:42:11,603 INFO Row 2478: split into 1 chunks
+2026-03-02 10:42:11,628 INFO Row 2479: split into 1 chunks
+2026-03-02 10:42:11,649 INFO Row 2480: split into 1 chunks
+2026-03-02 10:42:11,677 INFO Row 2481: split into 1 chunks
+2026-03-02 10:42:11,822 INFO Row 2482: split into 1 chunks
+2026-03-02 10:42:11,843 INFO Row 2483: split into 1 chunks
+2026-03-02 10:42:11,879 INFO Row 2484: split into 1 chunks
+2026-03-02 10:42:11,898 INFO Row 2485: split into 1 chunks
+2026-03-02 10:42:11,911 INFO Row 2486: split into 1 chunks
+2026-03-02 10:42:11,924 INFO Row 2487: split into 1 chunks
+2026-03-02 10:42:11,942 INFO Row 2488: split into 1 chunks
+2026-03-02 10:42:11,987 INFO Row 2489: split into 1 chunks
+2026-03-02 10:42:12,010 INFO Row 2490: split into 1 chunks
+2026-03-02 10:42:12,034 INFO Row 2491: split into 1 chunks
+2026-03-02 10:42:12,051 INFO Row 2492: split into 1 chunks
+2026-03-02 10:42:12,071 INFO Row 2493: split into 1 chunks
+2026-03-02 10:42:12,088 INFO Row 2494: split into 1 chunks
+2026-03-02 10:42:12,104 INFO Row 2495: split into 1 chunks
+2026-03-02 10:42:12,118 INFO Row 2496: split into 1 chunks
+2026-03-02 10:42:12,133 INFO Row 2497: split into 1 chunks
+2026-03-02 10:42:12,138 INFO Row 2498: split into 1 chunks
+2026-03-02 10:42:12,144 INFO Row 2499: split into 1 chunks
+2026-03-02 10:42:12,150 INFO Row 2500: split into 1 chunks
+2026-03-02 10:42:12,155 INFO Row 2501: split into 1 chunks
+2026-03-02 10:42:12,169 INFO Row 2502: split into 1 chunks
+2026-03-02 10:42:12,183 INFO Row 2503: split into 1 chunks
+2026-03-02 10:42:12,194 INFO Row 2504: split into 1 chunks
+2026-03-02 10:42:12,210 INFO Row 2505: split into 1 chunks
+2026-03-02 10:42:12,230 INFO Row 2506: split into 1 chunks
+2026-03-02 10:42:12,243 INFO Row 2507: split into 1 chunks
+2026-03-02 10:42:12,258 INFO Row 2508: split into 1 chunks
+2026-03-02 10:42:12,285 INFO Row 2509: split into 1 chunks
+2026-03-02 10:42:12,297 INFO Row 2510: split into 1 chunks
+2026-03-02 10:42:12,316 INFO Row 2511: split into 1 chunks
+2026-03-02 10:42:12,338 INFO Row 2512: split into 1 chunks
+2026-03-02 10:42:12,349 INFO Row 2513: split into 1 chunks
+2026-03-02 10:42:12,366 INFO Row 2514: split into 1 chunks
+2026-03-02 10:42:12,397 INFO Row 2515: split into 1 chunks
+2026-03-02 10:42:12,422 INFO Row 2516: split into 1 chunks
+2026-03-02 10:42:12,439 INFO Row 2517: split into 1 chunks
+2026-03-02 10:42:12,455 INFO Row 2518: split into 1 chunks
+2026-03-02 10:42:12,469 INFO Row 2519: split into 1 chunks
+2026-03-02 10:42:12,494 INFO Row 2520: split into 1 chunks
+2026-03-02 10:42:12,510 INFO Row 2521: split into 1 chunks
+2026-03-02 10:42:12,523 INFO Row 2522: split into 1 chunks
+2026-03-02 10:42:12,539 INFO Row 2523: split into 1 chunks
+2026-03-02 10:42:12,547 INFO Row 2524: split into 1 chunks
+2026-03-02 10:42:12,568 INFO Row 2525: split into 1 chunks
+2026-03-02 10:42:12,581 INFO Row 2526: split into 1 chunks
+2026-03-02 10:42:12,593 INFO Row 2527: split into 1 chunks
+2026-03-02 10:42:12,606 INFO Row 2528: split into 1 chunks
+2026-03-02 10:42:12,630 INFO Row 2529: split into 1 chunks
+2026-03-02 10:42:12,653 INFO Row 2530: split into 1 chunks
+2026-03-02 10:42:12,662 INFO Row 2531: split into 1 chunks
+2026-03-02 10:42:12,680 INFO Row 2532: split into 1 chunks
+2026-03-02 10:42:12,687 INFO Row 2533: split into 1 chunks
+2026-03-02 10:42:12,700 INFO Row 2534: split into 1 chunks
+2026-03-02 10:42:12,715 INFO Row 2535: split into 1 chunks
+2026-03-02 10:42:12,740 INFO Row 2536: split into 1 chunks
+2026-03-02 10:42:12,753 INFO Row 2537: split into 1 chunks
+2026-03-02 10:42:12,764 INFO Row 2538: split into 1 chunks
+2026-03-02 10:42:12,777 INFO Row 2539: split into 1 chunks
+2026-03-02 10:42:12,785 INFO Row 2540: split into 1 chunks
+2026-03-02 10:42:12,803 INFO Row 2541: split into 1 chunks
+2026-03-02 10:42:12,811 INFO Row 2542: split into 1 chunks
+2026-03-02 10:42:12,834 INFO Row 2543: split into 1 chunks
+2026-03-02 10:42:12,846 INFO Row 2544: split into 1 chunks
+2026-03-02 10:42:12,856 INFO Row 2545: split into 1 chunks
+2026-03-02 10:42:12,861 INFO Row 2546: split into 1 chunks
+2026-03-02 10:42:12,869 INFO Row 2547: split into 1 chunks
+2026-03-02 10:42:12,874 INFO Row 2548: split into 1 chunks
+2026-03-02 10:42:12,880 INFO Row 2549: split into 1 chunks
+2026-03-02 10:42:12,890 INFO Row 2550: split into 1 chunks
+2026-03-02 10:42:12,897 INFO Row 2551: split into 1 chunks
+2026-03-02 10:42:12,902 INFO Row 2552: split into 1 chunks
+2026-03-02 10:42:12,912 INFO Row 2553: split into 1 chunks
+2026-03-02 10:42:12,920 INFO Row 2554: split into 1 chunks
+2026-03-02 10:42:12,934 INFO Row 2555: split into 1 chunks
+2026-03-02 10:42:12,940 INFO Row 2556: split into 1 chunks
+2026-03-02 10:42:12,950 INFO Row 2557: split into 1 chunks
+2026-03-02 10:42:12,957 INFO Row 2558: split into 1 chunks
+2026-03-02 10:42:12,964 INFO Row 2559: split into 1 chunks
+2026-03-02 10:42:12,973 INFO Row 2560: split into 1 chunks
+2026-03-02 10:42:12,986 INFO Row 2561: split into 1 chunks
+2026-03-02 10:42:12,995 INFO Row 2562: split into 1 chunks
+2026-03-02 10:42:13,014 INFO Row 2563: split into 1 chunks
+2026-03-02 10:42:13,021 INFO Row 2564: split into 1 chunks
+2026-03-02 10:42:13,036 INFO Row 2565: split into 1 chunks
+2026-03-02 10:42:13,048 INFO Row 2566: split into 1 chunks
+2026-03-02 10:42:13,068 INFO Row 2567: split into 1 chunks
+2026-03-02 10:42:13,095 INFO Row 2568: split into 1 chunks
+2026-03-02 10:42:13,104 INFO Row 2569: split into 1 chunks
+2026-03-02 10:42:13,123 INFO Row 2570: split into 1 chunks
+2026-03-02 10:42:13,144 INFO Row 2571: split into 1 chunks
+2026-03-02 10:42:13,155 INFO Row 2572: split into 1 chunks
+2026-03-02 10:42:13,176 INFO Row 2573: split into 1 chunks
+2026-03-02 10:42:13,202 INFO Row 2574: split into 1 chunks
+2026-03-02 10:42:13,211 INFO Row 2575: split into 1 chunks
+2026-03-02 10:42:13,254 INFO Row 2576: split into 1 chunks
+2026-03-02 10:42:13,260 INFO Row 2577: split into 1 chunks
+2026-03-02 10:42:13,272 INFO Row 2578: split into 1 chunks
+2026-03-02 10:42:13,286 INFO Row 2579: split into 1 chunks
+2026-03-02 10:42:13,298 INFO Row 2580: split into 1 chunks
+2026-03-02 10:42:13,304 INFO Row 2581: split into 1 chunks
+2026-03-02 10:42:13,325 INFO Row 2582: split into 1 chunks
+2026-03-02 10:42:13,340 INFO Row 2583: split into 1 chunks
+2026-03-02 10:42:13,359 INFO Row 2584: split into 1 chunks
+2026-03-02 10:42:13,380 INFO Row 2585: split into 1 chunks
+2026-03-02 10:42:13,409 INFO Row 2586: split into 1 chunks
+2026-03-02 10:42:13,440 INFO Row 2587: split into 1 chunks
+2026-03-02 10:42:13,485 INFO Row 2588: split into 1 chunks
+2026-03-02 10:42:13,528 INFO Row 2589: split into 1 chunks
+2026-03-02 10:42:13,544 INFO Row 2590: split into 1 chunks
+2026-03-02 10:42:13,559 INFO Row 2591: split into 1 chunks
+2026-03-02 10:42:13,568 INFO Row 2592: split into 1 chunks
+2026-03-02 10:42:13,578 INFO Row 2593: split into 1 chunks
+2026-03-02 10:42:13,621 INFO Row 2594: split into 1 chunks
+2026-03-02 10:42:13,632 INFO Row 2595: split into 1 chunks
+2026-03-02 10:42:13,654 INFO Row 2596: split into 1 chunks
+2026-03-02 10:42:13,671 INFO Row 2597: split into 1 chunks
+2026-03-02 10:42:13,717 INFO Row 2598: split into 1 chunks
+2026-03-02 10:42:13,737 INFO Row 2599: split into 1 chunks
+2026-03-02 10:42:13,748 INFO Row 2600: split into 1 chunks
+2026-03-02 10:42:13,767 INFO Row 2601: split into 1 chunks
+2026-03-02 10:42:13,861 INFO Row 2602: split into 1 chunks
+2026-03-02 10:42:13,894 INFO Row 2603: split into 1 chunks
+2026-03-02 10:42:13,923 INFO Row 2604: split into 1 chunks
+2026-03-02 10:42:13,949 INFO Row 2605: split into 1 chunks
+2026-03-02 10:42:13,961 INFO Row 2606: split into 1 chunks
+2026-03-02 10:42:14,001 INFO Row 2607: split into 1 chunks
+2026-03-02 10:42:14,035 INFO Row 2608: split into 1 chunks
+2026-03-02 10:42:14,052 INFO Row 2609: split into 1 chunks
+2026-03-02 10:42:14,082 INFO Row 2610: split into 1 chunks
+2026-03-02 10:42:14,119 INFO Row 2611: split into 1 chunks
+2026-03-02 10:42:14,152 INFO Row 2612: split into 1 chunks
+2026-03-02 10:42:14,170 INFO Row 2613: split into 1 chunks
+2026-03-02 10:42:14,206 INFO Row 2614: split into 1 chunks
+2026-03-02 10:42:14,224 INFO Row 2615: split into 1 chunks
+2026-03-02 10:42:14,242 INFO Row 2616: split into 1 chunks
+2026-03-02 10:42:14,260 INFO Row 2617: split into 1 chunks
+2026-03-02 10:42:14,283 INFO Row 2618: split into 1 chunks
+2026-03-02 10:42:14,322 INFO Row 2619: split into 1 chunks
+2026-03-02 10:42:14,338 INFO Row 2620: split into 1 chunks
+2026-03-02 10:42:14,363 INFO Row 2621: split into 1 chunks
+2026-03-02 10:42:14,406 INFO Row 2622: split into 1 chunks
+2026-03-02 10:42:14,425 INFO Row 2623: split into 1 chunks
+2026-03-02 10:42:14,453 INFO Row 2624: split into 1 chunks
+2026-03-02 10:42:14,479 INFO Row 2625: split into 1 chunks
+2026-03-02 10:42:14,499 INFO Row 2626: split into 1 chunks
+2026-03-02 10:42:14,523 INFO Row 2627: split into 1 chunks
+2026-03-02 10:42:14,558 INFO Row 2628: split into 1 chunks
+2026-03-02 10:42:14,570 INFO Row 2629: split into 1 chunks
+2026-03-02 10:42:14,623 INFO Row 2630: split into 1 chunks
+2026-03-02 10:42:14,643 INFO Row 2631: split into 1 chunks
+2026-03-02 10:42:14,668 INFO Row 2632: split into 1 chunks
+2026-03-02 10:42:14,691 INFO Row 2633: split into 1 chunks
+2026-03-02 10:42:14,718 INFO Row 2634: split into 1 chunks
+2026-03-02 10:42:14,748 INFO Row 2635: split into 1 chunks
+2026-03-02 10:42:14,776 INFO Row 2636: split into 1 chunks
+2026-03-02 10:42:14,801 INFO Row 2637: split into 1 chunks
+2026-03-02 10:42:14,827 INFO Row 2638: split into 1 chunks
+2026-03-02 10:42:14,889 INFO Row 2639: split into 1 chunks
+2026-03-02 10:42:14,905 INFO Row 2640: split into 1 chunks
+2026-03-02 10:42:14,937 INFO Row 2641: split into 1 chunks
+2026-03-02 10:42:14,966 INFO Row 2642: split into 1 chunks
+2026-03-02 10:42:14,992 INFO Row 2643: split into 1 chunks
+2026-03-02 10:42:15,007 INFO Row 2644: split into 1 chunks
+2026-03-02 10:42:15,033 INFO Row 2645: split into 1 chunks
+2026-03-02 10:42:15,067 INFO Row 2646: split into 1 chunks
+2026-03-02 10:42:15,091 INFO Row 2647: split into 1 chunks
+2026-03-02 10:42:15,113 INFO Row 2648: split into 1 chunks
+2026-03-02 10:42:15,137 INFO Row 2649: split into 1 chunks
+2026-03-02 10:42:15,149 INFO Row 2650: split into 1 chunks
+2026-03-02 10:42:15,185 INFO Row 2651: split into 1 chunks
+2026-03-02 10:42:15,217 INFO Row 2652: split into 1 chunks
+2026-03-02 10:42:15,247 INFO Row 2653: split into 1 chunks
+2026-03-02 10:42:15,263 INFO Row 2654: split into 1 chunks
+2026-03-02 10:42:15,283 INFO Row 2655: split into 1 chunks
+2026-03-02 10:42:15,311 INFO Row 2656: split into 1 chunks
+2026-03-02 10:42:15,340 INFO Row 2657: split into 1 chunks
+2026-03-02 10:42:15,362 INFO Row 2658: split into 1 chunks
+2026-03-02 10:42:15,388 INFO Row 2659: split into 1 chunks
+2026-03-02 10:42:15,421 INFO Row 2660: split into 1 chunks
+2026-03-02 10:42:15,456 INFO Row 2661: split into 1 chunks
+2026-03-02 10:42:15,486 INFO Row 2662: split into 1 chunks
+2026-03-02 10:42:15,506 INFO Row 2663: split into 1 chunks
+2026-03-02 10:42:15,537 INFO Row 2664: split into 1 chunks
+2026-03-02 10:42:15,550 INFO Row 2665: split into 1 chunks
+2026-03-02 10:42:15,558 INFO Row 2666: split into 1 chunks
+2026-03-02 10:42:15,570 INFO Row 2667: split into 1 chunks
+2026-03-02 10:42:15,579 INFO Row 2668: split into 1 chunks
+2026-03-02 10:42:15,588 INFO Row 2669: split into 1 chunks
+2026-03-02 10:42:15,610 INFO Row 2670: split into 1 chunks
+2026-03-02 10:42:15,628 INFO Row 2671: split into 1 chunks
+2026-03-02 10:42:15,630 INFO Total 2672 chunks to generate
+2026-03-02 10:42:15,630 INFO LLM dispatch 1/134 size 20
+/opt/mamba/envs/lcc/lib/python3.10/site-packages/vertexai/generative_models/_generative_models.py:433: UserWarning: This feature is deprecated as of June 24, 2025 and will be removed on June 24, 2026. For details, see https://cloud.google.com/vertex-ai/generative-ai/docs/deprecations/genai-vertexai-sdk.
+  warning_logs.show_deprecation_warning()
+2026-03-02 10:43:14,965 INFO LLM progress 20/2672 rate 0.34/s ETA 7867.9s empty 0/20
+2026-03-02 10:43:14,965 INFO LLM dispatch 2/134 size 20
+2026-03-02 10:44:18,870 INFO LLM progress 40/2672 rate 0.32/s ETA 8109.2s empty 0/20
+2026-03-02 10:44:18,870 INFO LLM dispatch 3/134 size 20
+2026-03-02 10:45:17,619 INFO LLM progress 60/2672 rate 0.33/s ETA 7922.6s empty 0/20
+2026-03-02 10:45:17,619 INFO LLM dispatch 4/134 size 20
+2026-03-02 10:46:22,785 INFO LLM progress 80/2672 rate 0.32/s ETA 8007.8s empty 0/20
+2026-03-02 10:46:22,785 INFO LLM dispatch 5/134 size 20
+2026-03-02 10:47:15,280 INFO LLM progress 100/2672 rate 0.33/s ETA 7707.0s empty 0/20
+2026-03-02 10:47:15,280 INFO LLM dispatch 6/134 size 20
+2026-03-02 10:48:19,906 INFO LLM progress 120/2672 rate 0.33/s ETA 7746.9s empty 0/20
+2026-03-02 10:48:19,906 INFO LLM dispatch 7/134 size 20
+2026-03-02 10:49:28,150 INFO LLM progress 140/2672 rate 0.32/s ETA 7822.4s empty 0/20
+2026-03-02 10:49:28,150 INFO LLM dispatch 8/134 size 20
+2026-03-02 10:50:08,701 INFO LLM progress 160/2672 rate 0.34/s ETA 7427.2s empty 0/20
+2026-03-02 10:50:08,701 INFO LLM dispatch 9/134 size 20
+2026-03-02 10:51:12,488 INFO LLM progress 180/2672 rate 0.34/s ETA 7432.5s empty 0/20
+2026-03-02 10:51:12,488 INFO LLM dispatch 10/134 size 20
+2026-03-02 10:52:08,557 INFO LLM progress 200/2672 rate 0.34/s ETA 7328.6s empty 0/20
+2026-03-02 10:52:08,557 INFO LLM dispatch 11/134 size 20
+2026-03-02 10:53:17,334 INFO LLM progress 220/2672 rate 0.33/s ETA 7375.0s empty 0/20
+2026-03-02 10:53:17,334 INFO LLM dispatch 12/134 size 20
+2026-03-02 10:54:04,722 INFO LLM progress 240/2672 rate 0.34/s ETA 7185.5s empty 0/20
+2026-03-02 10:54:04,722 INFO LLM dispatch 13/134 size 20
+2026-03-02 10:54:49,633 INFO LLM progress 260/2672 rate 0.34/s ETA 6994.8s empty 0/20
+2026-03-02 10:54:49,633 INFO LLM dispatch 14/134 size 20
+2026-03-02 10:55:55,327 INFO LLM progress 280/2672 rate 0.34/s ETA 7002.6s empty 0/20
+2026-03-02 10:55:55,327 INFO LLM dispatch 15/134 size 20
+2026-03-02 10:56:50,520 INFO LLM progress 300/2672 rate 0.34/s ETA 6917.5s empty 0/20
+2026-03-02 10:56:50,521 INFO LLM dispatch 16/134 size 20
+2026-03-02 10:57:52,804 INFO LLM progress 320/2672 rate 0.34/s ETA 6888.2s empty 0/20
+2026-03-02 10:57:52,804 INFO LLM dispatch 17/134 size 20
+2026-03-02 10:58:42,738 INFO LLM progress 340/2672 rate 0.34/s ETA 6770.4s empty 0/20
+2026-03-02 10:58:42,738 INFO LLM dispatch 18/134 size 20
+2026-03-02 10:59:28,060 INFO LLM progress 360/2672 rate 0.35/s ETA 6630.5s empty 0/20
+2026-03-02 10:59:28,060 INFO LLM dispatch 19/134 size 20
+2026-03-02 11:00:35,174 INFO LLM progress 380/2672 rate 0.35/s ETA 6632.0s empty 0/20
+2026-03-02 11:00:35,174 INFO LLM dispatch 20/134 size 20
+2026-03-02 11:01:43,185 INFO LLM progress 400/2672 rate 0.34/s ETA 6631.7s empty 0/20
+2026-03-02 11:01:43,185 INFO LLM dispatch 21/134 size 20
+2026-03-02 11:02:33,792 INFO LLM progress 420/2672 rate 0.34/s ETA 6531.7s empty 0/20
+2026-03-02 11:02:33,792 INFO LLM dispatch 22/134 size 20
+2026-03-02 11:03:39,462 INFO LLM progress 440/2672 rate 0.34/s ETA 6512.5s empty 0/20
+2026-03-02 11:03:39,462 INFO LLM dispatch 23/134 size 20
+2026-03-02 11:04:27,979 INFO LLM progress 460/2672 rate 0.35/s ETA 6406.9s empty 0/20
+2026-03-02 11:04:27,979 INFO LLM dispatch 24/134 size 20
+2026-03-02 11:06:03,636 INFO LLM progress 480/2672 rate 0.34/s ETA 6521.2s empty 0/20
+2026-03-02 11:06:03,636 INFO LLM dispatch 25/134 size 20
+2026-03-02 11:06:48,361 INFO LLM progress 500/2672 rate 0.34/s ETA 6397.5s empty 0/20
+2026-03-02 11:06:48,361 INFO LLM dispatch 26/134 size 20
+2026-03-02 11:07:44,713 INFO LLM progress 520/2672 rate 0.34/s ETA 6328.1s empty 0/20
+2026-03-02 11:07:44,714 INFO LLM dispatch 27/134 size 20
+2026-03-02 11:08:53,519 INFO LLM progress 540/2672 rate 0.34/s ETA 6308.7s empty 0/20
+2026-03-02 11:08:53,520 INFO LLM dispatch 28/134 size 20
+2026-03-02 11:09:55,508 INFO LLM progress 560/2672 rate 0.34/s ETA 6260.1s empty 0/20
+2026-03-02 11:09:55,508 INFO LLM dispatch 29/134 size 20
+2026-03-02 11:10:57,665 INFO LLM progress 580/2672 rate 0.34/s ETA 6211.2s empty 0/20
+2026-03-02 11:10:57,665 INFO LLM dispatch 30/134 size 20
+2026-03-02 11:11:55,892 INFO LLM progress 600/2672 rate 0.34/s ETA 6147.8s empty 0/20
+2026-03-02 11:11:55,892 INFO LLM dispatch 31/134 size 20
+2026-03-02 11:13:02,181 INFO LLM progress 620/2672 rate 0.34/s ETA 6111.5s empty 0/20
+2026-03-02 11:13:02,181 INFO LLM dispatch 32/134 size 20
+2026-03-02 11:14:08,252 INFO LLM progress 640/2672 rate 0.33/s ETA 6072.6s empty 0/20
+2026-03-02 11:14:08,252 INFO LLM dispatch 33/134 size 20
+2026-03-02 11:15:08,830 INFO LLM progress 660/2672 rate 0.33/s ETA 6015.3s empty 0/20
+2026-03-02 11:15:08,831 INFO LLM dispatch 34/134 size 20
+2026-03-02 11:15:56,942 INFO LLM progress 680/2672 rate 0.34/s ETA 5921.3s empty 0/20
+2026-03-02 11:15:56,942 INFO LLM dispatch 35/134 size 20
+2026-03-02 11:16:42,299 INFO LLM progress 700/2672 rate 0.34/s ETA 5822.1s empty 0/20
+2026-03-02 11:16:42,299 INFO LLM dispatch 36/134 size 20
+2026-03-02 11:17:54,227 INFO LLM progress 720/2672 rate 0.34/s ETA 5798.0s empty 0/20
+2026-03-02 11:17:54,227 INFO LLM dispatch 37/134 size 20
+2026-03-02 11:18:57,554 INFO LLM progress 740/2672 rate 0.34/s ETA 5748.8s empty 0/20
+2026-03-02 11:18:57,554 INFO LLM dispatch 38/134 size 20
+2026-03-02 11:20:05,771 INFO LLM progress 760/2672 rate 0.33/s ETA 5711.2s empty 0/20
+2026-03-02 11:20:05,771 INFO LLM dispatch 39/134 size 20
+2026-03-02 11:21:09,444 INFO LLM progress 780/2672 rate 0.33/s ETA 5661.0s empty 0/20
+2026-03-02 11:21:09,445 INFO LLM dispatch 40/134 size 20
+2026-03-02 11:22:16,064 INFO LLM progress 800/2672 rate 0.33/s ETA 5617.0s empty 0/20
+2026-03-02 11:22:16,065 INFO LLM dispatch 41/134 size 20
+2026-03-02 11:23:19,240 INFO LLM progress 820/2672 rate 0.33/s ETA 5564.2s empty 0/20
+2026-03-02 11:23:19,240 INFO LLM dispatch 42/134 size 20
+2026-03-02 11:24:18,241 INFO LLM progress 840/2672 rate 0.33/s ETA 5501.7s empty 0/20
+2026-03-02 11:24:18,241 INFO LLM dispatch 43/134 size 20
+2026-03-02 11:25:16,350 INFO LLM progress 860/2672 rate 0.33/s ETA 5437.5s empty 0/20
+2026-03-02 11:25:16,351 INFO LLM dispatch 44/134 size 20
+2026-03-02 11:26:23,915 INFO LLM progress 880/2672 rate 0.33/s ETA 5392.9s empty 0/20
+2026-03-02 11:26:23,915 INFO LLM dispatch 45/134 size 20
+2026-03-02 11:27:34,281 INFO LLM progress 900/2672 rate 0.33/s ETA 5352.7s empty 0/20
+2026-03-02 11:27:34,281 INFO LLM dispatch 46/134 size 20
+2026-03-02 11:28:14,900 INFO LLM progress 920/2672 rate 0.33/s ETA 5254.6s empty 0/20
+2026-03-02 11:28:14,900 INFO LLM dispatch 47/134 size 20
+2026-03-02 11:28:56,080 INFO LLM progress 940/2672 rate 0.34/s ETA 5160.0s empty 0/20
+2026-03-02 11:28:56,080 INFO LLM dispatch 48/134 size 20
+2026-03-02 11:29:57,529 INFO LLM progress 960/2672 rate 0.34/s ETA 5103.7s empty 0/20
+2026-03-02 11:29:57,529 INFO LLM dispatch 49/134 size 20
+2026-03-02 11:30:51,671 INFO LLM progress 980/2672 rate 0.34/s ETA 5034.6s empty 0/20
+2026-03-02 11:30:51,671 INFO LLM dispatch 50/134 size 20
+2026-03-02 11:31:54,897 INFO LLM progress 1000/2672 rate 0.34/s ETA 4981.3s empty 0/20
+2026-03-02 11:31:54,898 INFO LLM dispatch 51/134 size 20
+2026-03-02 11:32:42,882 INFO LLM progress 1020/2672 rate 0.34/s ETA 4903.0s empty 0/20
+2026-03-02 11:32:42,882 INFO LLM dispatch 52/134 size 20
+2026-03-02 11:33:36,754 INFO LLM progress 1040/2672 rate 0.34/s ETA 4835.0s empty 0/20
+2026-03-02 11:33:36,754 INFO LLM dispatch 53/134 size 20
+2026-03-02 11:34:29,221 INFO LLM progress 1060/2672 rate 0.34/s ETA 4765.4s empty 0/20
+2026-03-02 11:34:29,222 INFO LLM dispatch 54/134 size 20
+2026-03-02 11:35:22,724 INFO LLM progress 1080/2672 rate 0.34/s ETA 4698.0s empty 0/20
+2026-03-02 11:35:22,725 INFO LLM dispatch 55/134 size 20
+2026-03-02 11:36:24,451 INFO LLM progress 1100/2672 rate 0.34/s ETA 4642.9s empty 0/20
+2026-03-02 11:36:24,451 INFO LLM dispatch 56/134 size 20
+2026-03-02 11:37:07,869 INFO LLM progress 1120/2672 rate 0.34/s ETA 4562.1s empty 0/20
+2026-03-02 11:37:07,869 INFO LLM dispatch 57/134 size 20
+2026-03-02 11:37:47,900 INFO LLM progress 1140/2672 rate 0.34/s ETA 4478.1s empty 0/20
+2026-03-02 11:37:47,900 INFO LLM dispatch 58/134 size 20
+2026-03-02 11:38:49,494 INFO LLM progress 1160/2672 rate 0.34/s ETA 4423.7s empty 0/20
+2026-03-02 11:38:49,494 INFO LLM dispatch 59/134 size 20
+2026-03-02 11:39:44,917 INFO LLM progress 1180/2672 rate 0.34/s ETA 4361.3s empty 0/20
+2026-03-02 11:39:44,917 INFO LLM dispatch 60/134 size 20
+2026-03-02 11:40:40,423 INFO LLM progress 1200/2672 rate 0.34/s ETA 4299.2s empty 0/20
+2026-03-02 11:40:40,424 INFO LLM dispatch 61/134 size 20
+2026-03-02 11:41:49,115 INFO LLM progress 1220/2672 rate 0.34/s ETA 4253.0s empty 0/20
+2026-03-02 11:41:49,115 INFO LLM dispatch 62/134 size 20
+2026-03-02 11:42:55,832 INFO LLM progress 1240/2672 rate 0.34/s ETA 4203.8s empty 0/20
+2026-03-02 11:42:55,832 INFO LLM dispatch 63/134 size 20
+2026-03-02 11:44:08,326 INFO LLM progress 1260/2672 rate 0.34/s ETA 4160.6s empty 0/20
+2026-03-02 11:44:08,326 INFO LLM dispatch 64/134 size 20
+2026-03-02 11:45:15,467 INFO LLM progress 1280/2672 rate 0.34/s ETA 4110.6s empty 0/20
+2026-03-02 11:45:15,467 INFO LLM dispatch 65/134 size 20
+2026-03-02 11:46:09,028 INFO LLM progress 1300/2672 rate 0.34/s ETA 4045.7s empty 0/20
+2026-03-02 11:46:09,028 INFO LLM dispatch 66/134 size 20
+2026-03-02 11:47:18,796 INFO LLM progress 1320/2672 rate 0.34/s ETA 3997.8s empty 0/20
+2026-03-02 11:47:18,796 INFO LLM dispatch 67/134 size 20
+2026-03-02 11:48:03,193 INFO LLM progress 1340/2672 rate 0.34/s ETA 3924.0s empty 0/20
+2026-03-02 11:48:03,193 INFO LLM dispatch 68/134 size 20
+2026-03-02 11:49:07,793 INFO LLM progress 1360/2672 rate 0.34/s ETA 3870.6s empty 0/20
+2026-03-02 11:49:07,793 INFO LLM dispatch 69/134 size 20
+2026-03-02 11:50:08,550 INFO LLM progress 1380/2672 rate 0.34/s ETA 3813.2s empty 0/20
+2026-03-02 11:50:08,550 INFO LLM dispatch 70/134 size 20
+2026-03-02 11:51:02,842 INFO LLM progress 1400/2672 rate 0.34/s ETA 3749.9s empty 0/20
+2026-03-02 11:51:02,842 INFO LLM dispatch 71/134 size 20
+2026-03-02 11:52:08,103 INFO LLM progress 1420/2672 rate 0.34/s ETA 3696.5s empty 0/20
+2026-03-02 11:52:08,103 INFO LLM dispatch 72/134 size 20
+2026-03-02 11:52:58,604 INFO LLM progress 1440/2672 rate 0.34/s ETA 3630.1s empty 0/20
+2026-03-02 11:52:58,604 INFO LLM dispatch 73/134 size 20
+2026-03-02 11:53:52,563 INFO LLM progress 1460/2672 rate 0.34/s ETA 3567.0s empty 0/20
+2026-03-02 11:53:52,563 INFO LLM dispatch 74/134 size 20
+2026-03-02 11:54:58,231 INFO LLM progress 1480/2672 rate 0.34/s ETA 3513.7s empty 0/20
+2026-03-02 11:54:58,231 INFO LLM dispatch 75/134 size 20
+2026-03-02 11:55:58,763 INFO LLM progress 1500/2672 rate 0.34/s ETA 3455.9s empty 0/20
+2026-03-02 11:55:58,763 INFO LLM dispatch 76/134 size 20
+2026-03-02 11:56:53,311 INFO LLM progress 1520/2672 rate 0.34/s ETA 3393.6s empty 0/20
+2026-03-02 11:56:53,312 INFO LLM dispatch 77/134 size 20
+2026-03-02 11:57:48,674 INFO LLM progress 1540/2672 rate 0.34/s ETA 3332.1s empty 0/20
+2026-03-02 11:57:48,674 INFO LLM dispatch 78/134 size 20
+2026-03-02 11:58:46,073 INFO LLM progress 1560/2672 rate 0.34/s ETA 3272.2s empty 0/20
+2026-03-02 11:58:46,073 INFO LLM dispatch 79/134 size 20
+2026-03-02 11:59:37,149 INFO LLM progress 1580/2672 rate 0.34/s ETA 3207.9s empty 0/20
+2026-03-02 11:59:37,150 INFO LLM dispatch 80/134 size 20
+2026-03-02 12:00:23,299 INFO LLM progress 1600/2672 rate 0.34/s ETA 3140.7s empty 0/20
+2026-03-02 12:00:23,299 INFO LLM dispatch 81/134 size 20
+2026-03-02 12:01:15,693 INFO LLM progress 1620/2672 rate 0.34/s ETA 3078.1s empty 0/20
+2026-03-02 12:01:15,693 INFO LLM dispatch 82/134 size 20
+2026-03-02 12:02:05,233 INFO LLM progress 1640/2672 rate 0.34/s ETA 3013.9s empty 0/20
+2026-03-02 12:02:05,233 INFO LLM dispatch 83/134 size 20
+2026-03-02 12:03:16,827 INFO LLM progress 1660/2672 rate 0.34/s ETA 2963.6s empty 0/20
+2026-03-02 12:03:16,828 INFO LLM dispatch 84/134 size 20
+2026-03-02 12:04:21,160 INFO LLM progress 1680/2672 rate 0.34/s ETA 2908.4s empty 0/20
+2026-03-02 12:04:21,160 INFO LLM dispatch 85/134 size 20
+2026-03-02 12:05:10,620 INFO LLM progress 1700/2672 rate 0.34/s ETA 2844.5s empty 0/20
+2026-03-02 12:05:10,620 INFO LLM dispatch 86/134 size 20
+2026-03-02 12:06:15,599 INFO LLM progress 1720/2672 rate 0.34/s ETA 2789.6s empty 0/20
+2026-03-02 12:06:15,599 INFO LLM dispatch 87/134 size 20
+2026-03-02 12:07:19,205 INFO LLM progress 1740/2672 rate 0.34/s ETA 2733.6s empty 0/20
+2026-03-02 12:07:19,205 INFO LLM dispatch 88/134 size 20
+2026-03-02 12:08:15,809 INFO LLM progress 1760/2672 rate 0.34/s ETA 2673.9s empty 0/20
+2026-03-02 12:08:15,810 INFO LLM dispatch 89/134 size 20
+2026-03-02 12:09:20,765 INFO LLM progress 1780/2672 rate 0.34/s ETA 2618.4s empty 0/20
+2026-03-02 12:09:20,766 INFO LLM dispatch 90/134 size 20
+2026-03-02 12:10:27,166 INFO LLM progress 1800/2672 rate 0.34/s ETA 2563.5s empty 0/20
+2026-03-02 12:10:27,166 INFO LLM dispatch 91/134 size 20
+2026-03-02 12:11:17,536 INFO LLM progress 1820/2672 rate 0.34/s ETA 2500.7s empty 0/20
+2026-03-02 12:11:17,536 INFO LLM dispatch 92/134 size 20
+2026-03-02 12:12:14,475 INFO LLM progress 1840/2672 rate 0.34/s ETA 2441.2s empty 0/20
+2026-03-02 12:12:14,475 INFO LLM dispatch 93/134 size 20
+2026-03-02 12:13:10,374 INFO LLM progress 1860/2672 rate 0.34/s ETA 2381.3s empty 0/20
+2026-03-02 12:13:10,374 INFO LLM dispatch 94/134 size 20
+2026-03-02 12:13:56,752 INFO LLM progress 1880/2672 rate 0.34/s ETA 2317.5s empty 0/20
+2026-03-02 12:13:56,752 INFO LLM dispatch 95/134 size 20
+2026-03-02 12:14:56,082 INFO LLM progress 1900/2672 rate 0.34/s ETA 2259.3s empty 0/20
+2026-03-02 12:14:56,082 INFO LLM dispatch 96/134 size 20
+2026-03-02 12:15:57,967 INFO LLM progress 1920/2672 rate 0.34/s ETA 2202.1s empty 0/20
+2026-03-02 12:15:57,968 INFO LLM dispatch 97/134 size 20
+2026-03-02 12:16:44,999 INFO LLM progress 1940/2672 rate 0.34/s ETA 2139.2s empty 0/20
+2026-03-02 12:16:44,999 INFO LLM dispatch 98/134 size 20
+2026-03-02 12:17:32,053 INFO LLM progress 1960/2672 rate 0.34/s ETA 2076.6s empty 0/20
+2026-03-02 12:17:32,053 INFO LLM dispatch 99/134 size 20
+2026-03-02 12:18:39,899 INFO LLM progress 1980/2672 rate 0.34/s ETA 2021.6s empty 0/20
+2026-03-02 12:18:39,899 INFO LLM dispatch 100/134 size 20
+2026-03-02 12:19:49,605 INFO LLM progress 2000/2672 rate 0.34/s ETA 1966.9s empty 0/20
+2026-03-02 12:19:49,605 INFO LLM dispatch 101/134 size 20
+2026-03-02 12:20:55,074 INFO LLM progress 2020/2672 rate 0.34/s ETA 1910.6s empty 0/20
+2026-03-02 12:20:55,074 INFO LLM dispatch 102/134 size 20
+2026-03-02 12:21:58,650 INFO LLM progress 2040/2672 rate 0.34/s ETA 1853.6s empty 0/20
+2026-03-02 12:21:58,651 INFO LLM dispatch 103/134 size 20
+2026-03-02 12:22:53,549 INFO LLM progress 2060/2672 rate 0.34/s ETA 1793.8s empty 0/20
+2026-03-02 12:22:53,549 INFO LLM dispatch 104/134 size 20
+2026-03-02 12:23:40,740 INFO LLM progress 2080/2672 rate 0.34/s ETA 1731.9s empty 0/20
+2026-03-02 12:23:40,741 INFO LLM dispatch 105/134 size 20
+2026-03-02 12:24:40,476 INFO LLM progress 2100/2672 rate 0.34/s ETA 1673.7s empty 0/20
+2026-03-02 12:24:40,476 INFO LLM dispatch 106/134 size 20
+2026-03-02 12:25:31,193 INFO LLM progress 2120/2672 rate 0.34/s ETA 1613.2s empty 0/20
+2026-03-02 12:25:31,193 INFO LLM dispatch 107/134 size 20
+2026-03-02 12:26:37,316 INFO LLM progress 2140/2672 rate 0.34/s ETA 1556.6s empty 0/20
+2026-03-02 12:26:37,316 INFO LLM dispatch 108/134 size 20
+2026-03-02 12:27:40,590 INFO LLM progress 2160/2672 rate 0.34/s ETA 1499.2s empty 0/20
+2026-03-02 12:27:40,590 INFO LLM dispatch 109/134 size 20
+2026-03-02 12:28:36,015 INFO LLM progress 2180/2672 rate 0.34/s ETA 1440.0s empty 0/20
+2026-03-02 12:28:36,015 INFO LLM dispatch 110/134 size 20
+2026-03-02 12:29:46,595 INFO LLM progress 2200/2672 rate 0.34/s ETA 1384.0s empty 0/20
+2026-03-02 12:29:46,595 INFO LLM dispatch 111/134 size 20
+2026-03-02 12:30:49,077 INFO LLM progress 2220/2672 rate 0.34/s ETA 1326.2s empty 0/20
+2026-03-02 12:30:49,077 INFO LLM dispatch 112/134 size 20
+2026-03-02 12:32:00,602 INFO LLM progress 2240/2672 rate 0.34/s ETA 1270.0s empty 0/20
+2026-03-02 12:32:00,602 INFO LLM dispatch 113/134 size 20
+2026-03-02 12:33:05,770 INFO LLM progress 2260/2672 rate 0.34/s ETA 1212.3s empty 0/20
+2026-03-02 12:33:05,770 INFO LLM dispatch 114/134 size 20
+2026-03-02 12:34:03,369 INFO LLM progress 2280/2672 rate 0.34/s ETA 1153.3s empty 0/20
+2026-03-02 12:34:03,369 INFO LLM dispatch 115/134 size 20
+2026-03-02 12:34:57,672 INFO LLM progress 2300/2672 rate 0.34/s ETA 1093.7s empty 0/20
+2026-03-02 12:34:57,672 INFO LLM dispatch 116/134 size 20
+2026-03-02 12:36:03,963 INFO LLM progress 2320/2672 rate 0.34/s ETA 1036.0s empty 0/20
+2026-03-02 12:36:03,964 INFO LLM dispatch 117/134 size 20
+2026-03-02 12:37:06,697 INFO LLM progress 2340/2672 rate 0.34/s ETA 977.7s empty 0/20
+2026-03-02 12:37:06,697 INFO LLM dispatch 118/134 size 20
+2026-03-02 12:37:57,731 INFO LLM progress 2360/2672 rate 0.34/s ETA 917.8s empty 0/20
+2026-03-02 12:37:57,731 INFO LLM dispatch 119/134 size 20
+2026-03-02 12:39:01,256 INFO LLM progress 2380/2672 rate 0.34/s ETA 859.5s empty 0/20
+2026-03-02 12:39:01,256 INFO LLM dispatch 120/134 size 20
+2026-03-02 12:40:03,391 INFO LLM progress 2400/2672 rate 0.34/s ETA 801.0s empty 0/20
+2026-03-02 12:40:03,391 INFO LLM dispatch 121/134 size 20
+2026-03-02 12:41:09,254 INFO LLM progress 2420/2672 rate 0.34/s ETA 742.8s empty 0/20
+2026-03-02 12:41:09,254 INFO LLM dispatch 122/134 size 20
+2026-03-02 12:42:17,179 INFO LLM progress 2440/2672 rate 0.34/s ETA 684.7s empty 0/20
+2026-03-02 12:42:17,179 INFO LLM dispatch 123/134 size 20
+2026-03-02 12:43:18,735 INFO LLM progress 2460/2672 rate 0.34/s ETA 625.9s empty 0/20
+2026-03-02 12:43:18,735 INFO LLM dispatch 124/134 size 20
+2026-03-02 12:44:26,703 INFO LLM progress 2480/2672 rate 0.34/s ETA 567.6s empty 0/20
+2026-03-02 12:44:26,703 INFO LLM dispatch 125/134 size 20
+2026-03-02 12:45:18,994 INFO LLM progress 2500/2672 rate 0.34/s ETA 508.0s empty 0/20
+2026-03-02 12:45:18,994 INFO LLM dispatch 126/134 size 20
+2026-03-02 12:46:27,892 INFO LLM progress 2520/2672 rate 0.34/s ETA 449.5s empty 0/20
+2026-03-02 12:46:27,892 INFO LLM dispatch 127/134 size 20
+2026-03-02 12:47:22,095 INFO LLM progress 2540/2672 rate 0.34/s ETA 390.1s empty 0/20
+2026-03-02 12:47:22,096 INFO LLM dispatch 128/134 size 20
+2026-03-02 12:48:20,640 INFO LLM progress 2560/2672 rate 0.34/s ETA 331.0s empty 0/20
+2026-03-02 12:48:20,641 INFO LLM dispatch 129/134 size 20
+2026-03-02 12:49:07,420 INFO LLM progress 2580/2672 rate 0.34/s ETA 271.4s empty 0/20
+2026-03-02 12:49:07,421 INFO LLM dispatch 130/134 size 20
+2026-03-02 12:50:05,197 INFO LLM progress 2600/2672 rate 0.34/s ETA 212.4s empty 0/20
+2026-03-02 12:50:05,197 INFO LLM dispatch 131/134 size 20
+2026-03-02 12:51:09,556 INFO LLM progress 2620/2672 rate 0.34/s ETA 153.5s empty 0/20
+2026-03-02 12:51:09,556 INFO LLM dispatch 132/134 size 20
+2026-03-02 12:52:15,295 INFO LLM progress 2640/2672 rate 0.34/s ETA 94.5s empty 0/20
+2026-03-02 12:52:15,295 INFO LLM dispatch 133/134 size 20
+2026-03-02 12:53:00,813 INFO LLM progress 2660/2672 rate 0.34/s ETA 35.4s empty 0/20
+2026-03-02 12:53:00,813 INFO LLM dispatch 134/134 size 12
+2026-03-02 12:53:49,689 INFO LLM progress 2672/2672 rate 0.34/s ETA 0.0s empty 0/12
+2026-03-02 12:53:54,908 INFO Generation complete. Output saved to /share/lcc/dataflow-dp/outputs/monomer_demo/step_0.json
+2026-03-02 12:53:59,458 INFO Running MonomerSmilesEnrichStage rows 2672 api_workers 10 row_workers 10
+[13:11:11] WARNING: not removing hydrogen atom without neighbors
+[13:11:11] WARNING: not removing hydrogen atom without neighbors
+[13:11:51] Can't kekulize mol.  Unkekulized atoms: 5 6 7 21 22
+[13:11:51] Can't kekulize mol.  Unkekulized atoms: 5 6 7 21 22
+2026-03-02 13:15:13,861 INFO MonomerSmilesEnrichStage complete
+Scanning JSON under: /share/lcc/paper/
+Found 2672 JSON files. Preparing input...
+Prepared 2672 entries in /share/lcc/dataflow-dp/data/monomer_input_full.jsonl
+Initializing Pipeline...
+Compiling Pipeline...
+Running Pipeline (this may take a while)...
+Processing results...
+Loaded 2672 rows from storage. Writing CSVs with 10 workers...
+CSV progress: 200/2672 rows processed
+CSV progress: 400/2672 rows processed
+CSV progress: 600/2672 rows processed
+CSV progress: 800/2672 rows processed
+CSV progress: 1000/2672 rows processed
+CSV progress: 1200/2672 rows processed
+CSV progress: 1400/2672 rows processed
+CSV progress: 1600/2672 rows processed
+CSV progress: 1800/2672 rows processed
+CSV progress: 2000/2672 rows processed
+CSV progress: 2200/2672 rows processed
+CSV progress: 2400/2672 rows processed
+CSV progress: 2600/2672 rows processed
+Saved CSV results to 2526 folders. Non-empty: 2526, Empty: 146.
+Wrote 9389 problem rows to /share/lcc/dataflow-dp/data/monomer_smiles_issues.csv
+Monomer library concatenated: 11809 rows from 2662 files. Saved to /share/lcc/dataflow-dp/data/monomer_library_test.csv

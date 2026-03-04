@@ -1,12 +1,31 @@
 import argparse
 import copy
 import csv
-import ctypes
 import glob
 import json
 import os
 import sys
+import ctypes
 from typing import List, Tuple
+
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+
+from operators.general.chunked_generator import ChunkedPromptedGenerator
+from dataflow.operators.core_text import PandasOperator
+from prompts.generic_md_prompt import MarkdownSchemaPrompt
+from dataflow.serving.api_google_vertexai_serving import APIGoogleVertexAIServing
+try:
+    from dataflow.utils.storage import BatchedFileStorage as FileStorage
+except Exception:
+    from dataflow.utils.storage import LazyFileStorage as FileStorage
+try:
+    contractors = ()
+    from dataflow.pipeline import BatchedPipelineABC as PipelineBase
+except Exception:
+    class PipelineBase:
+        def __init__(self): ...
+        def compile(self): ...
+from utils.format_utils import safe_parse_json
 
 def _ensure_local_libstdcpp():
     try:
@@ -31,18 +50,15 @@ def _ensure_local_libstdcpp():
         parts = [p for p in cur_ld.split(":") if p]
         if lib_dir not in parts:
             os.environ["LD_LIBRARY_PATH"] = lib_dir + (":" + cur_ld if cur_ld else "")
+        try:
+            ctypes.CDLL(candidate, mode=ctypes.RTLD_GLOBAL)
+        except Exception:
+            pass
         cur = os.environ.get("LD_PRELOAD", "").strip()
         parts = [p for p in cur.split() if p]
         if candidate not in parts:
             os.environ["LD_PRELOAD"] = candidate + (" " + cur if cur else "")
         os.environ["LCC_LIBSTDCPP_READY"] = "1"
-        try:
-            os.execv(sys.executable, [sys.executable] + sys.argv)
-        except Exception:
-            try:
-                ctypes.CDLL(candidate, mode=ctypes.RTLD_GLOBAL)
-            except Exception:
-                pass
     except Exception:
         pass
 
@@ -72,7 +88,9 @@ def _load_env_from_setup_env(path=None):
                     continue
                 key, value = rest.split("=", 1)
                 key = key.strip()
-                if key not in wanted:
+                if key.startswith("PROPS_") or key in wanted:
+                    pass
+                else:
                     continue
                 if os.environ.get(key):
                     continue
@@ -89,24 +107,7 @@ def _load_env_from_setup_env(path=None):
 _ensure_local_libstdcpp()
 _load_env_from_setup_env()
 
-sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-
-from operators.general.chunked_generator import ChunkedPromptedGenerator
-from dataflow.operators.core_text import PandasOperator
-from prompts.generic_md_prompt import MarkdownSchemaPrompt
-from dataflow.serving.api_google_vertexai_serving import APIGoogleVertexAIServing
-try:
-    from dataflow.utils.storage import BatchedFileStorage as FileStorage
-except Exception:
-    from dataflow.utils.storage import LazyFileStorage as FileStorage
-try:
-    contractors = ()
-    from dataflow.pipeline import BatchedPipelineABC as PipelineBase
-except Exception:
-    class PipelineBase:
-        def __init__(self): ...
-        def compile(self): ...
-from utils.format_utils import safe_parse_json
+PAPER_ROOT = "/share/lcc/paper"
 
 def _env_int(name: str, default: int) -> int:
     v = os.getenv(name)
@@ -117,36 +118,32 @@ def _env_int(name: str, default: int) -> int:
     except Exception:
         return default
 
-def _norm_key(s: str) -> str:
-    s = s.lower()
-    for p in ["prompt_", "extract_polymer_", "extract_", "polymer_"]:
-        if s.startswith(p):
-            s = s[len(p):]
-    return s
-
-def _pair_prompts_and_schemas(prompt_dir: str, schema_dir: str) -> List[Tuple[str, str, str]]:
-    md_files = [f for f in glob.glob(os.path.join(prompt_dir, "*.md")) if os.path.isfile(f)]
-    json_files = [f for f in glob.glob(os.path.join(schema_dir, "*.json")) if os.path.isfile(f)]
-    schemas = {}
-    for jf in json_files:
-        base = os.path.splitext(os.path.basename(jf))[0]
-        schemas[_norm_key(base)] = jf
-    pairs = []
-    for mf in md_files:
-        base = os.path.splitext(os.path.basename(mf))[0]
-        key = _norm_key(base)
-        jp = schemas.get(key)
-        if not jp:
-            continue
-        pairs.append((key, mf, jp))
-    return pairs
-
 HEADERS = {
-    "mechanical": ["doi","file_path","polymer_name","record_type","metric_group","metric_type","value","unit","temperature","temperature_range","frequency","test_standard","test_conditions","test_mode","measurement_direction","notes"],
-    "thermal": ["doi","file_path","polymer_name","record_type","value","unit","temperature","temperature_range","test_method","decomposition_criterion","atmosphere","notes"],
-    "electrical": ["doi","file_path","polymer_name","record_type","value","unit","frequency","temperature","test_standard","test_method","loss_tangent","structural_info","notes"],
-    "optical": ["doi","file_path","polymer_name","record_type","value","unit","wavelength","ri_mode","method","conditions","thickness","transmittance_unit","notes"],
-    "other": ["doi","file_path","polymer_name","record_type","value","unit","conditions","notes"],
+    "mechanical": [
+        "doi", "file_path", "polymer_name", "record_type", "metric_group", "metric_type", 
+        "value", "temperature", "temperature_range", "frequency", 
+        "test_standard", "test_method", "test_conditions", "test_mode", "measurement_direction", "notes"
+    ],
+    "thermal": [
+        "doi", "file_path", "polymer_name", "record_type", 
+        "value", "temperature", "temperature_range", 
+        "test_standard", "test_method", "test_conditions", "heating_rate", "decomposition_criterion", "atmosphere", "notes"
+    ],
+    "electrical": [
+        "doi", "file_path", "polymer_name", "record_type", 
+        "value", "temperature", "frequency", 
+        "test_standard", "test_method", "test_conditions", "notes"
+    ],
+    "optical": [
+        "doi", "file_path", "polymer_name", "record_type", 
+        "value", "temperature", "wavelength", "thickness", 
+        "test_standard", "test_method", "test_conditions", "ri_mode", "notes"
+    ],
+    "other": [
+        "doi", "file_path", "polymer_name", "record_type", 
+        "value", "temperature", 
+        "test_standard", "test_method", "test_conditions", "notes"
+    ]
 }
 
 def _fixed_headers(category: str) -> List[str]:
@@ -162,99 +159,76 @@ def _first_non_empty(d, keys, default=""):
             return s
     return default
 
-def _normalize_item(category: str, key: str, item: dict, doi: str, file_path: str) -> dict:
-    row = {h: "" for h in _fixed_headers(category)}
-    row["doi"] = doi
+def _normalize_item(category: str, item: dict, doi: str, file_path: str) -> dict:
+    # Initialize with empty strings for all headers
+    headers = _fixed_headers(category)
+    row = {h: "" for h in headers}
+    
+    # Fill common fields
+    row["doi"] = _first_non_empty(item, ["doi"], doi)
     row["file_path"] = file_path
     row["polymer_name"] = str(item.get("polymer_name","")).strip()
-    row["record_type"] = key
-    if category == "mechanical":
-        val = _first_non_empty(item, ["modulus_value","strength_value","value"])
-        unit = _first_non_empty(item, ["modulus_unit","strength_unit","unit"])
-        row["value"] = val
-        row["unit"] = unit
-        if key == "tensile_modulus":
-            row["metric_group"] = "modulus"
-            row["metric_type"] = _first_non_empty(item, ["modulus_type"], "Tensile")
-            row["test_standard"] = _first_non_empty(item, ["test_standard"])
-            row["test_conditions"] = _first_non_empty(item, ["test_conditions"])
-        elif key == "flexural_modulus":
-            row["metric_group"] = "modulus"
-            row["metric_type"] = _first_non_empty(item, ["modulus_type"], "Flexural")
-            row["test_standard"] = _first_non_empty(item, ["test_standard"])
-            row["test_conditions"] = _first_non_empty(item, ["test_conditions"])
-        elif key == "storage_modulus":
-            row["metric_group"] = "modulus"
-            row["metric_type"] = "Storage"
-            row["temperature"] = _first_non_empty(item, ["temperature"])
-            row["frequency"] = _first_non_empty(item, ["frequency"])
-            row["test_mode"] = _first_non_empty(item, ["test_mode"])
-        elif key == "loss_modulus":
-            row["metric_group"] = "modulus"
-            row["metric_type"] = "Loss"
-            row["temperature"] = _first_non_empty(item, ["temperature"])
-            row["frequency"] = _first_non_empty(item, ["frequency"])
-        elif key == "tan_delta":
-            row["metric_group"] = "damping"
-            row["metric_type"] = "TanDelta"
-            row["temperature"] = _first_non_empty(item, ["temperature"])
-            row["frequency"] = _first_non_empty(item, ["frequency"])
-        elif key == "tensile_strength":
-            row["metric_group"] = "strength"
-            row["metric_type"] = _first_non_empty(item, ["strength_type"], "Not specified")
-            row["test_standard"] = _first_non_empty(item, ["test_standard"])
-            row["test_conditions"] = _first_non_empty(item, ["test_conditions"])
-        else:
-            row["metric_group"] = _first_non_empty(item, ["metric_group"])
-            row["metric_type"] = _first_non_empty(item, ["metric_type"])
-        row["measurement_direction"] = _first_non_empty(item, ["measurement_direction"])
-        row["notes"] = _first_non_empty(item, ["notes"])
-    elif category == "thermal":
-        val = _first_non_empty(item, ["cte_value","tg_value","td_value","tm_value","tc_value","thermal_conductivity_value","value"])
-        unit = _first_non_empty(item, ["cte_unit","tg_unit","td_unit","tm_unit","tc_unit","thermal_conductivity_unit","unit"])
-        row["value"] = val
-        row["unit"] = unit
-        row["temperature"] = _first_non_empty(item, ["temperature"])
-        row["temperature_range"] = _first_non_empty(item, ["temperature_range"])
-        row["test_method"] = _first_non_empty(item, ["test_method"])
-        row["decomposition_criterion"] = _first_non_empty(item, ["decomposition_criterion"])
-        row["atmosphere"] = _first_non_empty(item, ["atmosphere"])
-        row["notes"] = _first_non_empty(item, ["notes"])
-    elif category == "electrical":
-        val = _first_non_empty(item, ["dielectric_value","dielectric_loss","value"])
-        row["value"] = val
-        row["unit"] = _first_non_empty(item, ["unit"])
-        row["frequency"] = _first_non_empty(item, ["frequency"])
-        row["temperature"] = _first_non_empty(item, ["temperature"])
-        row["test_standard"] = _first_non_empty(item, ["test_standard"])
-        row["test_method"] = _first_non_empty(item, ["test_method"])
-        row["loss_tangent"] = _first_non_empty(item, ["loss_tangent"])
-        row["structural_info"] = _first_non_empty(item, ["structural_info"])
-        row["notes"] = _first_non_empty(item, ["notes"])
-    elif category == "optical":
-        val = _first_non_empty(item, ["ri_value","transmittance_value","yi_value","value"])
-        unit = _first_non_empty(item, ["transmittance_unit","unit"])
-        row["value"] = val
-        row["unit"] = unit
-        row["wavelength"] = _first_non_empty(item, ["measurement_wavelength","wavelength"])
-        row["ri_mode"] = _first_non_empty(item, ["ri_mode"])
-        row["method"] = _first_non_empty(item, ["method"])
-        row["conditions"] = _first_non_empty(item, ["conditions","test_conditions"])
-        row["thickness"] = _first_non_empty(item, ["thickness"])
-        row["transmittance_unit"] = _first_non_empty(item, ["transmittance_unit"])
-        row["notes"] = _first_non_empty(item, ["notes"])
-    else:
+    
+    # Map item keys to row keys
+    # Since headers now match schema keys exactly, we can try direct mapping first
+    for k, v in item.items():
+        if k in row:
+            row[k] = _first_non_empty(item, [k])
+            
+    # Handle any potential aliases or fallback logic if schema keys drift from headers
+    # But based on schema inspection, they match exactly now.
+    # Just ensure value is captured if schema uses 'value'
+    if "value" in row:
         row["value"] = _first_non_empty(item, ["value"])
-        row["unit"] = _first_non_empty(item, ["unit"])
-        row["conditions"] = _first_non_empty(item, ["conditions","test_conditions"])
-        row["notes"] = _first_non_empty(item, ["notes"])
+        
     return row
+
+_DEFAULT_PROMPT_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "prompts")
+_DEFAULT_SCHEMA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "schemas")
+
+_CATEGORY_FILES = {
+    "mechanical": (os.path.join("mechanical", "mechanical_properties.md"), ["mechanical_properties.json"]),
+    "optical": (os.path.join("optical", "prompt_optical_properties.md"), ["optical_properties.json"]),
+    "electrical": (os.path.join("electrical", "polymer_electrical_properties.md"), ["electrical_properties.json"]),
+    "other": (os.path.join("other", "polymer_other_properties.md"), ["other_properties.json"]),
+    "thermal": (os.path.join("thermal", "polymer_thermal_properties.md"), ["thermal_properties.json"]),
+}
+
+def _resolve_prompt_and_schema(category: str, prompt_dir: str, schema_dir: str) -> Tuple[str, str]:
+    if category not in _CATEGORY_FILES:
+        raise ValueError(f"Unsupported category: {category}")
+    prompt_file_rel, schema_candidates = _CATEGORY_FILES[category]
+    prompt_base = os.path.basename(prompt_file_rel)
+    prompt_candidates = [
+        os.path.join(prompt_dir, prompt_file_rel),
+        os.path.join(prompt_dir, prompt_base),
+        os.path.join(prompt_dir, category, prompt_base),
+    ]
+    md_path = ""
+    for cand in prompt_candidates:
+        if os.path.exists(cand):
+            md_path = cand
+            break
+    if not md_path:
+        raise FileNotFoundError(f"Prompt file not found for {category} in {prompt_dir}")
+    schema_path = ""
+    for name in schema_candidates:
+        for cand in [os.path.join(schema_dir, name), os.path.join(schema_dir, category, name)]:
+            if os.path.exists(cand):
+                schema_path = cand
+                break
+        if schema_path:
+            break
+    if not schema_path:
+        raise FileNotFoundError(f"Schema file not found for {category} in {schema_dir}")
+    return md_path, schema_path
 
 class ExtractCategoryProperties(PipelineBase):
     def __init__(self, entry_file_name: str, category: str, prompt_dir: str, schema_dir: str, max_chunk_len=32000, llm_max_workers=None, llm_max_tokens=None):
         super().__init__()
         self.category = category
-        self.pairs = _pair_prompts_and_schemas(prompt_dir, schema_dir)
+        md_path, schema_path = _resolve_prompt_and_schema(category, prompt_dir, schema_dir)
+        self.pairs = [(category, md_path, schema_path)]
         max_chunk_len = _env_int("PROPS_MAX_CHUNK_LEN", max_chunk_len)
         llm_max_workers = _env_int("PROPS_LLM_MAX_WORKERS", llm_max_workers if llm_max_workers is not None else 100)
         llm_max_tokens = _env_int("PROPS_LLM_MAX_TOKENS", llm_max_tokens if llm_max_tokens is not None else 64000)
@@ -266,18 +240,20 @@ class ExtractCategoryProperties(PipelineBase):
         self.llm_serving = APIGoogleVertexAIServing(
             project=os.getenv("GOOGLE_CLOUD_PROJECT") or os.getenv("GCP_PROJECT_ID"),
             location='us-central1',
-            model_name="gemini-2.5-flash",
+            model_name="gemini-2.5-pro",
             max_workers=llm_max_workers,
             max_tokens=llm_max_tokens,
         )
         self.generators = []
+        disable_chunking = bool(_env_int("PROPS_DISABLE_CHUNKING", 1))
         for key, md_path, schema_path in self.pairs:
             prompt = MarkdownSchemaPrompt(md_path=md_path, schema_path=schema_path)
             gen = ChunkedPromptedGenerator(
                 llm_serving=self.llm_serving,
                 prompt_template=prompt,
                 json_schema=prompt.build_json_schema(),
-                max_chunk_len=max_chunk_len
+                max_chunk_len=max_chunk_len,
+                disable_chunking=disable_chunking,
             )
             self.generators.append((key, gen))
         self.parse_operator = PandasOperator([
@@ -288,30 +264,38 @@ class ExtractCategoryProperties(PipelineBase):
 
     def _parse_all(self, row):
         out = []
-        doi_fb = str(row.get("doi_hint", "") or "").strip()
+        doi_fb = str(row.get("extracted_doi", "") or "").strip()
+        if not doi_fb:
+            doi_fb = str(row.get("doi_hint", "") or "").strip()
         file_path = str(row.get("file_path","") or "")
         if not doi_fb and file_path:
             try:
-                doi_fb = os.path.basename(os.path.dirname(file_path))
+                dir_path = os.path.dirname(file_path)
+                if dir_path.startswith(PAPER_ROOT + os.sep):
+                    doi_fb = os.path.relpath(dir_path, PAPER_ROOT).replace("\\", "/").strip("/")
+                else:
+                    doi_fb = os.path.basename(dir_path)
             except Exception:
                 doi_fb = ""
-        for key, _, _ in self.pairs:
-            raw_key = f"{key}_raw"
-            raw_list = row.get(raw_key)
-            if raw_list is None:
-                continue
-            items = []
-            for chunk_res in (raw_list or []):
-                parsed = safe_parse_json(chunk_res, [])
-                if isinstance(parsed, dict):
-                    parsed = [parsed]
-                if not isinstance(parsed, list):
-                    parsed = []
-                items.extend(parsed)
-            for item in items:
-                if isinstance(item, dict):
-                    norm = _normalize_item(self.category, key, item, doi_fb, file_path)
-                    out.append(norm)
+        key = self.category
+        raw_key = f"{key}_raw"
+        raw_list = row.get(raw_key)
+        items = []
+        for chunk_res in (raw_list or []):
+            parsed = safe_parse_json(chunk_res, [])
+            if isinstance(parsed, dict):
+                parsed = [parsed]
+            if not isinstance(parsed, list):
+                parsed = []
+            items.extend(parsed)
+        for item in items:
+            if isinstance(item, dict):
+                norm = _normalize_item(self.category, item, doi_fb, file_path)
+                # 以 Schema 为准：各类 Schema 都包含 record_type 与 value
+                # 因此前置过滤改为检查 record_type 与 value 是否非空
+                if not norm.get("record_type") or not norm.get("value"):
+                    continue
+                out.append(norm)
         return out
 
     def forward(self):
@@ -345,7 +329,7 @@ def find_json_files(base_path):
         return [base_path]
     return glob.glob(os.path.join(base_path, "**", "*.json"), recursive=True)
 
-def prepare_input_data(json_files, output_jsonl):
+def prepare_input_data(json_files, output_jsonl, base_dir=""):
     data = []
     for file_path in json_files:
         try:
@@ -354,10 +338,22 @@ def prepare_input_data(json_files, output_jsonl):
             text_content = content_json.get('content', '')
             if not text_content:
                 continue
+            dir_path = os.path.dirname(file_path)
+            doi_candidate = ""
+            try:
+                if dir_path.startswith(PAPER_ROOT + os.sep):
+                    rel = os.path.relpath(dir_path, PAPER_ROOT).replace("\\", "/").strip("/")
+                    doi_candidate = rel
+            except Exception:
+                doi_candidate = ""
+            if not doi_candidate:
+                doi_candidate = os.path.basename(dir_path)
+
             data.append({
                 "file_path": file_path,
                 "content": text_content,
-                "doi_hint": content_json.get('token', '')
+                "doi_hint": content_json.get('token', ''),
+                "extracted_doi": doi_candidate,
             })
         except Exception:
             continue
@@ -449,7 +445,6 @@ def save_results_to_csv(pipeline, category):
     return res
 
 def main():
-    _load_env_from_setup_env()
     logger = None
     try:
         from dataflow import get_logger
@@ -476,8 +471,8 @@ def main():
     if logger:
         logger.info(f"Running property_extract_pipeline categories {','.join(cats)} base_dir {args.base_dir or ''} entry_file {args.entry_file or ''}")
     for category in cats:
-        prompt_dir = args.prompt_dir or f"/share/lcc/prompt/{category}"
-        schema_dir = args.schema_dir or f"/share/lcc/schema/{category}"
+        prompt_dir = args.prompt_dir or _DEFAULT_PROMPT_DIR
+        schema_dir = args.schema_dir or _DEFAULT_SCHEMA_DIR
         entry_file = args.entry_file
         if args.base_dir:
             base_dir = args.base_dir
@@ -490,10 +485,14 @@ def main():
             json_files = find_json_files(base_dir)
             if args.limit and args.limit > 0:
                 json_files = json_files[:args.limit]
-            prepare_input_data(json_files, output_jsonl)
+            n = prepare_input_data(json_files, output_jsonl, base_dir=base_dir)
+            if logger:
+                logger.info(f"Prepared input_jsonl category {category} files {len(json_files)} rows {n} path {output_jsonl}")
             entry_file = output_jsonl
         if not entry_file:
             continue
+        if logger:
+            logger.info(f"Running category {category} entry_file {entry_file} prompt_dir {prompt_dir} schema_dir {schema_dir}")
         pipeline = ExtractCategoryProperties(
             entry_file_name=entry_file,
             category=category,

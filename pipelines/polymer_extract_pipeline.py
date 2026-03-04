@@ -9,7 +9,9 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 from operators.general.chunked_generator import ChunkedPromptedGenerator
 from prompts.polymer import PolymerExtractPrompt
-from serving.api_openai_serving import APIOpenAICompatServing
+# from serving.api_openai_serving import APIOpenAICompatServing
+from dataflow.serving.api_google_vertexai_serving import APIGoogleVertexAIServing
+
 try:
     from dataflow.utils.storage import BatchedFileStorage
 except Exception:
@@ -24,6 +26,7 @@ except Exception:
 from dataflow.operators.core_text import PandasOperator
 from utils.format_utils import safe_parse_json
 
+PAPER_ROOT = "/share/lcc/paper"
 
 class ExtractPolymer(BatchedPipelineABC):
     def __init__(self, entry_file_name: str, max_chunk_len=128000):
@@ -33,21 +36,45 @@ class ExtractPolymer(BatchedPipelineABC):
             cache_path="../polymer_output",
             cache_type="jsonl",
         )
-        self.llm_serving = APIOpenAICompatServing(
-            base_url=os.getenv("LLM_OPENAI_BASE_URL"),
-            api_key=os.getenv("LLM_OPENAI_API_KEY"),
+        
+        # 使用 APIGoogleVertexAIServing 以匹配用户 setup_env.sh 中的 GCP 配置
+        self.llm_serving = APIGoogleVertexAIServing(
+            project=os.getenv("GOOGLE_CLOUD_PROJECT") or os.getenv("GCP_PROJECT_ID"),
+            location="us-central1",
             model_name=os.getenv("LLM_OPENAI_MODEL", "gemini-2.5-pro"),
             max_workers=int(os.getenv("MONOMER_LLM_MAX_WORKERS", "100")),
-            max_tokens=int(os.getenv("MONOMER_LLM_MAX_TOKENS", "64000")),
+            max_tokens=int(os.getenv("MONOMER_LLM_MAX_TOKENS", "8192")),
             timeout=int(os.getenv("LLM_OPENAI_TIMEOUT", "60")),
         )
+        
         self.prompt = PolymerExtractPrompt()
         self.prompt_generator = ChunkedPromptedGenerator(
             llm_serving=self.llm_serving,
             prompt_template=self.prompt,
             json_schema=self.prompt.build_json_schema(),
-            max_chunk_len=max_chunk_len
+            max_chunk_len=max_chunk_len,
+            input_aux_keys=["monomer_whitelist"]
         )
+
+        def _read_monomers(p):
+            try:
+                d = os.path.dirname(p)
+                jp = os.path.join(d, "monomers.json")
+                if not os.path.exists(jp):
+                    return []
+                with open(jp, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                if isinstance(data, list):
+                    return [str(x).strip() for x in data if str(x).strip()]
+                return []
+            except Exception:
+                return []
+
+        self.load_monomer_whitelist = PandasOperator([
+            lambda df: df.assign(
+                monomer_whitelist=df["file_path"].apply(_read_monomers)
+            )
+        ])
 
         self.parse_result = PandasOperator([
             lambda df: df.assign(
@@ -67,6 +94,9 @@ class ExtractPolymer(BatchedPipelineABC):
         return items
 
     def forward(self, batch_size=100, resume_from_last=True):
+        self.load_monomer_whitelist.run(
+            storage=self.storage.step(),
+        )
         self.prompt_generator.run(
             storage=self.storage.step(),
             input_key="content",
@@ -87,11 +117,18 @@ if __name__ == "__main__":
         wanted = {
             "GOOGLE_APPLICATION_CREDENTIALS",
             "GCP_PROJECT_ID",
+            "GOOGLE_CLOUD_PROJECT",
             "HTTP_PROXY",
             "HTTPS_PROXY",
             "http_proxy",
             "https_proxy",
             "no_proxy",
+            "LLM_OPENAI_BASE_URL",
+            "LLM_OPENAI_API_KEY",
+            "LLM_OPENAI_MODEL",
+            "MONOMER_LLM_MAX_WORKERS",
+            "MONOMER_LLM_MAX_TOKENS",
+            "LLM_OPENAI_TIMEOUT",
         }
         with open(path, "r", encoding="utf-8") as f:
             for line in f:
@@ -120,6 +157,7 @@ if __name__ == "__main__":
     sys.path.append("/share/lcc/dataflow-dp")
 
     CSV_COLUMNS = [
+        "doi",
         "polymer_name",
         "polymer_type",
         "components",
@@ -152,10 +190,23 @@ if __name__ == "__main__":
                 text_content = content_json.get('content', '')
                 if not text_content:
                     continue
+                
+                dir_path = os.path.dirname(file_path)
+                doi_candidate = ""
+                try:
+                    if dir_path.startswith(PAPER_ROOT + os.sep):
+                        rel = os.path.relpath(dir_path, PAPER_ROOT).replace("\\", "/").strip("/")
+                        doi_candidate = rel
+                except Exception:
+                    doi_candidate = ""
+                if not doi_candidate:
+                    doi_candidate = os.path.basename(dir_path)
+
                 data.append({
                     "file_path": file_path,
                     "content": text_content,
-                    "doi_hint": content_json.get('token', '')
+                    "doi_hint": content_json.get('token', ''),
+                    "extracted_doi": doi_candidate
                 })
             except Exception:
                 continue
@@ -190,8 +241,9 @@ if __name__ == "__main__":
             if rows:
                 writer.writerows(rows)
 
-    def _row_to_csv_data(m):
+    def _row_to_csv_data(m, doi=""):
         return {
+            "doi": doi,
             "polymer_name": m.get("polymer_name"),
             "polymer_type": m.get("polymer_type"),
             "components": ";".join(m.get("components", [])),
@@ -213,6 +265,9 @@ if __name__ == "__main__":
     def _write_one(row):
         file_path = getattr(row, "file_path", None)
         polymers = getattr(row, "polymers", None)
+        doi = getattr(row, "extracted_doi", "")
+        if not doi:
+            doi = getattr(row, "doi_hint", "")
         if not file_path or not os.path.exists(file_path):
             return "skip", 0
         dir_path = os.path.dirname(file_path)
@@ -222,7 +277,7 @@ if __name__ == "__main__":
                 return "skip", 0
             _write_csv(csv_path, [])
             return "empty", 0
-        csv_data = [_row_to_csv_data(m) for m in polymers]
+        csv_data = [_row_to_csv_data(m, doi) for m in polymers]
         _write_csv(csv_path, csv_data)
         return "nonempty", len(csv_data)
 

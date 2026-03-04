@@ -1,0 +1,40 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "array",
+    "description": "A flat list of ALL individual mechanical and dynamic mechanical property measurements.",
+    "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+            "doi", "file_path", "polymer_name", "record_type", "metric_group", "metric_type", 
+            "value", "temperature", "temperature_range", "frequency", 
+            "test_standard", "test_method", "test_conditions", "test_mode", "measurement_direction", "notes"
+        ],
+        "properties": {
+            "doi": { "type": ["string", "null"], "description": "The Digital Object Identifier." },
+            "file_path": { "type": ["string", "null"], "description": "The local file path or filename." },
+            "polymer_name": { "type": "string", "description": "Name or ID of the polymer. Mandatory." },
+            "record_type": {
+                "type": "string",
+                "enum": [
+                    "Tensile Strength", "Tensile Modulus", "Elongation at Break", "Flexural Modulus",
+                    "Impact Strength", "Shear Strength", "Storage Modulus (E' or G')", 
+                    "Loss Modulus (E'' or G'')", "Tan Delta", "Poisson's Ratio"
+                ],
+                "description": "The specific mechanical property being measured."
+            },
+            "metric_group": { "type": ["string", "null"], "description": "Category (e.g., 'Static Mechanical', 'DMA')." },
+            "metric_type": { "type": ["string", "null"], "description": "Specifics (e.g., 'Ultimate', 'Yield', 'Break')." },
+            "value": { "type": "string", "description": "The numeric value ALONG WITH ITS UNIT (e.g., '50 MPa', '3 GPa', '15 %'). Extract mean if a range is provided. Use just the number for dimensionless values." },
+            "temperature": { "type": ["string", "null"], "description": "Test temperature (e.g., '25 °C', 'Tg Peak')." },
+            "temperature_range": { "type": ["string", "null"], "description": "Temperature sweep range if applicable." },
+            "frequency": { "type": ["string", "null"], "description": "Test frequency for dynamic properties (e.g., '1 Hz')." },
+            "test_standard": { "type": ["string", "null"], "description": "Testing standard (e.g., 'ASTM D638', 'ISO 179')." },
+            "test_method": { "type": ["string", "null"], "description": "Measurement method/instrument (e.g., 'Video Extensometer', 'DIC')." },
+            "test_conditions": { "type": ["string", "null"], "description": "Crosshead speed, strain rate, sample geometry (e.g., '5 mm/min', 'Dumbbell Type V')." },
+            "test_mode": { "type": ["string", "null"], "description": "Dynamic testing mode (e.g., 'Tensile', 'Shear')." },
+            "measurement_direction": { "type": ["string", "null"], "description": "Direction (e.g., 'MD', 'TD')." },
+            "notes": { "type": ["string", "null"], "description": "Any extra context." }
+        }
+    }
+}

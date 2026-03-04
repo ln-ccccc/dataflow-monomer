@@ -236,16 +236,11 @@ def prepare_input_data(json_files, output_jsonl):
                 try:
                     if dir_path.startswith(PAPER_ROOT + os.sep):
                         rel = os.path.relpath(dir_path, PAPER_ROOT).replace("\\", "/").strip("/")
-                        if rel.endswith("/merged"):
-                            rel = rel[: -len("/merged")]
-                        if rel == "merged":
-                            rel = ""
                         doi_candidate = rel
                 except Exception:
                     doi_candidate = ""
                 if not doi_candidate:
-                    parent_dir = os.path.basename(dir_path)
-                    doi_candidate = parent_dir.replace("merged", "").strip()
+                    doi_candidate = os.path.basename(dir_path)
 
                 entry = {
                     "file_path": file_path,

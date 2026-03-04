@@ -1,6 +1,5 @@
 import os
 import sys
-import ctypes
 import pandas as pd
 import time
 import re
@@ -8,90 +7,6 @@ import threading
 from urllib.parse import quote
 from concurrent.futures import ThreadPoolExecutor
 import requests
-
-def _ensure_local_libstdcpp():
-    try:
-        if os.environ.get("LCC_LIBSTDCPP_READY") == "1":
-            return
-        candidates = []
-        prefix = os.path.dirname(os.path.dirname(sys.executable))
-        candidates.append(os.path.join(prefix, "lib", "libstdc++.so.6"))
-        conda_prefix = os.environ.get("CONDA_PREFIX")
-        if conda_prefix:
-            candidates.append(os.path.join(conda_prefix, "lib", "libstdc++.so.6"))
-        candidates.append("/opt/mamba/envs/lcc/lib/libstdc++.so.6")
-        candidate = None
-        for c in candidates:
-            if os.path.exists(c):
-                candidate = c
-                break
-        if not candidate:
-            return
-        lib_dir = os.path.dirname(candidate)
-        cur_ld = os.environ.get("LD_LIBRARY_PATH", "")
-        parts = [p for p in cur_ld.split(":") if p]
-        if lib_dir not in parts:
-            os.environ["LD_LIBRARY_PATH"] = lib_dir + (":" + cur_ld if cur_ld else "")
-        cur = os.environ.get("LD_PRELOAD", "").strip()
-        parts = [p for p in cur.split() if p]
-        if candidate not in parts:
-            os.environ["LD_PRELOAD"] = candidate + (" " + cur if cur else "")
-        os.environ["LCC_LIBSTDCPP_READY"] = "1"
-        try:
-            os.execv(sys.executable, [sys.executable] + sys.argv)
-        except Exception:
-            try:
-                ctypes.CDLL(candidate, mode=ctypes.RTLD_GLOBAL)
-            except Exception:
-                pass
-    except Exception:
-        pass
-
-
-_ensure_local_libstdcpp()
-def _load_env_from_setup_env(path=None):
-    try:
-        if path is None:
-            path = os.getenv("LCC_SETUP_ENV_PATH", "/share/lcc/setup_env.sh")
-        if not os.path.exists(path):
-            return
-        wanted = {
-            "GOOGLE_APPLICATION_CREDENTIALS",
-            "GCP_PROJECT_ID",
-            "GOOGLE_CLOUD_PROJECT",
-            "HTTP_PROXY",
-            "HTTPS_PROXY",
-            "http_proxy",
-            "https_proxy",
-            "no_proxy",
-        }
-        with open(path, "r", encoding="utf-8") as f:
-            for line in f:
-                line = line.strip()
-                if not line.startswith("export "):
-                    continue
-                _, rest = line.split("export ", 1)
-                if "=" not in rest:
-                    continue
-                key, value = rest.split("=", 1)
-                key = key.strip()
-                if key.startswith("MONOMER_") or key in wanted:
-                    pass
-                else:
-                    continue
-                if os.environ.get(key):
-                    continue
-                value = value.strip()
-                if len(value) >= 2 and ((value[0] == value[-1] == '"') or (value[0] == value[-1] == "'")):
-                    value = value[1:-1]
-                os.environ[key] = value
-        for upper, lower in [("HTTP_PROXY", "http_proxy"), ("HTTPS_PROXY", "https_proxy")]:
-            if upper in os.environ and lower not in os.environ:
-                os.environ[lower] = os.environ[upper]
-    except Exception:
-        pass
-
-_load_env_from_setup_env()
 from rdkit import Chem
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))

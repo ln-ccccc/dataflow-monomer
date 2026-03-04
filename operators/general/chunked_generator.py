@@ -10,11 +10,9 @@ import tiktoken
 import os
 import time
 
-from prompts.monomer import MonomerNameExtractPrompt
-from prompts.polymer import PolymerExtractPrompt
-from dataflow.core.prompt import prompt_restrict
+from dataflow.core.prompt import PromptABC, prompt_restrict
 
-@prompt_restrict(MonomerNameExtractPrompt, PolymerExtractPrompt)
+@prompt_restrict(PromptABC)
 @OPERATOR_REGISTRY.register()
 class ChunkedPromptedGenerator(OperatorABC):
     """
@@ -27,16 +25,18 @@ class ChunkedPromptedGenerator(OperatorABC):
     def __init__(
         self,
         llm_serving: LLMServingABC,
-        prompt_template: MonomerNameExtractPrompt | PolymerExtractPrompt,
+        prompt_template: PromptABC,
         json_schema: dict = None,
         max_chunk_len: int = 128000,
-        input_aux_keys: list[str] = []
+        input_aux_keys: list[str] = [],
+        disable_chunking: bool = True,
     ):
         self.logger = get_logger()
         self.llm_serving = llm_serving
         self.prompt_template = prompt_template
         self.json_schema = json_schema
         self.max_chunk_len = max_chunk_len
+        self.disable_chunking = bool(disable_chunking)
         self.enc = tiktoken.get_encoding("cl100k_base")
         self.input_aux_keys = input_aux_keys
 
@@ -58,6 +58,8 @@ class ChunkedPromptedGenerator(OperatorABC):
     # === 递归二分分chunk ===
     def _split_recursive(self, text: str) -> list[str]:
         """递归地将文本拆分为不超过max_chunk_len的多个chunk"""
+        if self.disable_chunking:
+            return [text]
         token_len = self._count_tokens(text)
         if token_len <= self.max_chunk_len:
             return [text]
@@ -89,7 +91,10 @@ class ChunkedPromptedGenerator(OperatorABC):
                 continue
 
             chunks = self._split_recursive(raw_content)
-            self.logger.info(f"Row {i}: split into {len(chunks)} chunks")
+            if self.disable_chunking:
+                self.logger.info(f"Row {i}: chunking disabled, using 1 chunk")
+            else:
+                self.logger.info(f"Row {i}: split into {len(chunks)} chunks")
 
             system_prompts = self.prompt_template.build_prompt(**prompt_kwargs)
             if not isinstance(system_prompts, list):
@@ -119,7 +124,18 @@ class ChunkedPromptedGenerator(OperatorABC):
                     j = min(i + batch_size, total)
                     batch = all_llm_inputs[i:j]
                     self.logger.info(f"LLM dispatch {b}/{batches} size {len(batch)}")
-                    out = self.llm_serving.generate_from_input(batch)
+                    out = None
+                    if self.json_schema is not None:
+                        try:
+                            out = self.llm_serving.generate_from_input(
+                                batch,
+                                json_schema=self.json_schema,
+                                use_function_call=False,
+                            )
+                        except TypeError:
+                            out = None
+                    if out is None:
+                        out = self.llm_serving.generate_from_input(batch)
                     if not isinstance(out, list) or len(out) != len(batch):
                         out = [""] * len(batch)
                     all_responses.extend(out)
