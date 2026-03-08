@@ -43,6 +43,22 @@ python pipelines/polymer_extract_pipeline.py --base-dir /share/lcc/paper --max-c
 - 产物：
   - 每篇论文目录：`polymers.csv`
 
+- 大规模时推荐按文献分片运行（避免一次性加载过多 JSON），例如每批 2000 篇：
+
+```bash
+cd /share/lcc/dataflow-dp
+export MAX_CONCURRENT_CATEGORIES=1
+python pipelines/polymer_extract_pipeline.py \
+  --base-dir /share/lcc/paper \
+  --batch-size 2000 \
+  --use-batch
+```
+
+说明：
+- `--batch-size`：在脚本内部按文件列表自动分片，每批处理 `batch-size` 个 JSON  
+- `--offset` / `--limit`：可选，控制全局起始位置与总数（例如只跑 1–10000）
+- `--use-batch`：使用 Vertex AI Batch 推理，所有分片会尽快提交，然后并行等待结果
+
 ## 属性抽取（Property）
 - 单个类别（例如 thermal），扫描目录并写回各论文目录 `thermal.csv`：
 
@@ -59,6 +75,23 @@ python pipelines/property_extract_pipeline.py --categories thermal,mechanical,el
 
 - 产物：
   - 每篇论文目录：`{category}.csv`（如 `thermal.csv`、`mechanical.csv`）
+
+- 大规模数据（数万篇）推荐使用自动分片 + Batch 推理：
+
+```bash
+cd /share/lcc/dataflow-dp
+export MAX_CONCURRENT_CATEGORIES=1
+python pipelines/property_extract_pipeline.py \
+  --categories thermal,mechanical,electrical,optical,other \
+  --base-dir /share/lcc/paper \
+  --batch-size 2000 \
+  --use-batch
+```
+
+说明：
+- `--batch-size`：内部自动循环，按文件列表每 2000 篇一个批次  
+- `--offset` / `--limit`：可选，只在某个范围内分片  
+- `--use-batch`：每个批次内部使用 Vertex AI Batch，先提交所有分片 job，再并行等待与取回结果
 
 ## COF 抽取
 - 单文件可运行（使用仓库示例数据路径）：
@@ -92,8 +125,11 @@ python pipelines/content_evaluation_pipeline.py
   - `GOOGLE_APPLICATION_CREDENTIALS`：服务账号 JSON 凭证
   - `HTTP_PROXY` / `HTTPS_PROXY` / `no_proxy`：网络代理
   - `MONOMER_API_WORKERS` / `MONOMER_API_SLEEP_EVERY` / `MONOMER_API_SLEEP_SECONDS` / `MONOMER_API_TIMEOUT`：外部化学库访问并发与限流
-  - `MONOMER_LLM_MAX_WORKERS` / `MONOMER_LLM_MAX_TOKENS`：Monomer 名称识别（LLM）并发与 tokens（代理环境建议 LLM 并发 2–5）
-  - `PROPS_MAX_CHUNK_LEN` / `PROPS_LLM_MAX_WORKERS` / `PROPS_LLM_MAX_TOKENS`：属性抽取分块大小、并发与 tokens
+  - `MONOMER_LLM_MAX_WORKERS` / `MONOMER_LLM_MAX_TOKENS`：Monomer/Polymer 名称识别（实时 LLM）并发与 tokens（代理环境建议实时并发 2–5）
+  - `PROPS_MAX_CHUNK_LEN` / `PROPS_LLM_MAX_WORKERS` / `PROPS_LLM_MAX_TOKENS`：属性抽取分块大小、实时并发与 tokens
+  - `PROPS_BATCH_CHUNK_SIZE`：Vertex AI Batch 模式下，每个 Batch Job 中的请求条数（默认 1000）
+  - `MAX_CONCURRENT_CATEGORIES`：Property 流水线中同时并行的性质种类数（默认 2）
+  - `MONOMER_LLM_BATCH`：`ChunkedPromptedGenerator` 每批处理的行数（建议与 `--batch-size` 同量级）
 
 ## 说明
 - Monomer 以脚本 [run_monomer.py](file:///share/lcc/dataflow-dp/run_monomer.py) 为入口（负责扫描、调用流水线、落盘与问题汇总）。

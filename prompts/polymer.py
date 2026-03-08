@@ -17,7 +17,7 @@ class PolymerExtractPrompt(PromptABC):
         return ""
 
     def build_prompt(self, **kwargs) -> str:
-        base = _load_text("/share/lcc/dataflow-dp/prompts/details/polymer.md")
+        base = _load_text("/uni-curator/user/lcc/lcc/dataflow-dp/prompts/details/polymer.md")
         wl = kwargs.get("monomer_whitelist") or []
         
         # 如果白名单存在且非空，添加受限指令
@@ -43,4 +43,4 @@ class PolymerExtractPrompt(PromptABC):
             return f"{base}{fallback_note}"
 
     def build_json_schema(self) -> dict:
-        return json.load(open("/share/lcc/dataflow-dp/schemas/polymer.json"))
+        return json.load(open("/uni-curator/user/lcc/lcc/dataflow-dp/schemas/polymer.json"))

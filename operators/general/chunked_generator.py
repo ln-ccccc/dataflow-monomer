@@ -78,88 +78,82 @@ class ChunkedPromptedGenerator(OperatorABC):
         dataframe = storage.read("dataframe")
         self.logger.info(f"Loaded DataFrame with {len(dataframe)} rows.")
 
-        all_generated_results = []
-        all_llm_inputs = []
-        row_chunk_map = []  # 记录每个row对应的chunk数量
+        # === 分批处理每一行，避免全量攒内存 ===
+        all_generated_results = [[] for _ in range(len(dataframe))]
+        
+        use_batch = getattr(self.llm_serving, "use_batch", False)
+        # 如果是 batch 模式，我们还是得攒一波，但可以按行分批提交给 serving
+        # 如果是非 batch 模式，直接按行/小批次处理
+        
+        total_rows = len(dataframe)
+        done_rows = 0
+        
+        # 这里的 batch_size 是指一次处理多少个 chunk，对内存非常敏感
+        bs_env = os.getenv("MONOMER_LLM_BATCH")
+        try:
+            row_batch_size = int(bs_env) if bs_env else 20
+        except:
+            row_batch_size = 20
+        if row_batch_size <= 0:
+            row_batch_size = 20
 
-        # === 收集所有chunk ===
-        for i, row in dataframe.iterrows():
-            raw_content = row.get(input_key, "")
-            prompt_kwargs = {k: row.get(k) for k in self.input_aux_keys}
-            if not raw_content:
-                row_chunk_map.append(0)
+        for start_row in range(0, total_rows, row_batch_size):
+            end_row = min(start_row + row_batch_size, total_rows)
+            df_batch = dataframe.iloc[start_row:end_row]
+            
+            batch_llm_inputs = []
+            row_chunk_indices = [] # 记录当前 batch 中每一行对应的 chunk 在 batch_llm_inputs 中的范围
+            
+            curr_idx = 0
+            for i, row in df_batch.iterrows():
+                raw_content = row.get(input_key, "")
+                prompt_kwargs = {k: row.get(k) for k in self.input_aux_keys}
+                
+                if not raw_content:
+                    row_chunk_indices.append((curr_idx, curr_idx))
+                    continue
+                
+                chunks = self._split_recursive(raw_content)
+                system_prompts = self.prompt_template.build_prompt(**prompt_kwargs)
+                if not isinstance(system_prompts, list):
+                    system_prompts = [system_prompts] * len(chunks)
+                
+                llm_inputs = [system_prompt + chunk for chunk, system_prompt in zip(chunks, system_prompts)]
+                batch_llm_inputs.extend(llm_inputs)
+                row_chunk_indices.append((curr_idx, curr_idx + len(chunks)))
+                curr_idx += len(chunks)
+
+            if not batch_llm_inputs:
                 continue
 
-            chunks = self._split_recursive(raw_content)
-            if self.disable_chunking:
-                self.logger.info(f"Row {i}: chunking disabled, using 1 chunk")
-            else:
-                self.logger.info(f"Row {i}: split into {len(chunks)} chunks")
-
-            system_prompts = self.prompt_template.build_prompt(**prompt_kwargs)
-            if not isinstance(system_prompts, list):
-                system_prompts = [system_prompts] * len(chunks)
-            llm_inputs = [system_prompt + chunk for chunk, system_prompt in zip(chunks, system_prompts)]
-            all_llm_inputs.extend(llm_inputs)
-            row_chunk_map.append(len(chunks))
-
-        # === 分批并发调用 ===
-        total = len(all_llm_inputs)
-        self.logger.info(f"Total {total} chunks to generate")
-
-        try:
-            all_responses = []
-            if total > 0:
-                bs_env = os.getenv("MONOMER_LLM_BATCH")
-                try:
-                    batch_size = int(bs_env) if bs_env else 20
-                except Exception:
-                    batch_size = 20
-                if batch_size <= 0:
-                    batch_size = 20
-                done = 0
-                start = time.time()
-                batches = (total + batch_size - 1) // batch_size
-                for b, i in enumerate(range(0, total, batch_size), start=1):
-                    j = min(i + batch_size, total)
-                    batch = all_llm_inputs[i:j]
-                    self.logger.info(f"LLM dispatch {b}/{batches} size {len(batch)}")
-                    out = None
-                    if self.json_schema is not None:
-                        try:
-                            out = self.llm_serving.generate_from_input(
-                                batch,
-                                json_schema=self.json_schema,
-                                use_function_call=False,
-                            )
-                        except TypeError:
-                            out = None
-                    if out is None:
-                        out = self.llm_serving.generate_from_input(batch)
-                    if not isinstance(out, list) or len(out) != len(batch):
-                        out = [""] * len(batch)
-                    all_responses.extend(out)
-                    done += len(batch)
-                    elapsed = max(1e-6, time.time() - start)
-                    rate = done / elapsed
-                    remain = total - done
-                    eta = remain / rate if rate > 0 else 0
-                    empty_cnt = sum(1 for x in out if not (str(x).strip()))
-                    self.logger.info(f"LLM progress {done}/{total} rate {rate:.2f}/s ETA {eta:.1f}s empty {empty_cnt}/{len(out)}")
+            # 调用 LLM
+            try:
+                out = None
+                if self.json_schema is not None:
+                    try:
+                        out = self.llm_serving.generate_from_input(
+                            batch_llm_inputs,
+                            json_schema=self.json_schema,
+                            use_function_call=False,
+                        )
+                    except TypeError:
+                        out = None
+                if out is None:
+                    out = self.llm_serving.generate_from_input(batch_llm_inputs)
+                
+                if not isinstance(out, list) or len(out) != len(batch_llm_inputs):
+                    out = [""] * len(batch_llm_inputs)
+                
+                # 分配回结果
+                for idx_in_batch, (s_idx, e_idx) in enumerate(row_chunk_indices):
+                    if s_idx < e_idx:
+                        all_generated_results[start_row + idx_in_batch] = out[s_idx:e_idx]
+                
+            except Exception as e:
+                self.logger.error(f"Batch rows {start_row}-{end_row} failed: {e}")
             
-            # 重新按 row 划分
-            all_generated_results = []
-            idx = 0
-            for num_chunks in row_chunk_map:
-                if num_chunks == 0:
-                    all_generated_results.append([])
-                else:
-                    all_generated_results.append(all_responses[idx:idx + num_chunks])
-                    idx += num_chunks
-                    
-        except Exception as e:
-            self.logger.error(f"Global generation failed: {e}")
-            all_generated_results = [[] for _ in range(len(dataframe))]
+            done_rows += len(df_batch)
+            self.logger.info(f"Progress: {done_rows}/{total_rows} rows processed")
 
         dataframe[output_key] = all_generated_results
         output_file = storage.write(dataframe)

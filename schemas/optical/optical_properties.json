@@ -1,5 +1,4 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "array",
     "description": "A flat list of ALL individual optical property measurements.",
     "items": {
@@ -11,8 +10,8 @@
             "test_method", "test_conditions", "ri_mode", "notes"
         ],
         "properties": {
-            "doi": { "type": ["string", "null"], "description": "The Digital Object Identifier." },
-            "file_path": { "type": ["string", "null"], "description": "The local file path or filename." },
+            "doi": { "type": "string", "nullable": true, "description": "The Digital Object Identifier." },
+            "file_path": { "type": "string", "nullable": true, "description": "The local file path or filename." },
             "polymer_name": { "type": "string", "description": "Name or ID of the polymer. Mandatory." },
             "record_type": {
                 "type": "string",
@@ -24,14 +23,14 @@
                 "description": "The specific optical property."
             },
             "value": { "type": "string", "description": "The numeric value ALONG WITH ITS UNIT if applicable (e.g., '450 nm', '88 %', '1.65')." },
-            "temperature": { "type": ["string", "null"], "description": "Measurement temperature if reported." },
-            "wavelength": { "type": ["string", "null"], "description": "Measurement wavelength (e.g., '633 nm') or excitation wavelength ('λ_ex = 350 nm')." },
-            "thickness": { "type": ["string", "null"], "description": "Film thickness (e.g., '10 μm') or solution concentration." },
-            "test_standard": { "type": ["string", "null"], "description": "Standard (e.g., 'ASTM D1003' for Haze/Transmittance)." },
-            "test_method": { "type": ["string", "null"], "description": "Method/Instrument (e.g., 'Ellipsometry', 'UV-Vis')." },
-            "test_conditions": { "type": ["string", "null"], "description": "Criterion like '1% transmittance' for cut-off, or other states." },
-            "ri_mode": { "type": ["string", "null"], "description": "Mode for RI/Birefringence (e.g., 'n_TE', 'n_TM', 'In-plane')." },
-            "notes": { "type": ["string", "null"], "description": "Any extra visual context or descriptions." }
+            "temperature": { "type": "string", "nullable": true, "description": "Measurement temperature if reported." },
+            "wavelength": { "type": "string", "nullable": true, "description": "Measurement wavelength (e.g., '633 nm') or excitation wavelength ('λ_ex = 350 nm')." },
+            "thickness": { "type": "string", "nullable": true, "description": "Film thickness (e.g., '10 μm') or solution concentration." },
+            "test_standard": { "type": "string", "nullable": true, "description": "Standard (e.g., 'ASTM D1003' for Haze/Transmittance)." },
+            "test_method": { "type": "string", "nullable": true, "description": "Method/Instrument (e.g., 'Ellipsometry', 'UV-Vis')." },
+            "test_conditions": { "type": "string", "nullable": true, "description": "Criterion like '1% transmittance' for cut-off, or other states." },
+            "ri_mode": { "type": "string", "nullable": true, "description": "Mode for RI/Birefringence (e.g., 'n_TE', 'n_TM', 'In-plane')." },
+            "notes": { "type": "string", "nullable": true, "description": "Any extra visual context or descriptions." }
         }
     }
 }

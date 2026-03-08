@@ -6,10 +6,6 @@ import json
 import os
 import sys
 import ctypes
-from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
-
-import pandas as pd
-import types
 
 def _ensure_local_libstdcpp():
     try:
@@ -49,8 +45,14 @@ def _ensure_local_libstdcpp():
     except Exception:
         pass
 
-
 _ensure_local_libstdcpp()
+
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+PARENT_DIR = os.path.dirname(ROOT_DIR)
+
+from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
+import pandas as pd
+import types
 
 def _patch_file_storage_write():
     try:
@@ -125,8 +127,23 @@ def _env_float(name, default):
 
 def _load_env_from_setup_env(path=None):
     if path is None:
-        path = os.getenv("LCC_SETUP_ENV_PATH", "/share/lcc/setup_env.sh")
-    if not os.path.exists(path):
+        # 尝试多个可能的相对路径
+        candidates = [
+            os.path.join(ROOT_DIR, "setup_env.sh"),
+            os.path.join(PARENT_DIR, "setup_env.sh"),
+            "./setup_env.sh",
+            "../setup_env.sh",
+        ]
+        env_path = os.getenv("LCC_SETUP_ENV_PATH")
+        if env_path:
+            candidates.insert(0, env_path)
+        
+        for cand in candidates:
+            if os.path.exists(cand):
+                path = cand
+                break
+    
+    if path is None or not os.path.exists(path):
         return
     wanted = {
         "GOOGLE_APPLICATION_CREDENTIALS",
@@ -185,15 +202,13 @@ for upper, lower in [("HTTP_PROXY", "http_proxy"), ("HTTPS_PROXY", "https_proxy"
 
 # _ensure_no_proxy_for_gcp()
 
-ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 if ROOT_DIR not in sys.path:
     sys.path.append(ROOT_DIR)
-PARENT_DIR = os.path.dirname(ROOT_DIR)
 if PARENT_DIR and PARENT_DIR not in sys.path:
     sys.path.append(PARENT_DIR)
 from pipelines.monomer_extract_pipeline import ExtractMonomer
 
-PAPER_ROOT = "/share/lcc/paper"
+PAPER_ROOT = os.getenv("LCC_PAPER_ROOT", "../paper")
 
 CSV_COLUMNS = [
     "doi",
@@ -255,7 +270,7 @@ def prepare_input_data(json_files, output_jsonl):
     print(f"Prepared {count} entries in {output_jsonl}")
     return count
 
-def run_pipeline(input_file, api_workers=8, api_timeout=5, api_sleep_every=100, api_sleep_seconds=0.2, api_row_workers=2, llm_max_workers=100, llm_max_tokens=12800, library_output_path=None):
+def run_pipeline(input_file, api_workers=8, api_timeout=5, api_sleep_every=100, api_sleep_seconds=0.2, api_row_workers=2, llm_max_workers=100, llm_max_tokens=12800, library_output_path=None, use_batch=False):
     print("Initializing Pipeline...")
     pipeline = ExtractMonomer(
         entry_file_name=input_file,
@@ -268,6 +283,7 @@ def run_pipeline(input_file, api_workers=8, api_timeout=5, api_sleep_every=100, 
         llm_max_workers=llm_max_workers,
         llm_max_tokens=llm_max_tokens,
         library_output_path=library_output_path,
+        use_batch=use_batch,
     )
     print("Compiling Pipeline...")
     pipeline.compile()
@@ -503,12 +519,15 @@ def concat_monomers_csv(scan_dir, output_path):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--base-dir", default="/share/lcc/paper")
-    parser.add_argument("--input-jsonl", default="/share/lcc/dataflow-dp/data/monomer_input_full.jsonl")
+    parser.add_argument("--base-dir", default=PAPER_ROOT)
+    parser.add_argument("--input-jsonl", default="./data/monomer_input_full.jsonl")
     parser.add_argument("--limit", type=int, default=0)
-    parser.add_argument("--smiles-issue-csv", default="/share/lcc/dataflow-dp/data/monomer_smiles_issues.csv")
+    parser.add_argument("--offset", type=int, default=0)
+    parser.add_argument("--batch-size", type=int, default=0)
+    parser.add_argument("--smiles-issue-csv", default="./data/monomer_smiles_issues.csv")
     parser.add_argument("--output-dir", default=None, help="Output directory for results. If not set, results are written to the input directories.")
     parser.add_argument("--library-output-path", default=None, help="Output path for monomer library CSV. If not set, uses default path.")
+    parser.add_argument("--use-batch", action="store_true", help="是否使用 BigQuery 批量推理")
     args = parser.parse_args()
 
     base_dir = args.base_dir
@@ -526,32 +545,84 @@ def main():
     
     print(f"Scanning JSON under: {base_dir}")
     files = find_json_files(base_dir)
-    if args.limit and args.limit > 0:
-        files = files[:args.limit]
+    files = sorted(files)
     if not files:
         print("No JSON files found.")
         return
 
-    count = prepare_input_data(files, input_jsonl)
-    if count == 0:
-        print("No valid data found.")
+    start_global = max(0, int(args.offset or 0))
+    end_global = len(files)
+    if args.limit and args.limit > 0:
+        end_global = min(start_global + args.limit, end_global)
+    if start_global >= end_global:
+        print("Offset/limit range has no files to process.")
         return
 
-    pipeline = run_pipeline(
-        input_jsonl,
-        api_workers=api_workers,
-        api_timeout=api_timeout,
-        api_sleep_every=api_sleep_every,
-        api_sleep_seconds=api_sleep_seconds,
-        api_row_workers=api_row_workers,
-        llm_max_workers=llm_max_workers,
-        llm_max_tokens=llm_max_tokens,
-        library_output_path=args.library_output_path,
-    )
-    save_results_to_csv(pipeline, output_root=args.output_dir, csv_workers=csv_workers, progress_every=progress_every)
-    issue_count = write_smiles_issue_csv(pipeline, args.smiles_issue_csv)
-    if issue_count:
-        print(f"Wrote {issue_count} problem rows to {args.smiles_issue_csv}")
+    def run_one_batch(start_idx, batch_limit):
+        batch_files = files[start_idx:start_idx + batch_limit]
+        if not batch_files:
+            return None
+        base, ext = os.path.splitext(input_jsonl)
+        if not ext:
+            ext = ".jsonl"
+        batch_jsonl = f"{base}_{start_idx}_{batch_limit}{ext}"
+        count = prepare_input_data(batch_files, batch_jsonl)
+        if count == 0:
+            print(f"No valid data found for batch offset={start_idx} limit={batch_limit}.")
+            return None
+        pipeline = run_pipeline(
+            batch_jsonl,
+            api_workers=api_workers,
+            api_timeout=api_timeout,
+            api_sleep_every=api_sleep_every,
+            api_sleep_seconds=api_sleep_seconds,
+            api_row_workers=api_row_workers,
+            llm_max_workers=llm_max_workers,
+            llm_max_tokens=llm_max_tokens,
+            library_output_path=args.library_output_path,
+            use_batch=args.use_batch,
+        )
+        save_results_to_csv(pipeline, output_root=args.output_dir, csv_workers=csv_workers, progress_every=progress_every)
+        if args.smiles_issue_csv:
+            base_issue, ext_issue = os.path.splitext(args.smiles_issue_csv)
+            if not ext_issue:
+                ext_issue = ".csv"
+            issue_path = f"{base_issue}_{start_idx}_{batch_limit}{ext_issue}" if args.batch_size > 0 else args.smiles_issue_csv
+            issue_count = write_smiles_issue_csv(pipeline, issue_path)
+            if issue_count:
+                print(f"Wrote {issue_count} problem rows to {issue_path}")
+        return pipeline
+
+    if args.batch_size and args.batch_size > 0:
+        batch_size = int(args.batch_size)
+        if batch_size <= 0:
+            batch_size = 1000
+        batch_params = []
+        for start_idx in range(start_global, end_global, batch_size):
+            current_limit = min(batch_size, end_global - start_idx)
+            if current_limit <= 0:
+                break
+            batch_params.append((start_idx, current_limit))
+        if not batch_params:
+            print("No batches to run.")
+            return
+        max_batches = _env_int("MONOMER_MAX_CONCURRENT_BATCHES", 1)
+        if max_batches <= 1:
+            for start_idx, current_limit in batch_params:
+                print(f"Running batch offset={start_idx}, limit={current_limit} ...")
+                run_one_batch(start_idx, current_limit)
+        else:
+            print(f"Running {len(batch_params)} batches with concurrency={max_batches} ...")
+            with ThreadPoolExecutor(max_workers=max_batches) as executor:
+                futures = []
+                for start_idx, current_limit in batch_params:
+                    print(f"Submitting batch offset={start_idx}, limit={current_limit} ...")
+                    futures.append(executor.submit(run_one_batch, start_idx, current_limit))
+                wait(futures)
+    else:
+        total_limit = end_global - start_global
+        print(f"Running single batch offset={start_global}, limit={total_limit} ...")
+        run_one_batch(start_global, total_limit)
 
     if args.library_output_path:
         concat_monomers_csv(args.output_dir or base_dir, args.library_output_path)

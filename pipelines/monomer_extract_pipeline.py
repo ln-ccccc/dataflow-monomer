@@ -149,18 +149,18 @@ class MonomerListProcessor:
 
 
 class MonomerSeedStage:
-    def __init__(self, llm_serving, list_processor, max_chunk_len=24000):
+    def __init__(self, llm_serving, list_processor, max_chunk_len=24000, use_schema=True):
         self.prompt = MonomerNameExtractPrompt()
         self.prompt_generator = ChunkedPromptedGenerator(
             llm_serving=llm_serving,
             prompt_template=self.prompt,
-            json_schema=self.prompt.build_json_schema(),
+            json_schema=self.prompt.build_json_schema() if use_schema else None,
             max_chunk_len=max_chunk_len
         )
         self.process_seed_monomers = PandasOperator([
             lambda df: df.assign(
                 monomers_seed=df["monomers_seed_raw"].apply(list_processor.process_monomer_list_chunks)
-            )
+            ).drop(columns=["monomers_seed_raw", "content"], errors="ignore")
         ])
 
     def run(self, storage):
@@ -243,26 +243,68 @@ class MonomerSmilesEnrichStage:
         return session
 
     def _get(self, url, as_json=False):
+        logger = None
+        try:
+            from dataflow import get_logger
+            logger = get_logger()
+        except ImportError:
+            pass
+            
         try:
             self._throttle()
             session = self._get_session()
+            if logger:
+                logger.debug(f"Requesting URL: {url}")
+                
             res = session.get(url, timeout=self.timeout)
-            if res.status_code != 200:
+            
+            if res.status_code == 200:
+                if logger:
+                    logger.debug(f"Success 200 OK: {url}")
+                return res.json() if as_json else res.text
+            elif res.status_code == 404:
+                if logger:
+                    logger.debug(f"Not Found 404: {url}")
                 return None
-            return res.json() if as_json else res.text
-        except Exception:
+            else:
+                if logger:
+                    logger.warning(f"Request failed with status {res.status_code}: {url} - {res.text[:100]}")
+                return None
+                
+        except requests.exceptions.RequestException as e:
+            if logger:
+                logger.warning(f"Network/Retry Error for {url}: {str(e)}")
+            return None
+        except Exception as e:
+            if logger:
+                logger.error(f"Unexpected Error for {url}: {str(e)}")
             return None
 
     def _query_pubchem(self, name):
         name = self._clean_text(name)
         if not name:
             return ""
+        # 针对复杂名称中的特殊字符进行处理，例如引号
+        # 1. 先尝试完全 unquote，如果已经是 URL encoded
+        # 2. 对引号进行转义或替换
+        # 但最稳妥的是直接 quote，Python quote 会处理大部分特殊字符
+        # 注意：PubChem 可能不喜欢 name 中的某些字符，如换行符等，这里先 strip
+        
+        # 尝试 1: 直接 quote
+        encoded_name = quote(name, safe='')
+        
         url = (
             "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/"
-            f"{quote(name)}/property/"
+            f"{encoded_name}/property/"
             "IsomericSMILES,CanonicalSMILES,ConnectivitySMILES/JSON"
         )
-        data = self._get(url, as_json=True) or {}
+        data = self._get(url, as_json=True)
+        if not data:
+             # 尝试 2: 如果名字里有引号，尝试替换或特殊处理
+             # 有些时候 PubChem 对 URL 里的引号比较敏感，虽然 quote 了
+             # 这里可以加一些 fallback 逻辑，比如去掉括号里的内容等，但暂时先只做标准 quote
+             return ""
+             
         props = data.get("PropertyTable", {}).get("Properties", [])
         if not props:
             return ""
@@ -460,13 +502,17 @@ class MonomerSmilesEnrichStage:
             cached = self._name_cache.get(name)
         if cached is not None:
             return cached
+            
+        # 按照用户要求：PubChem, OPSIN, CACTUS 独立查询，互不干扰
+        # 可以并行查询以提高速度，也可以串行
+        # 这里为了逻辑清晰和避免过度并发，使用串行但确保每个都尝试
+        
         p = self._query_pubchem(name)
         o = self._query_opsin(name)
-        c = ""
+        c = self._query_cactus(name)
+        
         final = self._pick_final_smiles(p, o, c)
-        if not final:
-            c = self._query_cactus(name)
-            final = self._pick_final_smiles(p, o, c)
+        
         result = (p, o, c, final)
         with self._name_cache_lock:
             self._name_cache[name] = result
@@ -591,7 +637,8 @@ class ExtractMonomer:
         api_row_workers=None,
         llm_max_workers=None,
         llm_max_tokens=None,
-        library_output_path=None
+        library_output_path=None,
+        use_batch=False
     ):
         def _env_int(name, fallback):
             val = os.getenv(name)
@@ -625,7 +672,7 @@ class ExtractMonomer:
 
         self.storage = FileStorage(
             first_entry_file_name=entry_file_name,
-            cache_path="/share/lcc/dataflow-dp/outputs/monomer_demo",
+            cache_path="./outputs/monomer_demo",
             cache_type="json",
         )
         self.llm_serving = APIGoogleVertexAIServing(
@@ -634,12 +681,14 @@ class ExtractMonomer:
             model_name="gemini-2.5-pro",
             max_workers=llm_max_workers,
             max_tokens=llm_max_tokens,
+            use_batch=use_batch,
         )
         self.list_processor = MonomerListProcessor()
         self.seed_stage = MonomerSeedStage(
             llm_serving=self.llm_serving,
             list_processor=self.list_processor,
-            max_chunk_len=max_chunk_len
+            max_chunk_len=max_chunk_len,
+            use_schema=True
         )
         self.smiles_stage = MonomerSmilesEnrichStage(
             timeout=api_timeout,
@@ -650,7 +699,7 @@ class ExtractMonomer:
         )
         
         # 使用传入的 library_output_path，如果未传入则使用默认值
-        default_library_path = "/share/lcc/dataflow-dp/data/monomer_library.csv"
+        default_library_path = "./data/monomer_library.csv"
         lib_path = library_output_path if library_output_path else default_library_path
         
         self.library_stage = MonomerLibrarySaveStage(library_path=lib_path)
@@ -665,7 +714,7 @@ class ExtractMonomer:
 
 
 class MonomerLibrarySaveStage:
-    def __init__(self, library_path="/share/lcc/dataflow-dp/data/monomer_library.csv"):
+    def __init__(self, library_path="./data/monomer_library.csv"):
         self.library_path = library_path
 
     def _normalize_list(self, lst):

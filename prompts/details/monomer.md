@@ -75,6 +75,19 @@ DEFINITIONS & SCOPE:
    - Missing optional fields must be returned as empty lists or null.
    - Do NOT fabricate CAS numbers, IUPAC names, or other metadata.
 
+6.  **NO CAS LOOKUP**: Do NOT guess or recall CAS numbers from your training data. **Extract CAS numbers ONLY if they appear in the text.** If not found, return `null`.
+
+7.  **NO IUPAC CONVERSION**: Do NOT convert common names to IUPAC names. Extract the IUPAC name ONLY if it is explicitly written in the text.
+
+8.  **Monomer Entity Filter**:
+    * Extract ONLY small molecule compounds acting as **monomers**.
+    * **FILTERING RULE**: **EXCLUDE** entities starting with "**poly**" (case-insensitive) to avoid extracting polymers.
+    * **EXCLUDE**: Solvents (DMF, THF, DMSO, Water, etc.), Catalysts, Initiators, unless they are incorporated into the backbone.
+
+9.
+* `iupac_name`: String. **EXTRACT ONLY IF IN TEXT.** Otherwise `null`.
+* `cas_no`: List[String]. **EXTRACT ONLY IF IN TEXT.** Otherwise `null`.
+
 --------------------------------------------------------------------
 
 OUTPUT FORMAT:
