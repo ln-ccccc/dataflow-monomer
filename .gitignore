@@ -8,6 +8,7 @@ __pycache__/
 *.log/
 logs/
 
+*.jsonl
 # Data outputs (keep directory structure)
 data/*
 !data/.gitkeep
@@ -20,3 +21,4 @@ outputs/
 
 # OS/Editor
 Thumbs.db
+*.log

@@ -17,7 +17,7 @@
                 "type": "string",
                 "enum": [
                     "Dielectric Constant (Dk)", "Dielectric Loss (Df / tan δ)", "Breakdown Strength", 
-                    "Electrical Conductivity", "Volume Resistivity", "Remnant Polarization (Pr)", 
+                    "Electrical Conductivity", "Volume Resistivity", "Surface Resistivity", "Remnant Polarization (Pr)", 
                     "Coercive Field (Ec)", "Piezoelectric Coefficient (d33)"
                 ],
                 "description": "The specific electrical property being measured."

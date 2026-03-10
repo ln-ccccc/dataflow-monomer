@@ -16,7 +16,7 @@
                 "type": "string",
                 "enum": [
                     "Crystallinity", "Density", "Intrinsic Viscosity", "Dynamic Viscosity", 
-                    "Melt Viscosity", "Solubility", "Water Absorption / Solvent Uptake", 
+                    "Melt Viscosity", "Minimum Viscosity", "Solubility", "Water Absorption", "Solvent Uptake", 
                     "Gas Permeability", "Gas Separation Selectivity", "Solubility Coefficient"
                 ],
                 "description": "The specific property being measured."

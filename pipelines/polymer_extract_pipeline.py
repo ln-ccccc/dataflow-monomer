@@ -146,7 +146,7 @@ class ExtractPolymer(BatchedPipelineABC):
             model_name=os.getenv("LLM_OPENAI_MODEL", "gemini-2.5-pro"),
             max_workers=int(os.getenv("MONOMER_LLM_MAX_WORKERS", "100")),
             max_tokens=int(os.getenv("MONOMER_LLM_MAX_TOKENS", "8192")),
-            timeout=int(os.getenv("LLM_OPENAI_TIMEOUT", "60")),
+            # timeout=int(os.getenv("LLM_OPENAI_TIMEOUT", "60")),
             use_batch=use_batch,
         )
         

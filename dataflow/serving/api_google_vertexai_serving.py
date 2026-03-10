@@ -145,7 +145,7 @@ class BigQueryClient:
         
         job_config = bigquery.LoadJobConfig(
             source_format=bigquery.SourceFormat.CSV,
-            autodetect=False, # We explicitly define schema
+            autodetect=False, 
             skip_leading_rows=1,
             allow_quoted_newlines=True,
             write_disposition=bigquery.WriteDisposition.WRITE_TRUNCATE,

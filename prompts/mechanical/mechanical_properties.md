@@ -10,19 +10,29 @@ Output a FLAT LIST of independent measurement records (Long Format) strictly map
    - Multiple Metric Types: If a table reports both "Yield Strength" and "Break/Ultimate Strength", create TWO separate records.
    - Anisotropy/Direction: If values are reported for both "MD" (Machine Direction) and "TD" (Transverse Direction), create TWO separate records.
    - Multiple DMA Temperatures: If Storage Modulus (E') is reported at 25 °C (glassy state) and 200 °C (rubbery state), create TWO separate records.
-3. OCR CORRECTION & DATA CLEANING: 
+3. SYNONYM RESOLUTION (To Boost Recall): Authors frequently use varied terminology. You MUST recognize these synonyms and map them STRICTLY to the corresponding `record_type` ENUM:
+   - "Young's Modulus", "Elastic Modulus", "E" -> Map to "Tensile Modulus".
+   - "Strain at break", "Extension at break", "Elongation" -> Map to "Elongation at Break".
+   - "Bending Strength", "Transverse Rupture Strength" -> Map to "Flexural Strength".
+   - "Bending Modulus" -> Map to "Flexural Modulus".
+   - "G'" -> Map to "Storage Modulus (E' or G')".
+   - "G''" -> Map to "Loss Modulus (E'' or G'')".
+4. TABLE & CONTEXT ALIGNMENT (To Boost Precision): 
+   - Pay strict attention to table headers (columns) and rows to avoid mixing up polymers or properties.
+   - Do NOT confuse Storage Modulus (E'/G') with Loss Modulus (E''/G'').
+5. OCR CORRECTION & DATA CLEANING: 
    - Fix common PDF extraction errors specific to mechanical units (e.g., "Mpa" -> "MPa", "Gpa" -> "GPa", "k]/m2" -> "kJ/m^2").
    - Merge table header context (which often contains the units) with the cell value.
    - Preserve error margins exactly as written (e.g., "50.5 ± 2.1 MPa").
    - DO NOT extract values vaguely "estimated visually from stress-strain curves" unless exact numerical values are explicitly stated in text/tables.
-4. Faithful Value & Unit Merging: The `value` field MUST contain BOTH the numeric value AND the unit (e.g., "50 MPa", "15.4 %", "5.2 kJ/m^2"). 
+6. Faithful Value & Unit Merging: The `value` field MUST contain BOTH the numeric value AND the unit (e.g., "50 MPa", "15.4 %", "5.2 kJ/m^2"). 
    - CRITICAL: Be strictly faithful to the original text. If a range is provided in the literature (e.g., "2.6-2.7 GPa"), extract it EXACTLY as "2.6-2.7 GPa". DO NOT calculate or output the mean/median.
    - For intrinsically dimensionless values (like Tan Delta or Poisson's ratio), output just the number.
-5. Null Handling: Your output MUST contain exactly the 16 keys defined below. If a field is not reported or not applicable (e.g., `frequency` for a static tensile test), you MUST output `null`. Do not invent data.
+7. Null Handling: Your output MUST contain exactly the 16 keys defined below. If a field is not reported or not applicable (e.g., `frequency` for a static tensile test), you MUST output `null`. Do not invent data.
 
 ### TARGET PROPERTIES (`record_type` ENUM):
 Classify the property STRICTLY into one of these exact strings:
-"Tensile Strength", "Tensile Modulus", "Elongation at Break", "Flexural Modulus", "Impact Strength", "Shear Strength", "Storage Modulus (E' or G')", "Loss Modulus (E'' or G'')", "Tan Delta", "Poisson's Ratio".
+"Tensile Strength", "Tensile Modulus", "Elongation at Break", "Flexural Modulus", "Flexural Strength", "Impact Strength", "Impact Modulus", "Shear Strength", "Shear Modulus", "Storage Modulus (E' or G')", "Loss Modulus (E'' or G'')", "Tan Delta", "Poisson's Ratio".
 
 ### FIELD DEFINITIONS & MAPPING GUIDE (16 Fixed Headers):
 * `doi` (String | null): The Document Object Identifier.

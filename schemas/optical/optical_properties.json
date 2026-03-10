@@ -18,7 +18,7 @@
                 "enum": [
                     "Refractive Index (n)", "Transmittance", "Cut-off Wavelength (λ_cut)", 
                     "Maximum Absorption Wavelength (λ_max)", "Emission Wavelength (λ_em)", 
-                    "Birefringence (Δn)", "Abbe Number (νd)", "Haze", "Yellow Index (YI) / Whiteness Index (WI)"
+                    "Birefringence (Δn)", "Abbe Number (νd)", "Haze", "Yellow Index (YI) / Whiteness Index (WI)", "Thickness direction Retardation (Rth)"
                 ],
                 "description": "The specific optical property."
             },

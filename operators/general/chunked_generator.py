@@ -1,10 +1,10 @@
 import pandas as pd
 from dataflow.utils.registry import OPERATOR_REGISTRY
-from dataflow import get_logger
+# from dataflow import get_logger
+import logging
 
 from dataflow.utils.storage import DataFlowStorage
-from dataflow.core import OperatorABC
-from dataflow.core import LLMServingABC
+from dataflow.core import OperatorABC, LLMServingABC
 
 import tiktoken
 import os
@@ -31,7 +31,7 @@ class ChunkedPromptedGenerator(OperatorABC):
         input_aux_keys: list[str] = [],
         disable_chunking: bool = True,
     ):
-        self.logger = get_logger()
+        self.logger = logging.getLogger() # Use root logger directly
         self.llm_serving = llm_serving
         self.prompt_template = prompt_template
         self.json_schema = json_schema

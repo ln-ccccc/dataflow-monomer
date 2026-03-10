@@ -16,8 +16,8 @@
             "record_type": {
                 "type": "string",
                 "enum": [
-                    "Tensile Strength", "Tensile Modulus", "Elongation at Break", "Flexural Modulus",
-                    "Impact Strength", "Shear Strength", "Storage Modulus (E' or G')", 
+                    "Tensile Strength", "Tensile Modulus", "Elongation at Break", "Flexural Modulus","Flexural Strength",
+                    "Impact Strength", "Impact Modulus", "Shear Strength", "Shear Modulus", "Storage Modulus (E' or G')", 
                     "Loss Modulus (E'' or G'')", "Tan Delta", "Poisson's Ratio"
                 ],
                 "description": "The specific mechanical property being measured."

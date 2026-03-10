@@ -23,7 +23,15 @@ Output a FLAT LIST of independent measurement records strictly mapped to the pro
      * CRITICAL: You MUST include the monomer abbreviations (matching the library) in these specific fields to maintain correspondence (e.g., `diamine_ratio`: "ODA:PDA = 7:3". Do NOT just write "7:3").
    - Feed Ratio Text: ALWAYS extract the raw contextual text describing the ratio into `feed_ratio_text` as a backup.
 
-3. MOLECULAR WEIGHT (MW) EXTRACTION:
+3. TWO-STEP SYNTHESIS & PRECURSORS (CRITICAL FOR POLYIMIDES):
+   - Polyimides (PI) are frequently synthesized via a two-step method: Dianhydride + Diamine -> Poly(amic acid) (PAA) -> Polyimide (PI).
+   - MW & Viscosity Misattribution: Researchers usually measure Molecular Weight (GPC/SEC) and Inherent Viscosity on the soluble PAA precursor, because the final fully imidized PI might be insoluble.
+   - SEPARATION RULE: You MUST treat the PAA precursor and the final PI as TWO SEPARATE polymer records if both are discussed or characterized.
+     * Record 1 (The Precursor): `polymer_name` = e.g., "PAA-1", `polymer_type` = "Poly(amic acid)" or "PAA". Assign the MW or viscosity data here if the text specifies it was measured on the precursor.
+     * Record 2 (The Final Polymer): `polymer_name` = e.g., "PI-1", `polymer_type` = "Polyimide". Assign `null` to MW/viscosity fields UNLESS the text explicitly states the fully imidized PI was soluble and measured.
+     * Both records MUST share the exact same `components` (monomers) and stoichiometry ratio data.
+
+4. MOLECULAR WEIGHT (MW) EXTRACTION:
    - Extract Number-average MW (Mn), Weight-average MW (Mw), and Polydispersity Index (PDI).
    - Test Method Standardization: USE ABBREVIATIONS ONLY.
      - "Gel Permeation Chromatography" -> "GPC"
@@ -32,21 +40,21 @@ Output a FLAT LIST of independent measurement records strictly mapped to the pro
      - "Nuclear Magnetic Resonance" -> "NMR"
      - "Light Scattering" -> "LS"
 
-4. OCR CORRECTION & DATA CLEANING:
+5. OCR CORRECTION & DATA CLEANING:
    - Fix common OCR typos, especially in chemical names and numerical values:
      - "S" -> "5" (e.g., "S,6-dimethyl" -> "5,6-dimethyl")
      - "l" (lowercase L) -> "1" (one) (e.g., "l,3-propanediol" -> "1,3-propanediol")
      - "O" (letter O) -> "0" (zero) (e.g., "1.O5" -> "1.05", "Mw=5O000" -> "Mw=50000")
      - "Z" -> "2" (e.g., "Zn" -> "2n" if context implies a number)
 
-5. STRICT EXCLUSION CRITERIA:
+6. STRICT EXCLUSION CRITERIA:
    - References Section Block: You MUST completely IGNORE any text, polymer names, or data found in the "References" section (typically everything after the "Conclusion" heading).
    - Do NOT extract monomers themselves as polymers.
    - Do NOT extract commercial reference standards (e.g., "commercial Kapton film").
 
 ### FIELD DEFINITIONS & SCHEMA (JSON Object):
-* `polymer_name` (String): MANDATORY. Primary identifier (e.g., "PI-1", "co-PA").
-* `polymer_type` (String): MANDATORY. Chemical class (e.g., "Polyimide", "Polyurethane").
+* `polymer_name` (String): MANDATORY. Primary identifier (e.g., "PAA-1", "PI-1").
+* `polymer_type` (String): MANDATORY. Chemical class (e.g., "Polyimide", "Poly(amic acid)", "Polyurethane").
 * `components` (List of Strings): MANDATORY. Monomer strings strictly chosen from the provided Monomer Library.
 * `ratio_type` (String): Enum: "mole", "weight", "unknown". (Default to "mole").
 * `ratio_values_text` (String | null): Overall ratio. Default to "1:1" for binary step-growth if unstated.
@@ -68,8 +76,8 @@ Output a FLAT LIST of independent measurement records strictly mapped to the pro
 Return a valid JSON array only. Example:
 [
   {
-    "polymer_name": "co-PI-3",
-    "polymer_type": "Polyimide",
+    "polymer_name": "PAA-3",
+    "polymer_type": "Poly(amic acid)",
     "components": ["PMDA", "ODA", "PDA"], 
     "ratio_type": "mole",
     "ratio_values_text": null,
@@ -85,13 +93,13 @@ Return a valid JSON array only. Example:
     "test_method": "GPC"
   },
   {
-    "polymer_name": "PI-Ref",
+    "polymer_name": "PI-3",
     "polymer_type": "Polyimide",
-    "components": ["BPDA", "ODA"],
+    "components": ["PMDA", "ODA", "PDA"], 
     "ratio_type": "mole",
-    "ratio_values_text": "1:1",
-    "feed_ratio_text": "Synthesized via standard two-step method",
-    "diamine_ratio": null,
+    "ratio_values_text": null,
+    "feed_ratio_text": "The molar ratio of diamines (ODA to PDA) was set to 7:3",
+    "diamine_ratio": "ODA:PDA = 7:3",
     "dianhydride_ratio": null,
     "diisocyanate_ratio": null,
     "diol_ratio": null,
@@ -99,6 +107,6 @@ Return a valid JSON array only. Example:
     "mn_value": null,
     "mw_value": null,
     "pdi_value": null,
-    "test_method": "Viscosity"
+    "test_method": null
   }
 ]

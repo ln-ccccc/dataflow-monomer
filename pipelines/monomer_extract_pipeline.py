@@ -672,13 +672,13 @@ class ExtractMonomer:
 
         self.storage = FileStorage(
             first_entry_file_name=entry_file_name,
-            cache_path="./outputs/monomer_demo",
+            cache_path="./outputs/monomer",
             cache_type="json",
         )
         self.llm_serving = APIGoogleVertexAIServing(
             project=os.getenv("GOOGLE_CLOUD_PROJECT") or os.getenv("GCP_PROJECT_ID"),
             location='us-central1',
-            model_name="gemini-2.5-pro",
+            model_name="gemini-2.5-flash",
             max_workers=llm_max_workers,
             max_tokens=llm_max_tokens,
             use_batch=use_batch,
