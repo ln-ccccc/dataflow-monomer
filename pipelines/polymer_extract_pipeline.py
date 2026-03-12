@@ -77,6 +77,9 @@ def _load_env_from_setup_env(path=None):
             "http_proxy",
             "https_proxy",
             "no_proxy",
+            "MONOMER_LLM_MAX_WORKERS",
+            "MONOMER_LLM_MAX_TOKENS",
+            "LLM_OPENAI_TIMEOUT",
         }
         with open(picked, "r", encoding="utf-8") as f:
             for line in f:
@@ -214,115 +217,22 @@ class ExtractPolymer(BatchedPipelineABC):
 
 
 if __name__ == "__main__":
-    def _load_env_from_setup_env(path=None):
-        if path is None:
-            path = os.getenv("LCC_SETUP_ENV_PATH", "./setup_env.sh")
-        if not os.path.exists(path):
-            # 尝试上级目录
-            path = "../setup_env.sh"
-        if not os.path.exists(path):
-            return
-        wanted = {
-            "GOOGLE_APPLICATION_CREDENTIALS",
-            "GCP_PROJECT_ID",
-            "GOOGLE_CLOUD_PROJECT",
-            "HTTP_PROXY",
-            "HTTPS_PROXY",
-            "http_proxy",
-            "https_proxy",
-            "no_proxy",
-            "LLM_OPENAI_BASE_URL",
-            "LLM_OPENAI_API_KEY",
-            "LLM_OPENAI_MODEL",
-            "MONOMER_LLM_MAX_WORKERS",
-            "MONOMER_LLM_MAX_TOKENS",
-            "LLM_OPENAI_TIMEOUT",
-        }
-        with open(path, "r", encoding="utf-8") as f:
-            for line in f:
-                line = line.strip()
-                if not line.startswith("export "):
-                    continue
-                _, rest = line.split("export ", 1)
-                if "=" not in rest:
-                    continue
-                key, value = rest.split("=", 1)
-                key = key.strip()
-                if key not in wanted:
-                    continue
-                if os.environ.get(key):
-                    continue
-                value = value.strip()
-                if len(value) >= 2 and ((value[0] == value[-1] == '"') or (value[0] == value[-1] == "'")):
-                    value = value[1:-1]
-                os.environ[key] = value
+    from operators.general.paper_input_generator import PaperJsonInputGenerator
+    from operators.polymer.polymer_csv_profile import build_polymer_csv_exporter
 
-    _load_env_from_setup_env()
-    for upper, lower in [("HTTP_PROXY", "http_proxy"), ("HTTPS_PROXY", "https_proxy")]:
-        if upper in os.environ and lower not in os.environ:
-            os.environ[lower] = os.environ[upper]
-
-    # 使用相对路径
-    sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-    CSV_COLUMNS = [
-        "doi",
-        "polymer_name",
-        "polymer_type",
-        "components",
-        "ratio_type",
-        "ratio_values_text",
-        "feed_ratio_text",
-        "diamine_ratio",
-        "dianhydride_ratio",
-        "diisocyanate_ratio",
-        "diol_ratio",
-        "diacid_ratio",
-        "mn_value",
-        "mw_value",
-        "pdi_value",
-        "mw_unit",
-        "test_method",
-    ]
+    _input_gen = PaperJsonInputGenerator(paper_root=PAPER_ROOT)
 
     def find_json_files(base_path):
-        if os.path.isfile(base_path) and base_path.lower().endswith(".json"):
-            return [base_path]
-        return glob.glob(os.path.join(base_path, "**", "*.json"), recursive=True)
+        return _input_gen.find_json_files(base_path)
+
+    def _extract_doi_from_dir(dir_path: str, marker: str = "selected_polyimide_papers") -> str:
+        gen = PaperJsonInputGenerator(paper_root=PAPER_ROOT, marker=marker)
+        return gen.extract_doi_from_dir(dir_path)
 
     def prepare_input_data(json_files, output_jsonl):
-        data = []
-        for file_path in json_files:
-            try:
-                with open(file_path, 'r', encoding='utf-8') as f:
-                    content_json = json.load(f)
-                text_content = content_json.get('content', '')
-                if not text_content:
-                    continue
-                
-                dir_path = os.path.dirname(file_path)
-                doi_candidate = ""
-                try:
-                    if dir_path.startswith(PAPER_ROOT + os.sep):
-                        rel = os.path.relpath(dir_path, PAPER_ROOT).replace("\\", "/").strip("/")
-                        doi_candidate = rel
-                except Exception:
-                    doi_candidate = ""
-                if not doi_candidate:
-                    doi_candidate = os.path.basename(dir_path)
-
-                data.append({
-                    "file_path": file_path,
-                    "content": text_content,
-                    "doi_hint": content_json.get('token', ''),
-                    "extracted_doi": doi_candidate
-                })
-            except Exception:
-                continue
-        with open(output_jsonl, 'w', encoding='utf-8') as f:
-            for entry in data:
-                f.write(json.dumps(entry) + '\n')
-        return len(data)
+        records = _input_gen.build_records(json_files)
+        _input_gen.write_jsonl(records, output_jsonl)
+        return len(records)
 
     def run_pipeline(input_file, max_chunk_len=32000, use_batch=False):
         pipeline = ExtractPolymer(
@@ -334,63 +244,6 @@ if __name__ == "__main__":
         pipeline.forward(batch_size=50, resume_from_last=True)
         return pipeline
 
-    def _csv_has_data(path):
-        try:
-            with open(path, "r", encoding="utf-8") as f:
-                header = f.readline()
-                if not header:
-                    return False
-                return bool(f.readline())
-        except Exception:
-            return False
-
-    def _write_csv(path, rows):
-        with open(path, "w", encoding="utf-8", newline="") as f:
-            writer = csv.DictWriter(f, fieldnames=CSV_COLUMNS)
-            writer.writeheader()
-            if rows:
-                writer.writerows(rows)
-
-    def _row_to_csv_data(m, doi=""):
-        return {
-            "doi": doi,
-            "polymer_name": m.get("polymer_name"),
-            "polymer_type": m.get("polymer_type"),
-            "components": ";".join(m.get("components", [])),
-            "ratio_type": m.get("ratio_type"),
-            "ratio_values_text": m.get("ratio_values_text"),
-            "feed_ratio_text": m.get("feed_ratio_text"),
-            "diamine_ratio": m.get("diamine_ratio"),
-            "dianhydride_ratio": m.get("dianhydride_ratio"),
-            "diisocyanate_ratio": m.get("diisocyanate_ratio"),
-            "diol_ratio": m.get("diol_ratio"),
-            "diacid_ratio": m.get("diacid_ratio"),
-            "mn_value": m.get("mn_value"),
-            "mw_value": m.get("mw_value"),
-            "pdi_value": m.get("pdi_value"),
-            "mw_unit": m.get("mw_unit"),
-            "test_method": m.get("test_method"),
-        }
-
-    def _write_one(row):
-        file_path = getattr(row, "file_path", None)
-        polymers = getattr(row, "polymers", None)
-        doi = getattr(row, "extracted_doi", "")
-        if not doi:
-            doi = getattr(row, "doi_hint", "")
-        if not file_path or not os.path.exists(file_path):
-            return "skip", 0
-        dir_path = os.path.dirname(file_path)
-        csv_path = os.path.join(dir_path, "polymers.csv")
-        if not polymers:
-            if os.path.exists(csv_path) and _csv_has_data(csv_path):
-                return "skip", 0
-            _write_csv(csv_path, [])
-            return "empty", 0
-        csv_data = [_row_to_csv_data(m, doi) for m in polymers]
-        _write_csv(csv_path, csv_data)
-        return "nonempty", len(csv_data)
-
     def _read_pipeline_df(pipeline):
         storage_obj = pipeline.storage
         buffers = getattr(storage_obj, "_buffers", None)
@@ -401,27 +254,16 @@ if __name__ == "__main__":
             return reader.read("dataframe")
         return storage_obj.step().read("dataframe")
 
-    def save_results_to_csv(pipeline, progress_every=500):
+    def save_results_to_csv(pipeline, csv_workers=1, progress_every=500):
         try:
             df = _read_pipeline_df(pipeline)
         except Exception:
             return
-        total = len(df)
-        if total == 0:
-            return
-        count = 0
-        empty_written = 0
-        nonempty_written = 0
-        for i, row in enumerate(df.itertuples(index=False), 1):
-            status, rows_written = _write_one(row)
-            if status == "empty":
-                empty_written += 1
-            elif status == "nonempty":
-                nonempty_written += 1
-                count += 1
-            if progress_every and i % progress_every == 0:
-                pass
-        return {"nonempty": nonempty_written, "empty": empty_written, "rows": count}
+        exporter = build_polymer_csv_exporter(csv_workers=csv_workers, progress_every=progress_every)
+        stats = exporter.run(df)
+        if isinstance(stats, dict):
+            stats["rows"] = stats.get("nonempty", 0)
+        return stats
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--base-dir", type=str, default="")
@@ -433,6 +275,18 @@ if __name__ == "__main__":
     parser.add_argument("--batch-size", type=int, default=0)
     parser.add_argument("--use-batch", action="store_true", help="是否使用 BigQuery 批量推理")
     args = parser.parse_args()
+
+    def _env_int(name, default):
+        v = os.getenv(name)
+        if v is None or v == "":
+            return default
+        try:
+            return int(v)
+        except Exception:
+            return default
+
+    csv_workers = _env_int("POLYMER_CSV_WORKERS", 1)
+    progress_every = _env_int("POLYMER_PROGRESS_EVERY", 500)
 
     def run_one_batch(base_dir, entry_file, output_jsonl, offset, limit):
         ef = entry_file
@@ -472,9 +326,9 @@ if __name__ == "__main__":
             if not ef:
                 continue
             model = run_pipeline(ef, max_chunk_len=args.max_chunk_len, use_batch=args.use_batch)
-            save_results_to_csv(model)
+            save_results_to_csv(model, csv_workers=csv_workers, progress_every=progress_every)
     else:
         ef = run_one_batch(args.base_dir, args.entry_file, args.output_jsonl, args.offset, args.limit)
         if ef:
             model = run_pipeline(ef, max_chunk_len=args.max_chunk_len, use_batch=args.use_batch)
-            save_results_to_csv(model)
+            save_results_to_csv(model, csv_workers=csv_workers, progress_every=progress_every)

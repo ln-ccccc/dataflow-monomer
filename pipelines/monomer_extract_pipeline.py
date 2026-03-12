@@ -1,3 +1,4 @@
+import json
 import os
 import sys
 import pandas as pd
@@ -63,25 +64,18 @@ class MonomerListProcessor:
         doi = m.get("doi")
         abbreviation = m.get("abbreviation") or []
         full_name = m.get("full_name") or []
-        iupac_name = m.get("iupac_name")
-        cas_no = m.get("cas_no") or []
         smiles = m.get("smiles") or ""
         
         return {
             "doi": doi,
             "abbreviation": [self._clean_text(x) for x in abbreviation if self._clean_text(x)],
             "full_name": [self._clean_text(x) for x in full_name if self._clean_text(x)],
-            "iupac_name": (self._clean_text(iupac_name) if iupac_name else None),
-            "cas_no": [self._clean_text(x) for x in cas_no if self._clean_text(x)],
             "smiles": self._clean_text(smiles),
         }
 
     def _merge_one(self, existing, incoming):
         existing["abbreviation"] = list(set(existing.get("abbreviation", []) + incoming.get("abbreviation", [])))
         existing["full_name"] = list(set(existing.get("full_name", []) + incoming.get("full_name", [])))
-        existing["cas_no"] = list(set(existing.get("cas_no", []) + incoming.get("cas_no", [])))
-        if not existing.get("iupac_name") and incoming.get("iupac_name"):
-            existing["iupac_name"] = incoming.get("iupac_name")
         if not existing.get("doi") and incoming.get("doi"):
             existing["doi"] = incoming.get("doi")
         if not existing.get("smiles") and incoming.get("smiles"):
@@ -125,8 +119,6 @@ class MonomerListProcessor:
                 "doi": None,
                 "abbreviation": [],
                 "full_name": [name],
-                "iupac_name": None,
-                "cas_no": [],
                 "smiles": "",
             })
         return items
@@ -155,7 +147,8 @@ class MonomerSeedStage:
             llm_serving=llm_serving,
             prompt_template=self.prompt,
             json_schema=self.prompt.build_json_schema() if use_schema else None,
-            max_chunk_len=max_chunk_len
+            max_chunk_len=max_chunk_len,
+            disable_chunking=False
         )
         self.process_seed_monomers = PandasOperator([
             lambda df: df.assign(
@@ -707,6 +700,117 @@ class ExtractMonomer:
     def compile(self):
         pass
 
+    def submit_batch(self, input_jsonl):
+        """
+        Submits a batch of jobs to Vertex AI.
+        Returns (job_ids, row_mapping).
+        """
+        rows = []
+        with open(input_jsonl, "r", encoding="utf-8") as f:
+            for line in f:
+                try:
+                    rows.append(json.loads(line))
+                except:
+                    continue
+        
+        all_prompts = []
+        row_mapping = []
+        
+        for row in rows:
+            content = row.get("content", "")
+            if not content:
+                continue
+            
+            # Using private method _split_recursive
+            chunks = self.seed_stage.prompt_generator._split_recursive(content)
+            
+            prompt_kwargs = {
+                "file_path": row.get("file_path"),
+                "doi_hint": row.get("doi_hint"),
+                "extracted_doi": row.get("extracted_doi"),
+            }
+            
+            system_prompts = self.seed_stage.prompt.build_prompt(**prompt_kwargs)
+            if not isinstance(system_prompts, list):
+                system_prompts = [system_prompts] * len(chunks)
+            
+            llm_inputs = [sys_p + chunk for chunk, sys_p in zip(chunks, system_prompts)]
+            all_prompts.extend(llm_inputs)
+            
+            row_info = prompt_kwargs.copy()
+            row_info["num_chunks"] = len(chunks)
+            row_mapping.append(row_info)
+            
+        if not all_prompts:
+            return [], []
+
+        # Submit using self.llm_serving
+        job_ids = self.llm_serving.generate_from_input(
+            all_prompts,
+            json_schema=self.seed_stage.prompt.build_json_schema(),
+            use_function_call=False,
+            use_batch=True,
+            batch_wait=False
+        )
+        
+        if isinstance(job_ids, str):
+            job_ids = [job_ids] if job_ids else []
+            
+        return job_ids, row_mapping
+
+    def process_batch_result(self, job_ids, row_mapping, output_dir=None):
+        """
+        Polls jobs (if needed), retrieves results, and runs the rest of the pipeline.
+        """
+        runner = self.llm_serving.batch_runner
+        if not runner:
+             raise RuntimeError("Batch runner not available")
+             
+        full_result_map = {}
+        for jid in job_ids:
+             # wait_for_job returns URI immediately if done
+             uri = runner.wait_for_job(jid)
+             full_result_map.update(runner.retrieve_results(uri))
+             
+        reconstructed_rows = []
+        current_idx = 0
+        
+        for row_info in row_mapping:
+            num_chunks = row_info.get("num_chunks", 1)
+            chunks = []
+            for _ in range(num_chunks):
+                key = f"req-{current_idx}"
+                resp = full_result_map.get(key, "")
+                chunks.append(resp)
+                current_idx += 1
+            
+            monomers = self.list_processor.process_monomer_list_chunks(chunks)
+            
+            new_row = row_info.copy()
+            new_row["monomers_seed"] = monomers
+            reconstructed_rows.append(new_row)
+            
+        df = pd.DataFrame(reconstructed_rows)
+        
+        temp_cache_path = os.path.join(output_dir or "./outputs/monomer_batch", f"batch_{job_ids[0] if job_ids else 'empty'}")
+        batch_storage = FileStorage(
+            first_entry_file_name="dummy.json",
+            cache_path=temp_cache_path,
+            cache_type="json",
+        )
+        batch_storage.write(df) 
+
+        batch_storage.operator_step = 0
+        
+        self.smiles_stage.run(batch_storage)
+        
+        self.library_stage.run(batch_storage)
+        class DummyPipeline:
+            def __init__(self, storage):
+                self.storage = storage
+        
+        return DummyPipeline(batch_storage)
+
     def forward(self, batch_size=10, resume_from_last=False):
         self.seed_stage.run(self.storage)
         self.smiles_stage.run(self.storage)
@@ -917,3 +1021,12 @@ class MonomerLibrarySaveStage:
         self._save_library(rows)
         if logger:
             logger.info(f"MonomerLibrarySaveStage complete added {added} library_rows {len(rows)}")
+
+
+def main(argv=None):
+    from pipelines.monomer_extract_cli import main as _cli_main
+    return _cli_main(argv)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

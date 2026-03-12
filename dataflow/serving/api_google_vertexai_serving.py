@@ -635,7 +635,7 @@ class APIGoogleVertexAIServing(LLMServingABC):
                         pass
 
         if not wait_for_completion:
-            return job_names[-1] if job_names else ""
+            return job_names if job_names else []
 
         try:
             workers_env = os.getenv("PROPS_BATCH_RETRIEVAL_WORKERS")
@@ -678,7 +678,7 @@ class APIGoogleVertexAIServing(LLMServingABC):
                 ): i for i, inp in enumerate(user_inputs)
             }
             
-            for future in tqdm(as_completed(future_to_index), total=len(user_inputs), desc="Generating (Parallel)"):
+            for future in as_completed(future_to_index):
                 idx, res = future.result()
                 responses[idx] = res
                 

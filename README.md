@@ -1,17 +1,17 @@
 # 数据抽取流水线（Monomer / Polymer / Properties）
 
 本文档汇总本仓库中与“单体/聚合物/材料属性抽取”相关的能力与用法：
-- Monomer：推荐使用仓库根目录的 `run_monomer.py` 作为入口
+- Monomer：推荐使用 `pipelines/monomer_extract_pipeline.py` 作为入口
 - Polymer：可直接运行 `pipelines/polymer_extract_pipeline.py`
 - Properties：可直接运行 `pipelines/property_extract_pipeline.py`（按类别批量抽取）
 
 ## Monomer 快速开始
-- 推荐入口脚本：`run_monomer.py`
+- 推荐入口脚本：`python pipelines/monomer_extract_pipeline.py`（内部调用 `pipelines/monomer_extract_cli.py`）
 - 详细说明（流程/规则/字段/环境变量）：[README_MONOMER.md](README_MONOMER.md)
 
 运行示例：
 ```bash
-python run_monomer.py \
+python pipelines/monomer_extract_pipeline.py \
   --base-dir <论文JSON根目录> \
   --batch-size 1000
 ```
@@ -20,6 +20,10 @@ python run_monomer.py \
 - 自动加载 `setup_env.sh`（GCP 凭据、HTTP/HTTPS 代理；可用环境变量 `LCC_SETUP_ENV_PATH` 指定位置）
 - LLM：Vertex AI Gemini（通过 APIGoogleVertexAIServing）
 - 化学：RDKit 用于 SMILES 解析与规范化
+
+CSV 并发与进度（仅影响本地 CSV 写入，非 LLM 调用）：
+- `MONOMER_CSV_WORKERS`：写 `monomers.csv` 的线程数（默认 `min(4, os.cpu_count())`）
+- `MONOMER_PROGRESS_EVERY`：写 CSV 时的进度步长（默认 500）
 
 ## Monomer 抽取阶段概览
 Monomer 抽取通常包含以下阶段（以实际实现为准）：
@@ -49,9 +53,12 @@ Monomer 抽取通常包含以下阶段（以实际实现为准）：
   - 分子量与方法：`mn_value`、`mw_value`、`pdi_value`、`mw_unit`、`test_method`（标准化缩写：GPC/SEC/Viscosity/NMR/LS）
   - 排除：不将单体当作聚合物；忽略商业参比品；缺少核心三字段的条目直接丢弃
 - 输出
-  - 每篇论文一个 `polymers.csv`（写回各自 JSON 目录）
-- 当前说明
-  - 目前 Polymer 与 Monomer 流程“分开运行”，未做自动联动；后续测试通过后，再把 Polymer 的配比与 Monomer 结果联动（例如按 monomer 别名匹配 SMILES）
+52→  - 每篇论文一个 `polymers.csv`（写回各自 JSON 目录）
+53→- CSV 写入并发：
+54→  - `POLYMER_CSV_WORKERS`：写 `polymers.csv` 的线程数（默认 1，可根据 CPU/IO 调整）
+55→  - `POLYMER_PROGRESS_EVERY`：写 CSV 时的进度步长（默认 500）
+56→- 当前说明
+57→  - 目前 Polymer 与 Monomer 流程“分开运行”，未做自动联动；后续测试通过后，再把 Polymer 的配比与 Monomer 结果联动（例如按 monomer 别名匹配 SMILES）
 
 ## Property 抽取（批量：Vertex AI Batch）
 - 目标：按类别（optical/thermal/mechanical/other/electrical）从论文正文中抽取材料属性的结构化字段
@@ -69,12 +76,12 @@ python pipelines/property_extract_pipeline.py \
 - 输出（统一 IO 目录）：
   - 固定目录：`dataflow-dp/io`
   - 输入 JSONL：`io/<category>/input_<offset>_<limit>.jsonl`
-  - 批预测结果：`io/<category>/results/<base>_<job_id>.jsonl`
+  - 批预测结果 CSV：`io/<category>/results/<base>_<job_id>.csv`
   - 台账：`io/.jobs_ledger.jsonl`（用于断点续跑与状态追踪）
-- 并发与批大小（环境变量）：
-  - `PROPS_BATCH_CHUNK_SIZE`：文件级分片大小（未传 `--batch-size` 时使用，默认 1000）
-  - `MONOMER_LLM_BATCH`：提示级提交批大小（默认 100）
-  - `MAX_CONCURRENT_CATEGORIES`：类别并发上限（默认 2）
+74→- 并发与批大小（环境变量）：
+75→  - `PROPS_BATCH_CHUNK_SIZE`：文件级分片大小（未传 `--batch-size` 时使用，默认 1000）
+76→  - `MONOMER_LLM_BATCH`：提示级提交批大小（默认 100）
+77→  - `MAX_CONCURRENT_CATEGORIES`：类别并发上限（默认 2）
 
 ## Monomer 规则（SMILES 一致性）
 - 判定口径：
@@ -95,7 +102,8 @@ python pipelines/property_extract_pipeline.py \
   - `data/monomer_smiles_issues.csv`：`smiles_valid == "invalid"` 的问题条目
 - Properties 输出：
   - `io/<category>/input_*.jsonl`：每次分片提交的输入
-  - `io/<category>/results/*.jsonl`：批预测的结果落盘（按 job 切分）
+  - `io/<category>/results/*.csv`：批预测的结果落盘（按 job 切分）
+  - 每篇论文目录下的 `<category>.csv`：按 `file_path` 写回的最终属性表
 
 ## 常见问题
 - 运行结束未见输出
@@ -122,3 +130,12 @@ python pipelines/property_extract_pipeline.py \
   - [prompts/polymer.py](prompts/polymer.py) / `prompts/details/polymer.md` / `schemas/polymer.json`
   - [prompts/monomer.py](prompts/monomer.py) / [schemas/monomer_schemas](schemas/monomer_schemas)
   - [prompts/generic_md_prompt.py](prompts/generic_md_prompt.py) / [schemas](schemas)
+- 通用算子与 CSV profile：
+  - 输入准备算子：`PaperJsonInputGenerator`（扫描论文 JSON 并生成统一 input 记录）
+    - [operators/general/paper_input_generator.py](operators/general/paper_input_generator.py)
+  - CSV 导出算子：`CsvExportOperator`（可配置 columns / path / row_expander）
+    - [operators/general/csv_exporter.py](operators/general/csv_exporter.py)
+  - Monomer CSV profile（列定义与行展开逻辑）：
+    - [operators/monomer/monomer_csv_profile.py](operators/monomer/monomer_csv_profile.py)
+  - Polymer CSV profile（列定义与行展开逻辑）：
+    - [operators/polymer/polymer_csv_profile.py](operators/polymer/polymer_csv_profile.py)

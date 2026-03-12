@@ -19,16 +19,6 @@
           "type": "string"
         }
       },
-      "iupac_name": {
-        "type": "string",
-        "nullable": true
-      },
-      "cas_no": {
-        "type": "array",
-        "items": {
-          "type": "string"
-        }
-      },
       "smiles": {
         "type": "string",
         "nullable": true
@@ -37,10 +27,8 @@
     "required": [
       "abbreviation",
       "full_name",
-      "cas_no",
       "smiles",
-      "doi",
-      "iupac_name"
+      "doi"
     ],
     "additionalProperties": false
   }

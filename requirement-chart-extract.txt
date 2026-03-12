@@ -1,9 +1,0 @@
-openmim
-chardet
-bresenham
-scikit-image
-matplotlib
-opencv-python
-pillow
-mmcv-full
-mmdet==2.28.2
