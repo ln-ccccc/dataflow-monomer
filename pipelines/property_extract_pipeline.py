@@ -10,7 +10,7 @@
 #
 # 使用示例：
 #   python pipelines/property_extract_pipeline.py \
-#     --base-dir /path/to/selected_polyimide_papers \
+#     --base-dir /uni-curator/user/zwl/zwl/zwl/literature/selected_polyimide_papers \
 #     --category optical,thermal,mechanical,other,electrical \
 #     --use-batch \
 #     --batch-size 500

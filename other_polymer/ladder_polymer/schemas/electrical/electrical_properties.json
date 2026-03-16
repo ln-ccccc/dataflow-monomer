@@ -1,0 +1,86 @@
+{
+  "type": "array",
+  "description": "A flat list of ALL individual electrical property measurements for newly synthesized ladder polymers and ladder precursor materials.",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "doi",
+      "file_path",
+      "polymer_name",
+      "record_type",
+      "value",
+      "temperature",
+      "frequency",
+      "test_standard",
+      "test_method",
+      "test_conditions",
+      "notes"
+    ],
+    "properties": {
+      "doi": {
+        "type": "string",
+        "nullable": true,
+        "description": "The Digital Object Identifier."
+      },
+      "file_path": {
+        "type": "string",
+        "nullable": true,
+        "description": "The local file path or filename."
+      },
+      "polymer_name": {
+        "type": "string",
+        "description": "Name or ID of the ladder polymer or ladder precursor stage explicitly measured."
+      },
+      "record_type": {
+        "type": "string",
+        "enum": [
+          "Dielectric Constant (Dk)",
+          "Dielectric Loss (Df / tan δ)",
+          "Breakdown Strength",
+          "Electrical Conductivity",
+          "Volume Resistivity",
+          "Surface Resistivity",
+          "Remnant Polarization (Pr)",
+          "Coercive Field (Ec)",
+          "Piezoelectric Coefficient (d33)"
+        ],
+        "description": "The specific electrical property being measured."
+      },
+      "value": {
+        "type": "string",
+        "description": "The numeric value ALONG WITH ITS UNIT if applicable (e.g., '450 MV/m', '3.5 ± 0.1'). Null unit for dimensionless like Dk/Df."
+      },
+      "temperature": {
+        "type": "string",
+        "nullable": true,
+        "description": "Test temperature (e.g., '25 °C', 'Room Temperature')."
+      },
+      "frequency": {
+        "type": "string",
+        "nullable": true,
+        "description": "Test frequency (e.g., '10 GHz', '1 kHz', 'DC')."
+      },
+      "test_standard": {
+        "type": "string",
+        "nullable": true,
+        "description": "Standard used (e.g., 'ASTM D150')."
+      },
+      "test_method": {
+        "type": "string",
+        "nullable": true,
+        "description": "Method/Instrument (e.g., 'Cavity perturbation', 'LCR meter')."
+      },
+      "test_conditions": {
+        "type": "string",
+        "nullable": true,
+        "description": "Sample state or conditioning (e.g., '50% RH', 'Film of 50um')."
+      },
+      "notes": {
+        "type": "string",
+        "nullable": true,
+        "description": "Any extra context. Relevant stage/context for the Ladder Polymer material may also be captured here."
+      }
+    }
+  }
+}

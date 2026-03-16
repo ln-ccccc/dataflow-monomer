@@ -1,0 +1,73 @@
+{
+  "type": "ARRAY",
+  "description": "List of synthesized or studied Ladder Polymer materials extracted from the text.",
+  "items": {
+    "type": "OBJECT",
+    "required": [
+      "polymer_name",
+      "polymer_type",
+      "components"
+    ],
+    "properties": {
+      "polymer_name": {
+        "type": "STRING",
+        "description": "Primary identifier used by the paper for the synthesized material."
+      },
+      "polymer_type": {
+        "type": "STRING",
+        "description": "Chemical class or stage (for example, Ladder polymer, Ladder precursor polymer, Conjugated ladder polymer)."
+      },
+      "components": {
+        "type": "ARRAY",
+        "description": "List of monomer-library strings corresponding to the resin-forming components.",
+        "items": {
+          "type": "STRING"
+        }
+      },
+      "ratio_type": {
+        "type": "STRING",
+        "description": "How the reported ratio is expressed (for example, mole, weight, equivalent, phr, or unknown)."
+      },
+      "ratio_values_text": {
+        "type": "STRING",
+        "description": "Overall formulation ratio text as written in the paper."
+      },
+      "feed_ratio_text": {
+        "type": "STRING",
+        "description": "Raw contextual wording that describes the feed or formulation ratio."
+      },
+      "monomer_ratio": {
+        "type": "STRING",
+        "description": "Overall ratio among main ladder-forming monomers WITH NAMES."
+      },
+      "comonomer_ratio": {
+        "type": "STRING",
+        "description": "Ratio among optional comonomers WITH NAMES."
+      },
+      "bridge_ratio": {
+        "type": "STRING",
+        "description": "Ratio among bridge-forming or fused-ring-forming units WITH NAMES."
+      },
+      "precursor_ratio": {
+        "type": "STRING",
+        "description": "Ratio text specific to precursor polymer components WITH NAMES."
+      },
+      "mn_value": {
+        "type": "STRING",
+        "description": "Number-average molecular weight with unit if reported."
+      },
+      "mw_value": {
+        "type": "STRING",
+        "description": "Weight-average molecular weight with unit if reported."
+      },
+      "pdi_value": {
+        "type": "STRING",
+        "description": "Polydispersity index or dispersity value if reported."
+      },
+      "test_method": {
+        "type": "STRING",
+        "description": "Standardized method abbreviation such as GPC, SEC, Viscosity, NMR, or LS."
+      }
+    }
+  }
+}

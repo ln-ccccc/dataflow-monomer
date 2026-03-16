@@ -6,6 +6,8 @@ import json
 import os
 import sys
 import ctypes
+import time
+import pandas as pd
 
 def _ensure_local_libstdcpp():
     try:
@@ -146,7 +148,7 @@ class ExtractPolymer(BatchedPipelineABC):
         self.llm_serving = APIGoogleVertexAIServing(
             project=os.getenv("GOOGLE_CLOUD_PROJECT") or os.getenv("GCP_PROJECT_ID"),
             location="us-central1",
-            model_name=os.getenv("LLM_OPENAI_MODEL", "gemini-2.5-pro"),
+            model_name=os.getenv("LLM_OPENAI_MODEL", "gemini-2.5-flash"),
             max_workers=int(os.getenv("MONOMER_LLM_MAX_WORKERS", "100")),
             max_tokens=int(os.getenv("MONOMER_LLM_MAX_TOKENS", "8192")),
             # timeout=int(os.getenv("LLM_OPENAI_TIMEOUT", "60")),
@@ -162,6 +164,7 @@ class ExtractPolymer(BatchedPipelineABC):
             input_aux_keys=["monomer_whitelist"]
         )
 
+        # 读取 monomers.json 文件中的 monomer 列表
         def _read_monomers(p):
             try:
                 d = os.path.dirname(p)
@@ -187,6 +190,8 @@ class ExtractPolymer(BatchedPipelineABC):
                 polymers=df["polymers_raw"].apply(self._parse_polymers)
             ).drop(columns=["polymers_raw", "content"], errors="ignore")
         ])
+
+        self._read_monomers = _read_monomers
 
     def _parse_polymers(self, raw_list):
         items = []
@@ -214,6 +219,87 @@ class ExtractPolymer(BatchedPipelineABC):
 
     def compile(self):
         pass
+
+    def submit_batch(self, input_jsonl: str):
+        rows = []
+        with open(input_jsonl, "r", encoding="utf-8") as f:
+            for line in f:
+                try:
+                    rows.append(json.loads(line))
+                except Exception:
+                    continue
+
+        all_prompts = []
+        row_mapping = []
+
+        for row in rows:
+            content = row.get("content", "")
+            if not content:
+                continue
+
+            file_path = row.get("file_path")
+            whitelist = self._read_monomers(file_path) if file_path else []
+            chunks = self.prompt_generator._split_recursive(content)
+
+            prompt_kwargs = {
+                "monomer_whitelist": whitelist,
+            }
+
+            system_prompts = self.prompt.build_prompt(**prompt_kwargs)
+            if not isinstance(system_prompts, list):
+                system_prompts = [system_prompts] * len(chunks)
+
+            llm_inputs = [sys_p + chunk for chunk, sys_p in zip(chunks, system_prompts)]
+            all_prompts.extend(llm_inputs)
+
+            row_info = {
+                "file_path": file_path,
+                "doi_hint": row.get("doi_hint"),
+                "extracted_doi": row.get("extracted_doi"),
+                "num_chunks": len(chunks),
+            }
+            row_mapping.append(row_info)
+
+        if not all_prompts:
+            return [], []
+
+        job_ids = self.llm_serving.generate_from_input(
+            all_prompts,
+            json_schema=self.prompt.build_json_schema(),
+            use_function_call=False,
+            use_batch=True,
+            batch_wait=False,
+        )
+
+        if isinstance(job_ids, str):
+            job_ids = [job_ids] if job_ids else []
+        return job_ids, row_mapping
+
+    def process_batch_result(self, job_ids, row_mapping, output_dir=None):
+        runner = self.llm_serving.batch_runner
+        if not runner:
+            raise RuntimeError("Batch runner not available")
+
+        full_result_map = {}
+        for jid in job_ids:
+            uri = runner.wait_for_job(jid)
+            full_result_map.update(runner.retrieve_results(uri))
+
+        reconstructed_rows = []
+        current_idx = 0
+        for row_info in row_mapping:
+            num_chunks = row_info.get("num_chunks", 1) or 1
+            chunks = []
+            for _ in range(num_chunks):
+                key = f"req-{current_idx}"
+                chunks.append(full_result_map.get(key, ""))
+                current_idx += 1
+            polymers = self._parse_polymers(chunks)
+            new_row = dict(row_info)
+            new_row["polymers"] = polymers
+            reconstructed_rows.append(new_row)
+
+        return pd.DataFrame(reconstructed_rows)
 
 
 if __name__ == "__main__":
@@ -265,6 +351,41 @@ if __name__ == "__main__":
             stats["rows"] = stats.get("nonempty", 0)
         return stats
 
+    def poll_and_process(submitted_jobs, pipeline, csv_workers, progress_every):
+        import traceback
+        completed_indices = []
+        for i, job_info in enumerate(submitted_jobs):
+            job_ids = job_info.get("job_ids", [])
+            input_jsonl = job_info.get("input_jsonl", "")
+            row_mapping = job_info.get("row_mapping", [])
+            all_done = True
+            if job_ids:
+                try:
+                    client = pipeline.llm_serving.batch_runner.genai_client
+                    for jid in job_ids:
+                        try:
+                            job = client.batches.get(name=jid)
+                            state = job.state
+                            if state not in ("JOB_STATE_SUCCEEDED", "JOB_STATE_FAILED", "JOB_STATE_CANCELLED"):
+                                all_done = False
+                                break
+                        except Exception:
+                            all_done = False
+                            break
+                except Exception:
+                    all_done = False
+            if not all_done:
+                continue
+            try:
+                df = pipeline.process_batch_result(job_ids, row_mapping, output_dir=os.path.dirname(input_jsonl) if input_jsonl else None)
+                exporter = build_polymer_csv_exporter(csv_workers=csv_workers, progress_every=progress_every)
+                exporter.run(df)
+            except Exception:
+                traceback.print_exc()
+            completed_indices.append(i)
+        for i in sorted(completed_indices, reverse=True):
+            submitted_jobs.pop(i)
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--base-dir", type=str, default="")
     parser.add_argument("--entry-file", type=str, default="./data/MaterialExtractPipeline/material_papers.jsonl")
@@ -287,6 +408,10 @@ if __name__ == "__main__":
 
     csv_workers = _env_int("POLYMER_CSV_WORKERS", 1)
     progress_every = _env_int("POLYMER_PROGRESS_EVERY", 500)
+    max_concurrent_batches = _env_int(
+        "POLYMER_MAX_CONCURRENT_BATCHES",
+        _env_int("MONOMER_MAX_CONCURRENT_BATCHES", 2),
+    )
 
     def run_one_batch(base_dir, entry_file, output_jsonl, offset, limit):
         ef = entry_file
@@ -312,7 +437,63 @@ if __name__ == "__main__":
             ef = out_jl
         return ef
 
-    if args.batch_size > 0 and args.base_dir and not args.entry_file:
+    if args.use_batch and args.base_dir:
+        files = find_json_files(args.base_dir)
+        files.sort()
+        total = len(files)
+        start_g = args.offset
+        end_g = total
+        if args.limit > 0:
+            end_g = min(start_g + args.limit, total)
+        if start_g >= end_g:
+            raise SystemExit(0)
+
+        pipeline = ExtractPolymer(
+            entry_file_name="dummy",
+            max_chunk_len=args.max_chunk_len,
+            use_batch=True,
+        )
+        submitted_jobs = []
+        batch_size = int(args.batch_size) if args.batch_size and args.batch_size > 0 else 1000
+
+        for st in range(start_g, end_g, batch_size):
+            cur_lim = min(batch_size, end_g - st)
+            if cur_lim <= 0:
+                break
+            while len(submitted_jobs) >= max_concurrent_batches:
+                poll_and_process(submitted_jobs, pipeline, csv_workers, progress_every)
+                if len(submitted_jobs) >= max_concurrent_batches:
+                    time.sleep(60)
+
+            batch_files = files[st:st + cur_lim]
+            out_jl = args.output_jsonl
+            if not out_jl:
+                if os.path.isdir(args.base_dir):
+                    out_jl = os.path.join(args.base_dir, "polymer_input.jsonl")
+                else:
+                    out_jl = os.path.join(os.path.dirname(args.base_dir), "polymer_input.jsonl")
+            b, e = os.path.splitext(out_jl)
+            out_jl = f"{b}_{st}_{cur_lim}{e}" if (st > 0 or cur_lim != total) else out_jl
+            prepare_input_data(batch_files, out_jl)
+
+            try:
+                job_ids, row_mapping = pipeline.submit_batch(out_jl)
+                submitted_jobs.append({
+                    "job_ids": job_ids,
+                    "row_mapping": row_mapping,
+                    "input_jsonl": out_jl,
+                    "start_idx": st,
+                    "limit": cur_lim,
+                })
+            except Exception:
+                pass
+
+        while submitted_jobs:
+            poll_and_process(submitted_jobs, pipeline, csv_workers, progress_every)
+            if submitted_jobs:
+                time.sleep(60)
+
+    elif args.batch_size > 0 and args.base_dir and not args.entry_file:
         all_files = find_json_files(args.base_dir)
         all_files.sort()
         total = len(all_files)

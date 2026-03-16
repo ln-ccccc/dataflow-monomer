@@ -1,0 +1,40 @@
+{
+  "type": "array",
+  "description": "Starting-monomer extraction schema for Phenolic Resin papers.",
+  "items": {
+    "type": "object",
+    "properties": {
+      "doi": {
+        "type": "string",
+        "nullable": true,
+        "description": "Main article DOI if identified from the paper."
+      },
+      "abbreviation": {
+        "type": "array",
+        "description": "Abbreviations or short codes used for Phenolic Resin monomers/components.",
+        "items": {
+          "type": "string"
+        }
+      },
+      "full_name": {
+        "type": "array",
+        "description": "Systematic, common, or trade names for the extracted Phenolic Resin monomer/component.",
+        "items": {
+          "type": "string"
+        }
+      },
+      "smiles": {
+        "type": "string",
+        "nullable": true,
+        "description": "SMILES only if explicitly present in the paper text."
+      }
+    },
+    "required": [
+      "abbreviation",
+      "full_name",
+      "smiles",
+      "doi"
+    ],
+    "additionalProperties": false
+  }
+}

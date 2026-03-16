@@ -1,0 +1,101 @@
+{
+  "type": "array",
+  "description": "A flat list of ALL individual thermal property measurements for newly synthesized epoxy resins, blends, and cured networks.",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "doi",
+      "file_path",
+      "polymer_name",
+      "record_type",
+      "value",
+      "temperature",
+      "temperature_range",
+      "test_standard",
+      "test_method",
+      "test_conditions",
+      "heating_rate",
+      "decomposition_criterion",
+      "atmosphere",
+      "notes"
+    ],
+    "properties": {
+      "doi": {
+        "type": "string",
+        "nullable": true,
+        "description": "The Digital Object Identifier."
+      },
+      "file_path": {
+        "type": "string",
+        "nullable": true,
+        "description": "The local file path or filename."
+      },
+      "polymer_name": {
+        "type": "string",
+        "description": "Name or ID of the epoxy formulation, prepolymer, B-stage material, or cured network."
+      },
+      "record_type": {
+        "type": "string",
+        "enum": [
+          "Glass Transition Temperature (Tg)",
+          "Decomposition Temperature (Td)",
+          "Melting Temperature (Tm)",
+          "Crystallization Temperature (Tc)",
+          "Coefficient of Thermal Expansion (CTE)",
+          "Thermal Conductivity"
+        ],
+        "description": "The specific thermal property being measured."
+      },
+      "value": {
+        "type": "string",
+        "description": "The numeric value ALONG WITH ITS UNIT (e.g., '320 °C', '45 ppm/K', '0.2 W/mK')."
+      },
+      "temperature": {
+        "type": "string",
+        "nullable": true,
+        "description": "Temperature AT WHICH the property was measured (e.g., '25 °C' for Conductivity). Null for Tg/Td/Tm/Tc."
+      },
+      "temperature_range": {
+        "type": "string",
+        "nullable": true,
+        "description": "Range over which CTE was measured (e.g., '50-250 °C')."
+      },
+      "test_standard": {
+        "type": "string",
+        "nullable": true,
+        "description": "Testing standard used (e.g., 'ASTM D3418')."
+      },
+      "test_method": {
+        "type": "string",
+        "nullable": true,
+        "description": "Instrument or specific method (e.g., 'DSC', 'TGA', 'Laser Flash')."
+      },
+      "test_conditions": {
+        "type": "string",
+        "nullable": true,
+        "description": "Specific test conditions (e.g., 'Second heating scan', '1 Hz' for DMA)."
+      },
+      "heating_rate": {
+        "type": "string",
+        "nullable": true,
+        "description": "Heating/cooling rate (e.g., '10 K/min')."
+      },
+      "decomposition_criterion": {
+        "type": "string",
+        "nullable": true,
+        "description": "MANDATORY FOR Td: e.g., '5% loss', '10% loss', 'Onset'."
+      },
+      "atmosphere": {
+        "type": "string",
+        "nullable": true,
+        "description": "Gas environment (e.g., 'N2', 'Air')."
+      },
+      "notes": {
+        "type": "string",
+        "nullable": true,
+        "description": "Any extra context, like measurement direction (In-plane) for CTE. Relevant stage/context for the Epoxy material may also be captured here."
+      }
+    }
+  }
+}

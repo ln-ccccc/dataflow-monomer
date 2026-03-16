@@ -1,0 +1,83 @@
+{
+  "type": "array",
+  "description": "A flat list of ALL individual other property measurements for newly synthesized phenolic resins, novolac/resol intermediates, and cured networks.",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "doi",
+      "file_path",
+      "polymer_name",
+      "record_type",
+      "value",
+      "temperature",
+      "test_standard",
+      "test_method",
+      "test_conditions",
+      "notes"
+    ],
+    "properties": {
+      "doi": {
+        "type": "string",
+        "nullable": true,
+        "description": "The Digital Object Identifier."
+      },
+      "file_path": {
+        "type": "string",
+        "nullable": true,
+        "description": "The local file path or filename."
+      },
+      "polymer_name": {
+        "type": "string",
+        "description": "Name or ID of the novolac/resol resin, phenolic formulation, or cured phenolic network."
+      },
+      "record_type": {
+        "type": "string",
+        "enum": [
+          "Crystallinity",
+          "Density",
+          "Intrinsic Viscosity",
+          "Dynamic Viscosity",
+          "Melt Viscosity",
+          "Minimum Viscosity",
+          "Solubility",
+          "Water Absorption",
+          "Solvent Uptake",
+          "Gas Permeability",
+          "Gas Separation Selectivity",
+          "Solubility Coefficient"
+        ],
+        "description": "The specific property being measured."
+      },
+      "value": {
+        "type": "string",
+        "description": "Numeric value ALONG WITH ITS UNIT (e.g., '45 %', '1.35 g/cm^3', '0.85 dL/g', '450 Barrer') or qualitative state ('Soluble', 'Insoluble')."
+      },
+      "temperature": {
+        "type": "string",
+        "nullable": true,
+        "description": "Test temperature (e.g., '30 °C', 'Room Temperature')."
+      },
+      "test_standard": {
+        "type": "string",
+        "nullable": true,
+        "description": "Standard used (e.g., 'ASTM D570')."
+      },
+      "test_method": {
+        "type": "string",
+        "nullable": true,
+        "description": "Method/Instrument (e.g., 'Ubbelohde viscometer', 'Time-lag method')."
+      },
+      "test_conditions": {
+        "type": "string",
+        "nullable": true,
+        "description": "CRITICAL: Extract Medium ('NMP','CO2','CO2/CH4') "
+      },
+      "notes": {
+        "type": "string",
+        "nullable": true,
+        "description": "Any extra context (e.g., solution concentration '10 wt%'). Relevant stage/context for the Phenolic Resin material may also be captured here."
+      }
+    }
+  }
+}

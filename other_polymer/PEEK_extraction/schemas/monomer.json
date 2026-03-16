@@ -1,0 +1,35 @@
+{
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "doi": {
+        "type": "string",
+        "nullable": true
+      },
+      "abbreviation": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "full_name": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "smiles": {
+        "type": "string",
+        "nullable": true
+      }
+    },
+    "required": [
+      "abbreviation",
+      "full_name",
+      "smiles",
+      "doi"
+    ],
+    "additionalProperties": false
+  }
+}

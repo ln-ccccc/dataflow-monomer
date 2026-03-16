@@ -1,0 +1,73 @@
+{
+  "type": "ARRAY",
+  "description": "List of synthesized or studied Epoxy materials extracted from the text.",
+  "items": {
+    "type": "OBJECT",
+    "required": [
+      "polymer_name",
+      "polymer_type",
+      "components"
+    ],
+    "properties": {
+      "polymer_name": {
+        "type": "STRING",
+        "description": "Primary identifier used by the paper for the synthesized material."
+      },
+      "polymer_type": {
+        "type": "STRING",
+        "description": "Chemical class or stage (for example, Epoxy resin, Epoxy prepolymer, Cured epoxy network)."
+      },
+      "components": {
+        "type": "ARRAY",
+        "description": "List of monomer-library strings corresponding to the resin-forming components.",
+        "items": {
+          "type": "STRING"
+        }
+      },
+      "ratio_type": {
+        "type": "STRING",
+        "description": "How the reported ratio is expressed (for example, mole, weight, equivalent, phr, or unknown)."
+      },
+      "ratio_values_text": {
+        "type": "STRING",
+        "description": "Overall formulation ratio text as written in the paper."
+      },
+      "feed_ratio_text": {
+        "type": "STRING",
+        "description": "Raw contextual wording that describes the feed or formulation ratio."
+      },
+      "epoxy_resin_ratio": {
+        "type": "STRING",
+        "description": "Ratio among epoxy resins WITH NAMES (e.g., \"DGEBA:TGDDM = 80:20\")."
+      },
+      "amine_hardener_ratio": {
+        "type": "STRING",
+        "description": "Ratio among amine hardeners WITH NAMES (e.g., \"DDS:DDM = 50:50\")."
+      },
+      "anhydride_hardener_ratio": {
+        "type": "STRING",
+        "description": "Ratio among anhydride hardeners WITH NAMES."
+      },
+      "reactive_diluent_ratio": {
+        "type": "STRING",
+        "description": "Ratio among reactive diluents or chain extenders WITH NAMES."
+      },
+      "mn_value": {
+        "type": "STRING",
+        "description": "Number-average molecular weight with unit if reported."
+      },
+      "mw_value": {
+        "type": "STRING",
+        "description": "Weight-average molecular weight with unit if reported."
+      },
+      "pdi_value": {
+        "type": "STRING",
+        "description": "Polydispersity index or dispersity value if reported."
+      },
+      "test_method": {
+        "type": "STRING",
+        "description": "Standardized method abbreviation such as GPC, SEC, Viscosity, NMR, or LS."
+      }
+    }
+  }
+}
