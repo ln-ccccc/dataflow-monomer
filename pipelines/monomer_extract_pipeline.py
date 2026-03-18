@@ -377,6 +377,7 @@ class MonomerSmilesEnrichStage:
         except Exception:
             return ""
 
+    # 设置 SMILES 相关标志位
     def _set_smiles_flags(self, monomer):
         pubchem = str(monomer.get("smiles_pubchem", "")).strip()
         opsin = str(monomer.get("smiles_opsin", "")).strip()
@@ -397,15 +398,16 @@ class MonomerSmilesEnrichStage:
         uniq_api = list(dict.fromkeys(api_candidates))
         
         # smiles_api_can 填充逻辑：
-        # 如果 API 结果一致，取该结果
-        # 如果不一致但其中有一个与 text_can 一致，取 text_can
-        # 否则取第一个非空结果作为参考（或者置空）
-        if len(uniq_api) == 1:
+        # 仅当三库 canonical 结果达成“唯一一致意见”时才赋值：
+        # - 如果只有一个非空 canonical 结果，直接使用该结果；
+        # - 如果多个结果但经去重后只剩一个（即三库 canonical 完全一致），使用该结果；
+        # - 其它情况下（例如不同库 canonical 不一致），视为 API 无共识，不填 smiles_api_can。
+        if not uniq_api:
+            monomer["smiles_api_can"] = ""
+        elif len(uniq_api) == 1:
             monomer["smiles_api_can"] = uniq_api[0]
-        elif text_can and text_can in uniq_api:
-            monomer["smiles_api_can"] = text_can
         else:
-            monomer["smiles_api_can"] = uniq_api[0] if uniq_api else ""
+            monomer["smiles_api_can"] = ""
 
         api_can = str(monomer.get("smiles_api_can", "")).strip()
 
