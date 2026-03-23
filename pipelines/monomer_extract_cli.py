@@ -1,6 +1,7 @@
 import os
 import sys
 import time
+from concurrent.futures import ThreadPoolExecutor, wait
 from typing import Optional
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -138,20 +139,18 @@ def _env_float(name, default):
 
 
 def find_json_files(base_path):
-    gen = PaperJsonInputGenerator(exclude_basenames=["monomers.json"])
+    gen = PaperJsonInputGenerator(exclude_basenames=["monomer.json", "monomers.json"])
     return gen.find_json_files(base_path)
 
 
 def _extract_doi_from_dir(dir_path: str, marker: str = "selected_polyimide_papers") -> str:
-    gen = PaperJsonInputGenerator(paper_root=PAPER_ROOT, marker=marker, exclude_basenames=["monomers.json"])
+    gen = PaperJsonInputGenerator(paper_root=PAPER_ROOT, marker=marker, exclude_basenames=["monomer.json", "monomers.json"])
     return gen.extract_doi_from_dir(dir_path)
 
 
 def prepare_input_data(json_files, output_jsonl):
-    gen = PaperJsonInputGenerator(paper_root=PAPER_ROOT, exclude_basenames=["monomers.json"])
-    records = gen.build_records(json_files)
-    gen.write_jsonl(records, output_jsonl)
-    return len(records)
+    gen = PaperJsonInputGenerator(paper_root=PAPER_ROOT, exclude_basenames=["monomer.json", "monomers.json"])
+    return gen.write_jsonl_from_files(json_files, output_jsonl)
 
 
 def run_pipeline(
@@ -403,6 +402,9 @@ def main(argv: Optional[list[str]] = None):
 
     base_dir = args.base_dir
     input_jsonl = args.input_jsonl
+    if base_dir and not os.path.exists(base_dir):
+        print(f"[monomer_extract_cli] base-dir not found: {base_dir}")
+        return 2
     csv_workers = _env_int("MONOMER_CSV_WORKERS", min(4, os.cpu_count() or 1))
     progress_every = _env_int("MONOMER_PROGRESS_EVERY", 500)
     api_workers = _env_int("MONOMER_API_WORKERS", 4)
@@ -413,24 +415,17 @@ def main(argv: Optional[list[str]] = None):
     llm_max_workers = _env_int("MONOMER_LLM_MAX_WORKERS", 100)
     llm_max_tokens = _env_int("MONOMER_LLM_MAX_TOKENS", 12800)
 
-    files = sorted(find_json_files(base_dir))
-    if not files:
-        return 0
+    gen = PaperJsonInputGenerator(exclude_basenames=["monomer.json", "monomers.json"])
     start_global = max(0, int(args.offset or 0))
-    end_global = len(files)
-    if args.limit and args.limit > 0:
-        end_global = min(start_global + args.limit, end_global)
-    if start_global >= end_global:
-        return 0
+    limit_global = int(args.limit or 0)
 
-    def run_one_batch(start_idx, batch_limit):
-        batch_files = files[start_idx:start_idx + batch_limit]
+    def run_one_batch_files(start_idx: int, batch_files: list[str]):
         if not batch_files:
             return None
         base, ext = os.path.splitext(input_jsonl)
         if not ext:
             ext = ".jsonl"
-        batch_jsonl = f"{base}_{start_idx}_{batch_limit}{ext}"
+        batch_jsonl = f"{base}_{start_idx}_{len(batch_files)}{ext}"
         count = prepare_input_data(batch_files, batch_jsonl)
         if count == 0:
             return None
@@ -451,9 +446,39 @@ def main(argv: Optional[list[str]] = None):
             base_issue, ext_issue = os.path.splitext(args.smiles_issue_csv)
             if not ext_issue:
                 ext_issue = ".csv"
-            issue_path = f"{base_issue}_{start_idx}_{batch_limit}{ext_issue}" if args.batch_size > 0 else args.smiles_issue_csv
+            issue_path = f"{base_issue}_{start_idx}_{len(batch_files)}{ext_issue}" if args.batch_size > 0 else args.smiles_issue_csv
             write_smiles_issue_csv(pipeline, issue_path)
         return pipeline
+
+    def iter_files_with_offset_limit():
+        idx = 0
+        emitted = 0
+        for p in gen.iter_json_files(base_dir):
+            if idx < start_global:
+                idx += 1
+                continue
+            if limit_global and emitted >= limit_global:
+                break
+            yield p
+            idx += 1
+            emitted += 1
+
+    def iter_batches():
+        batch_size = int(args.batch_size or 0)
+        if batch_size <= 0:
+            batch_size = _env_int("MONOMER_FILE_BATCH_SIZE", 1000)
+        if batch_size <= 0:
+            batch_size = 1000
+        batch = []
+        start_idx = start_global
+        for p in iter_files_with_offset_limit():
+            batch.append(p)
+            if len(batch) >= batch_size:
+                yield start_idx, batch
+                start_idx += len(batch)
+                batch = []
+        if batch:
+            yield start_idx, batch
 
     if args.use_batch:
         pipeline = ExtractMonomer(
@@ -473,20 +498,15 @@ def main(argv: Optional[list[str]] = None):
         max_concurrent = _env_int("MONOMER_MAX_CONCURRENT_BATCHES", 2)
         if max_concurrent < 1:
             max_concurrent = 1
-        batch_size = int(args.batch_size) if args.batch_size and args.batch_size > 0 else 1000
-        for start_idx in range(start_global, end_global, batch_size):
-            current_limit = min(batch_size, end_global - start_idx)
-            if current_limit <= 0:
-                break
+        for start_idx, batch_files in iter_batches():
             while len(submitted_jobs) >= max_concurrent:
                 poll_and_process(submitted_jobs, pipeline, args.output_dir, csv_workers, progress_every, args.smiles_issue_csv)
                 if len(submitted_jobs) >= max_concurrent:
                     time.sleep(60)
-            batch_files = files[start_idx:start_idx + current_limit]
             base, ext = os.path.splitext(input_jsonl)
             if not ext:
                 ext = ".jsonl"
-            batch_jsonl = f"{base}_{start_idx}_{current_limit}{ext}"
+            batch_jsonl = f"{base}_{start_idx}_{len(batch_files)}{ext}"
             count = prepare_input_data(batch_files, batch_jsonl)
             if count == 0:
                 continue
@@ -497,7 +517,7 @@ def main(argv: Optional[list[str]] = None):
                     "row_mapping": row_mapping,
                     "input_jsonl": batch_jsonl,
                     "start_idx": start_idx,
-                    "limit": current_limit,
+                    "limit": len(batch_files),
                 })
             except Exception:
                 pass
@@ -505,31 +525,17 @@ def main(argv: Optional[list[str]] = None):
             poll_and_process(submitted_jobs, pipeline, args.output_dir, csv_workers, progress_every, args.smiles_issue_csv)
             if submitted_jobs:
                 time.sleep(60)
-    elif args.batch_size and args.batch_size > 0:
-        batch_size = int(args.batch_size)
-        if batch_size <= 0:
-            batch_size = 1000
-        batch_params = []
-        for start_idx in range(start_global, end_global, batch_size):
-            current_limit = min(batch_size, end_global - start_idx)
-            if current_limit <= 0:
-                break
-            batch_params.append((start_idx, current_limit))
-        if not batch_params:
-            return 0
-        max_batches = _env_int("MONOMER_MAX_CONCURRENT_BATCHES", 1)
+    else:
+        max_batches = 1 if not (args.batch_size and args.batch_size > 0) else _env_int("MONOMER_MAX_CONCURRENT_BATCHES", 1)
         if max_batches <= 1:
-            for start_idx, current_limit in batch_params:
-                run_one_batch(start_idx, current_limit)
+            for start_idx, batch_files in iter_batches():
+                run_one_batch_files(start_idx, batch_files)
         else:
             with ThreadPoolExecutor(max_workers=max_batches) as executor:
                 futures = []
-                for start_idx, current_limit in batch_params:
-                    futures.append(executor.submit(run_one_batch, start_idx, current_limit))
+                for start_idx, batch_files in iter_batches():
+                    futures.append(executor.submit(run_one_batch_files, start_idx, batch_files))
                 wait(futures)
-    else:
-        total_limit = end_global - start_global
-        run_one_batch(start_global, total_limit)
 
     if args.library_output_path:
         concat_monomers_csv(args.output_dir or base_dir, args.library_output_path)

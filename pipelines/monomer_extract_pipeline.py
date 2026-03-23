@@ -11,12 +11,11 @@ import requests
 from rdkit import Chem
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-
+from dataflow.serving.api_google_vertexai_serving import APIGoogleVertexAIServing
+from dataflow.serving.api_llm_serving_request import APILLMServing_request
 from operators.general.chunked_generator import ChunkedPromptedGenerator
 from dataflow.operators.core_text import PandasOperator
 from prompts.monomer import MonomerNameExtractPrompt
-
-from dataflow.serving.api_google_vertexai_serving import APIGoogleVertexAIServing
 from dataflow.utils.storage import LazyFileStorage, FileStorage
 from utils.format_utils import safe_parse_json
 
@@ -166,15 +165,64 @@ class MonomerSeedStage:
 
 
 class MonomerSmilesEnrichStage:
-    def __init__(self, timeout=10, sleep_every=500, sleep_seconds=0.1, api_workers=100, row_workers=10):
+    class _TransientNetworkError(Exception):
+        pass
+
+    class _RateLimiter:
+        def __init__(self, min_interval_seconds: float):
+            self._min_interval = max(0.0, float(min_interval_seconds or 0.0))
+            self._lock = threading.Lock()
+            self._next_time = 0.0
+
+        def wait(self):
+            if self._min_interval <= 0:
+                return
+            with self._lock:
+                now = time.time()
+                wait_s = self._next_time - now
+                if wait_s > 0:
+                    time.sleep(wait_s)
+                self._next_time = max(self._next_time, time.time()) + self._min_interval
+
+    def __init__(
+        self,
+        timeout=10,
+        sleep_every=500,
+        sleep_seconds=0.1,
+        api_workers=100,
+        row_workers=10,
+        http_max_retries=3,
+        http_backoff_factor=1.0,
+        http_max_backoff=20.0,
+        pubchem_min_interval=0.5,
+        opsin_min_interval=0.5,
+        cactus_min_interval=0.5,
+        http_max_inflight=15,
+        parallel_services=True,
+        pubchem_disable_proxy=True,
+        opsin_disable_proxy=False,
+        cactus_disable_proxy=False,
+    ):
         self.timeout = timeout
         self.sleep_every = sleep_every
         self.sleep_seconds = sleep_seconds
         self.api_workers = max(1, int(api_workers or 1))
         self.row_workers = max(1, int(row_workers or 1))
+        self.http_max_retries = max(0, int(http_max_retries or 0))
+        self.http_backoff_factor = float(http_backoff_factor or 0.0)
+        self.http_max_backoff = float(http_max_backoff or 0.0)
         self._request_count = 0
         self._lock = threading.Lock()
         self._session_local = threading.local()
+        self._http_sem = threading.Semaphore(max(1, int(http_max_inflight or 1)))
+        self._rate_pubchem = self._RateLimiter(pubchem_min_interval)
+        self._rate_opsin = self._RateLimiter(opsin_min_interval)
+        self._rate_cactus = self._RateLimiter(cactus_min_interval)
+        self.parallel_services = bool(parallel_services)
+        self._svc_executor = ThreadPoolExecutor(max_workers=max(3, int(http_max_inflight or 1)))
+        self.pubchem_disable_proxy = bool(pubchem_disable_proxy)
+        self.opsin_disable_proxy = bool(opsin_disable_proxy)
+        self.cactus_disable_proxy = bool(cactus_disable_proxy)
         self._name_cache = {}
         self._name_cache_lock = threading.Lock()
         self._smiles_canon_cache = {}
@@ -216,7 +264,8 @@ class MonomerSmilesEnrichStage:
 
     def _normalize_smiles(self, s):
         return self._clean_text(s)
-
+        
+    # 控制请求频率
     def _throttle(self):
         if not self.sleep_every or self.sleep_every <= 0:
             return
@@ -228,14 +277,35 @@ class MonomerSmilesEnrichStage:
         if should_sleep:
             time.sleep(self.sleep_seconds)
 
-    def _get_session(self):
-        session = getattr(self._session_local, "session", None)
+   # 获取 HTTP Session (线程安全)
+    def _get_session(self, trust_env: bool = True):
+        attr = "session_env" if trust_env else "session_noenv"
+        session = getattr(self._session_local, attr, None)
         if session is None:
             session = requests.Session()
-            self._session_local.session = session
+            session.trust_env = bool(trust_env)
+            try:
+                from requests.adapters import HTTPAdapter
+                adapter = HTTPAdapter(max_retries=0, pool_connections=50, pool_maxsize=50, pool_block=True)
+                session.mount("http://", adapter)
+                session.mount("https://", adapter)
+            except Exception:
+                pass
+            setattr(self._session_local, attr, session)
         return session
 
-    def _get(self, url, as_json=False):
+    # 指数退避策略
+    def _sleep_backoff(self, attempt: int, retry_after: float | None = None):
+        if retry_after is not None and retry_after > 0:
+            time.sleep(min(float(retry_after), self.http_max_backoff or float(retry_after)))
+            return
+        if attempt <= 0 or self.http_backoff_factor <= 0:
+            return
+        base = min(self.http_max_backoff, self.http_backoff_factor * (2 ** (attempt - 1)))
+        jitter = (time.time() % 1.0) * 0.25
+        time.sleep(max(0.0, base + jitter))
+
+    def _get(self, url, as_json=False, service: str | None = None):
         logger = None
         try:
             from dataflow import get_logger
@@ -243,35 +313,100 @@ class MonomerSmilesEnrichStage:
         except ImportError:
             pass
             
-        try:
-            self._throttle()
-            session = self._get_session()
-            if logger:
-                logger.debug(f"Requesting URL: {url}")
-                
-            res = session.get(url, timeout=self.timeout)
-            
-            if res.status_code == 200:
-                if logger:
-                    logger.debug(f"Success 200 OK: {url}")
-                return res.json() if as_json else res.text
-            elif res.status_code == 404:
-                if logger:
-                    logger.debug(f"Not Found 404: {url}")
+        rate = None
+        if service == "pubchem":
+            rate = self._rate_pubchem
+        elif service == "opsin":
+            rate = self._rate_opsin
+        elif service == "cactus":
+            rate = self._rate_cactus
+
+        disable_proxy = False
+        if service == "pubchem":
+            disable_proxy = self.pubchem_disable_proxy
+        elif service == "opsin":
+            disable_proxy = self.opsin_disable_proxy
+        elif service == "cactus":
+            disable_proxy = self.cactus_disable_proxy
+
+        last_exc = None
+        last_status = None
+
+        for attempt in range(0, max(1, self.http_max_retries + 1)):
+            try:
+                if rate:
+                    rate.wait()
+                self._throttle()
+                with self._http_sem:
+                    session = self._get_session(trust_env=not disable_proxy)
+                    if logger:
+                        logger.debug(f"Requesting URL: {url}")
+                    res = session.get(url, timeout=self.timeout, allow_redirects=False)
+                last_status = res.status_code
+
+                if res.status_code in (301, 302, 303, 307, 308):
+                    loc = res.headers.get("Location") or ""
+                    if "misuse.ncbi.nlm.nih.gov" in loc:
+                        raise self._TransientNetworkError(f"ncbi_abuse_block redirect={loc}")
+                    return None
+
+                if res.status_code == 200:
+                    if not as_json:
+                        return res.text
+
+                    # 优先通过 Content-Type 判断是否真的是 JSON
+                    ct = (res.headers.get("Content-Type") or "").lower()
+                    if "json" not in ct:
+                        # 对于 PubChem 这种 name 查询，如果 Content-Type 不是 JSON，
+                        # 通常是“not match”等 HTML 文本，直接视为无结果，不再重试
+                        if service == "pubchem":
+                            return None
+                        # 其他服务也直接当作无结果处理
+                        return None
+
+                    try:
+                        return res.json()
+                    except Exception as e:
+                        # Content-Type 声称是 JSON 但解析失败，视为瞬态错误，可重试
+                        last_exc = e
+                        self._sleep_backoff(attempt + 1)
+                        continue
+
+                if res.status_code == 404:
+                    return None
+
+                retry_after = None
+                if res.status_code == 429:
+                    ra = res.headers.get("Retry-After")
+                    if ra:
+                        try:
+                            retry_after = float(ra)
+                        except Exception:
+                            retry_after = None
+
+                if res.status_code in (429, 500, 502, 503, 504):
+                    self._sleep_backoff(attempt + 1, retry_after=retry_after)
+                    continue
+
                 return None
-            else:
-                if logger:
-                    logger.warning(f"Request failed with status {res.status_code}: {url} - {res.text[:100]}")
-                return None
-                
-        except requests.exceptions.RequestException as e:
-            if logger:
-                logger.warning(f"Network/Retry Error for {url}: {str(e)}")
-            return None
-        except Exception as e:
-            if logger:
-                logger.error(f"Unexpected Error for {url}: {str(e)}")
-            return None
+
+            except self._TransientNetworkError:
+                raise
+            except requests.exceptions.RequestException as e:
+                last_exc = e
+                self._sleep_backoff(attempt + 1)
+                continue
+            except Exception as e:
+                last_exc = e
+                self._sleep_backoff(attempt + 1)
+                continue
+
+        if logger:
+            if last_status is not None:
+                logger.warning(f"Request failed after retries status={last_status}: {url}")
+            elif last_exc is not None:
+                logger.warning(f"Request failed after retries error={str(last_exc)}: {url}")
+        raise self._TransientNetworkError(str(last_exc) if last_exc else f"status={last_status}")
 
     def _query_pubchem(self, name):
         name = self._clean_text(name)
@@ -291,7 +426,7 @@ class MonomerSmilesEnrichStage:
             f"{encoded_name}/property/"
             "IsomericSMILES,CanonicalSMILES,ConnectivitySMILES/JSON"
         )
-        data = self._get(url, as_json=True)
+        data = self._get(url, as_json=True, service="pubchem")
         if not data:
              # 尝试 2: 如果名字里有引号，尝试替换或特殊处理
              # 有些时候 PubChem 对 URL 里的引号比较敏感，虽然 quote 了
@@ -311,10 +446,10 @@ class MonomerSmilesEnrichStage:
     def _query_pubchem_smiles(self, smiles):
         url = (
             "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/smiles/"
-            f"{quote(smiles)}/property/"
+            f"{quote(smiles, safe='')}/property/"
             "IsomericSMILES,CanonicalSMILES,ConnectivitySMILES/JSON"
         )
-        data = self._get(url, as_json=True) or {}
+        data = self._get(url, as_json=True, service="pubchem") or {}
         props = data.get("PropertyTable", {}).get("Properties", [])
         if not props:
             return ""
@@ -329,20 +464,27 @@ class MonomerSmilesEnrichStage:
         name = self._clean_text(name)
         if not name:
             return ""
-        url = f"https://opsin.ch.cam.ac.uk/opsin/{quote(name)}.json"
-        data = self._get(url, as_json=True) or {}
-        if data.get("status") != "SUCCESS":
-            return ""
-        return data.get("smiles", "") or ""
+        url = f"https://opsin.ch.cam.ac.uk/opsin/{quote(name, safe='')}.smi"
+        text = self._get(url, as_json=False, service="opsin") or ""
+        return str(text).strip()
 
     def _query_cactus(self, name):
         name = self._clean_text(name)
         if not name:
             return ""
-        url = f"https://cactus.nci.nih.gov/chemical/structure/{quote(name)}/smiles"
-        text = self._get(url, as_json=False) or ""
-        text = text.strip()
-        return text
+        urls = [
+            f"https://cactus.nci.nih.gov/chemical/structure/{quote(name, safe='')}/smiles",
+            f"http://cactus.nci.nih.gov/chemical/structure/{quote(name, safe='')}/smiles",
+        ]
+        for u in urls:
+            try:
+                text = self._get(u, as_json=False, service="cactus") or ""
+            except self._TransientNetworkError:
+                continue
+            text = str(text).strip()
+            if text:
+                return text
+        return ""
 
     def _pick_final_smiles(self, pubchem_smiles, opsin_smiles, cactus_smiles):
         cp = self._canon_smiles(pubchem_smiles)
@@ -502,15 +644,55 @@ class MonomerSmilesEnrichStage:
         # 可以并行查询以提高速度，也可以串行
         # 这里为了逻辑清晰和避免过度并发，使用串行但确保每个都尝试
         
-        p = self._query_pubchem(name)
-        o = self._query_opsin(name)
-        c = self._query_cactus(name)
+        transient = False
+
+        if self.parallel_services:
+            futures = {
+                "pubchem": self._svc_executor.submit(self._query_pubchem, name),
+                "opsin": self._svc_executor.submit(self._query_opsin, name),
+                "cactus": self._svc_executor.submit(self._query_cactus, name),
+            }
+            results = {"pubchem": "", "opsin": "", "cactus": ""}
+            for k, fut in futures.items():
+                try:
+                    results[k] = fut.result() or ""
+                except self._TransientNetworkError:
+                    transient = True
+                    results[k] = ""
+                except Exception:
+                    results[k] = ""
+            p, o, c = results["pubchem"], results["opsin"], results["cactus"]
+        else:
+            try:
+                p = self._query_pubchem(name)
+            except self._TransientNetworkError:
+                p = ""
+                transient = True
+            except Exception:
+                p = ""
+
+            try:
+                o = self._query_opsin(name)
+            except self._TransientNetworkError:
+                o = ""
+                transient = True
+            except Exception:
+                o = ""
+
+            try:
+                c = self._query_cactus(name)
+            except self._TransientNetworkError:
+                c = ""
+                transient = True
+            except Exception:
+                c = ""
         
         final = self._pick_final_smiles(p, o, c)
         
         result = (p, o, c, final)
-        with self._name_cache_lock:
-            self._name_cache[name] = result
+        if final or p or o or c or not transient:
+            with self._name_cache_lock:
+                self._name_cache[name] = result
         return result
 
     def _enrich_single(self, monomer):
@@ -627,8 +809,8 @@ class ExtractMonomer:
         max_chunk_len=24000,
         api_workers=None,
         api_timeout=None,
-        api_sleep_every=None,
-        api_sleep_seconds=None,
+        api_sleep_every=100,
+        api_sleep_seconds=1,
         api_row_workers=None,
         llm_max_workers=None,
         llm_max_tokens=None,
@@ -658,10 +840,27 @@ class ExtractMonomer:
         api_sleep_every = api_sleep_every if api_sleep_every is not None else _env_int("MONOMER_API_SLEEP_EVERY", 50)
         api_sleep_seconds = api_sleep_seconds if api_sleep_seconds is not None else _env_float("MONOMER_API_SLEEP_SECONDS", 0.5)
         api_row_workers = api_row_workers if api_row_workers is not None else _env_int("MONOMER_API_ROW_WORKERS", 4)
+        pubchem_min_interval = _env_float("MONOMER_PUBCHEM_MIN_INTERVAL", 0.5)
+        opsin_min_interval = _env_float("MONOMER_OPSIN_MIN_INTERVAL", 0.5)
+        cactus_min_interval = _env_float("MONOMER_CACTUS_MIN_INTERVAL", 0.5)
+        http_max_inflight = _env_int("MONOMER_HTTP_MAX_INFLIGHT", 15)
+        http_max_retries = _env_int("MONOMER_HTTP_MAX_RETRIES", 3)
+        http_backoff_factor = _env_float("MONOMER_HTTP_BACKOFF_FACTOR", 1.0)
+        http_max_backoff = _env_float("MONOMER_HTTP_MAX_BACKOFF", 20.0)
+        parallel_services = _env_int("MONOMER_PARALLEL_SERVICES", 1)
+        pubchem_disable_proxy = _env_int("MONOMER_PUBCHEM_DISABLE_PROXY", 1)
+        opsin_disable_proxy = _env_int("MONOMER_OPSIN_DISABLE_PROXY", 0)
+        cactus_disable_proxy = _env_int("MONOMER_CACTUS_DISABLE_PROXY", 0)
         llm_max_workers = llm_max_workers if llm_max_workers is not None else _env_int("MONOMER_LLM_MAX_WORKERS", 100)
         llm_max_tokens = llm_max_tokens if llm_max_tokens is not None else _env_int("MONOMER_LLM_MAX_TOKENS", 12800)
+        llm_max_tokens_cap = _env_int("MONOMER_LLM_MAX_TOKENS_CAP", 32768)
+        llm_max_retries = _env_int("MONOMER_LLM_MAX_RETRIES", 5)
+        llm_connect_timeout = _env_float("MONOMER_LLM_CONNECT_TIMEOUT", 60.0)
+        llm_read_timeout = _env_float("MONOMER_LLM_READ_TIMEOUT", 600.0)
         if llm_max_tokens < 1:
             llm_max_tokens = 1
+        if llm_max_tokens_cap and llm_max_tokens_cap > 0 and llm_max_tokens > llm_max_tokens_cap:
+            llm_max_tokens = llm_max_tokens_cap
         if llm_max_tokens >= 65537:
             llm_max_tokens = 65535
 
@@ -678,6 +877,15 @@ class ExtractMonomer:
             max_tokens=llm_max_tokens,
             use_batch=use_batch,
         )
+        # self.llm_serving = APILLMServing_request(
+        #     api_url="https://ai-gateway-internal.dp.tech/v1/chat/completions",
+        #     model_name="ksyun/gemini-2.5-flash",
+        #     max_workers=llm_max_workers,
+        #     max_retries=llm_max_retries,
+        #     connect_timeout=llm_connect_timeout,
+        #     read_timeout=llm_read_timeout,
+        #     max_tokens=llm_max_tokens,
+        # )
         self.list_processor = MonomerListProcessor()
         self.seed_stage = MonomerSeedStage(
             llm_serving=self.llm_serving,
@@ -691,6 +899,17 @@ class ExtractMonomer:
             sleep_seconds=api_sleep_seconds,
             api_workers=api_workers,
             row_workers=api_row_workers,
+            pubchem_min_interval=pubchem_min_interval,
+            opsin_min_interval=opsin_min_interval,
+            cactus_min_interval=cactus_min_interval,
+            http_max_inflight=http_max_inflight,
+            http_max_retries=http_max_retries,
+            http_backoff_factor=http_backoff_factor,
+            http_max_backoff=http_max_backoff,
+            parallel_services=bool(parallel_services),
+            pubchem_disable_proxy=bool(pubchem_disable_proxy),
+            opsin_disable_proxy=bool(opsin_disable_proxy),
+            cactus_disable_proxy=bool(cactus_disable_proxy),
         )
         
         # 使用传入的 library_output_path，如果未传入则使用默认值

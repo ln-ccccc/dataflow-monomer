@@ -40,10 +40,11 @@ DEFINITIONS & SCOPE:
 
 1. Monomers:
    - Only extract **polymerizable starting monomers**.
-   - Exclude solvents, catalysts, initiators, crosslinkers, dopants, additives, reagents, and post-modification agents.
+   - Exclude solvents, catalysts, initiators, dopants, additives, reagents, and post-modification agents.
    - If a compound is used to form the polymer backbone, it is a monomer.
    - If it only triggers or assists the reaction, it is NOT a monomer.
    - If the role of a compound is ambiguous, exclude it.
+   - **CROSSLINKER EXCEPTION**: If a crosslinker is chemically incorporated into the final polymer network (e.g., bisazide compounds that form covalent bonds with the polymer via nitrene addition to vinyl groups, or multifunctional silanes like TEOS used as crosslinkers in condensation curing), it MUST be extracted as a monomer. Only exclude crosslinkers that act purely as catalytic agents without being incorporated into the network.
 
 2. Name Handling:
    - Extract abbreviation(s) if explicitly mentioned (e.g., "MMA", "St", "DGEBA").

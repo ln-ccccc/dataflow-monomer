@@ -14,6 +14,7 @@ Output a FLAT LIST of independent measurement records (Long Format) strictly map
    - "Dissipation Factor", "ε''", "Dielectric loss tangent" -> Map to "Dielectric Loss (Df / tan δ)".
    - "Dielectric Strength", "Breakdown Voltage / Thickness", "Eb" -> Map to "Breakdown Strength".
    - "Specific Resistance" -> Map to "Volume Resistivity" or "Surface Resistivity" (verify via units).
+   - "Proton conductivity", "σ", "ionic conductivity" (in the context of proton exchange membranes) -> Map to "Proton Conductivity". Units are typically S/cm or mS/cm. CRITICAL: Proton conductivity is highly dependent on temperature AND relative humidity (RH). If reported at multiple temperatures or RH levels, create SEPARATE records for each condition.
 4. TABLE & CONTEXT ALIGNMENT (To Boost Precision): 
    - Pay strict attention to units to distinguish properties. For example, Volume Resistivity is typically in Ω·cm or Ω·m, whereas Surface Resistivity is in Ω/sq (ohms per square) or simply Ω.
    - Ensure exact alignment between frequency columns/rows and their corresponding Dk/Df values. Do not mismatch 1 kHz Dk with 1 MHz Df.
@@ -30,7 +31,7 @@ Output a FLAT LIST of independent measurement records (Long Format) strictly map
 
 ### TARGET PROPERTIES (`record_type` ENUM):
 Classify the property STRICTLY into one of these exact strings:
-"Dielectric Constant (Dk)", "Dielectric Loss (Df / tan δ)", "Breakdown Strength", "Electrical Conductivity", "Volume Resistivity", "Surface Resistivity", "Remnant Polarization (Pr)", "Coercive Field (Ec)", "Piezoelectric Coefficient (d33)".
+"Dielectric Constant (Dk)", "Dielectric Loss (Df / tan δ)", "Breakdown Strength", "Electrical Conductivity", "Volume Resistivity", "Surface Resistivity", "Remnant Polarization (Pr)", "Coercive Field (Ec)", "Piezoelectric Coefficient (d33)", "Proton Conductivity".
 
 ### FIELD DEFINITIONS & MAPPING GUIDE (11 Fixed Headers):
 * `doi` (String | null): The Document Object Identifier.
@@ -102,5 +103,18 @@ Return a valid JSON array only. Example:
         "test_method": "High Resistance Meter",
         "test_conditions": "Silver paint electrodes",
         "notes": "Excellent insulation"
+    },
+    {
+        "doi": "10.1021/Example",
+        "file_path": null,
+        "polymer_name": "PBI-1",
+        "record_type": "Proton Conductivity",
+        "value": "0.12 S/cm",
+        "temperature": "160 °C",
+        "frequency": null,
+        "test_standard": null,
+        "test_method": "Four-probe AC impedance",
+        "test_conditions": "Anhydrous, PA doping level: 6.2 mol/PRU",
+        "notes": "Measured under dry N2 atmosphere"
     }
 ]

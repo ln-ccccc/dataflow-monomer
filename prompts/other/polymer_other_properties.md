@@ -15,6 +15,7 @@ Output a FLAT LIST of independent measurement records (Long Format) strictly map
    - For Permeability/Solubility Coefficient: Extract the Gas and Upstream Pressure (e.g., "Gas: CO2, Pressure: 2 atm").
    - For Selectivity: Extract the Gas Pair (e.g., "Gas Pair: CO2/CH4").
    - For Sorption: Extract Environment/Humidity and Time (e.g., "Environment: 85% RH, Time: 24h" or "Immersion in water").
+   - For Acid Doping: Extract the Acid type, concentration, temperature, and immersion time (e.g., "Acid: 85 wt% H₃PO₄, Temperature: 120 °C, Time: 24h").
 4. SOLUBILITY TABLE DECODING (To Boost Precision): Authors often use symbols in solubility tables. You MUST decode them into qualitative semantic states for the `value` field:
    - "++", "+", "S", "Soluble" -> Map to "Soluble".
    - "+-", "±", "PS", "Swollen", "Partially Soluble", "Heating required" -> Map to "Partially Soluble".
@@ -42,6 +43,10 @@ You must classify every extracted property EXACTLY into one of the following str
 * "Gas Permeability": The rate of gas transport through the membrane, P. Usually in Barrer.
 * "Gas Separation Selectivity": Ideal selectivity, permselectivity, separation factor, α. The ratio of permeabilities.
 * "Solubility Coefficient": Gas sorption coefficient in the polymer, S. Usually in cm^3(STP)/(cm^3·cmHg).
+* "Acid Doping Level": The amount of acid (typically phosphoric acid, H₃PO₄) absorbed per repeat unit of the polymer. Look for "ADL", "doping level", "acid uptake", "PA doping level", "mol H₃PO₄ per repeat unit", "PRU" (per repeat unit). Usually reported as a dimensionless number (e.g., "6.2 mol PA/PRU") or as weight percentage (e.g., "350 wt%"). CRITICAL for PBI membrane studies.
+* "Contact Angle": Static or dynamic water contact angle (WCA), surface wettability. Look for "contact angle", "WCA", "θ", "advancing/receding angle". Usually in degrees (°). Highly relevant for silicone and fluoropolymer surfaces.
+* "Crosslink Density": The number of crosslink points per unit volume, νe. Look for "crosslink density", "network density", "νe", "Mc (molecular weight between crosslinks)". Usually in mol/cm³ or mol/m³. Often calculated from swelling experiments (Flory-Rehner) or from rubbery plateau modulus (DMA). If reported as Mc, extract as Crosslink Density with the Mc value and unit.
+* "Gel Fraction": The insoluble fraction after solvent extraction or the crosslinking efficiency, indicating the degree of crosslinking. Look for "gel content", "gel fraction", "insoluble fraction", "sol-gel analysis", "normalized remaining thickness", "crosslinking efficiency", "ratio consumed for crosslinking". Usually in % (e.g., "95 %"). Measured by Soxhlet extraction, simple immersion/weighing, or FTIR-based conversion analysis. CRITICAL FOR PHOTOCROSSLINKING SYSTEMS: In photosensitive polymer systems (e.g., polysilsesquioxane + bisazide), the "ratio of crosslinker consumed for crosslinking" or "normalized remaining film thickness after development" is a measure of crosslinking efficiency and should be recorded as Gel Fraction. Record the vinyl group conversion and crosslinker decomposition ratio in `notes` if available.
 
 ### FIELD DEFINITIONS & MAPPING GUIDE (10 Fixed Headers):
 * `doi` (String | null): The Document Object Identifier.
@@ -109,5 +114,17 @@ Return a valid JSON array only. Example:
         "test_method": "Ideal gas calculation",
         "test_conditions": "Gas Pair: CO2/CH4",
         "notes": null
+    },
+    {
+        "doi": "10.1021/Example",
+        "file_path": null,
+        "polymer_name": "PBI-1",
+        "record_type": "Acid Doping Level",
+        "value": "6.2 mol PA/PRU",
+        "temperature": "Room Temperature",
+        "test_standard": null,
+        "test_method": "Gravimetric",
+        "test_conditions": "Acid: 85 wt% H₃PO₄, Temperature: 120 °C, Time: 24h",
+        "notes": "Membrane swelled significantly after doping"
     }
 ]

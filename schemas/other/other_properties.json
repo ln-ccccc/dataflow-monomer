@@ -17,7 +17,9 @@
                 "enum": [
                     "Crystallinity", "Density", "Intrinsic Viscosity", "Dynamic Viscosity", 
                     "Melt Viscosity", "Minimum Viscosity", "Solubility", "Water Absorption", "Solvent Uptake", 
-                    "Gas Permeability", "Gas Separation Selectivity", "Solubility Coefficient"
+                    "Gas Permeability", "Gas Separation Selectivity", "Solubility Coefficient",
+                    "Acid Doping Level",
+                    "Contact Angle", "Crosslink Density", "Gel Fraction"
                 ],
                 "description": "The specific property being measured."
             },

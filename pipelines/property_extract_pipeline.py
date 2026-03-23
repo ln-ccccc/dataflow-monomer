@@ -301,13 +301,23 @@ from prompts.generic_md_prompt import MarkdownSchemaPrompt
 from dataflow.serving.api_google_vertexai_serving import APIGoogleVertexAIServing
 
 # 类别与对应的 Prompt/Schema 文件位置
+# _CATEGORY_FILES = {
+#     "mechanical": ("mechanical/mechanical_properties.md", "mechanical/mechanical_properties.json"),
+#     "optical": ("optical/prompt_optical_properties.md", "optical/optical_properties.json"),
+#     "electrical": ("electrical/polymer_electrical_properties.md", "electrical/electrical_properties.json"),
+#     "other": ("other/polymer_other_properties.md", "other/other_properties.json"),
+#     "thermal": ("thermal/polymer_thermal_properties.md", "thermal/thermal_properties.json"),
+# }
+
+# BMI
 _CATEGORY_FILES = {
-    "mechanical": ("mechanical/mechanical_properties.md", "mechanical/mechanical_properties.json"),
-    "optical": ("optical/prompt_optical_properties.md", "optical/optical_properties.json"),
-    "electrical": ("electrical/polymer_electrical_properties.md", "electrical/electrical_properties.json"),
-    "other": ("other/polymer_other_properties.md", "other/other_properties.json"),
-    "thermal": ("thermal/polymer_thermal_properties.md", "thermal/thermal_properties.json"),
+    "mechanical": ("/uni-curator/user/zwl/other_polymer_benchmark/epoxy_benchmark/prompts/mechanical/mechanical_properties.md", "/uni-curator/user/lcc/lcc/dataflow-dp/other_polymer/ladder_polymer/schemas/mechanical/mechanical_properties.json"),
+    "optical": ("/uni-curator/user/zwl/other_polymer_benchmark/epoxy_benchmark/prompts/optical/prompt_optical_properties.md", "/uni-curator/user/zwl/other_polymer_benchmark/epoxy_benchmark/schemas/optical/optical_properties.json"), 
+    "electrical": ("/uni-curator/user/lcc/lcc/dataflow-dp/other_polymer/ladder_polymer/prompts/electrical/polymer_electrical_properties.md", "/uni-curator/user/lcc/lcc/dataflow-dp/other_polymer/ladder_polymer/schemas/electrical/electrical_properties.json"),
+    "other": ("/uni-curator/user/lcc/lcc/dataflow-dp/other_polymer/ladder_polymer/prompts/other/polymer_other_properties.md", "/uni-curator/user/lcc/lcc/dataflow-dp/other_polymer/ladder_polymer/schemas/other/other_properties.json"),
+    "thermal": ("/uni-curator/user/lcc/lcc/dataflow-dp/other_polymer/ladder_polymer/prompts/thermal/polymer_thermal_properties.md", "/uni-curator/user/lcc/lcc/dataflow-dp/other_polymer/ladder_polymer/schemas/thermal/thermal_properties.json"),
 }
+
 
 def _env_int(name: str, default: int) -> int:
     v = os.getenv(name)

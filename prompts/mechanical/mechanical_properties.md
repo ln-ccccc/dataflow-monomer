@@ -17,6 +17,7 @@ Output a FLAT LIST of independent measurement records (Long Format) strictly map
    - "Bending Modulus" -> Map to "Flexural Modulus".
    - "G'" -> Map to "Storage Modulus (E' or G')".
    - "G''" -> Map to "Loss Modulus (E'' or G'')".
+   - "Hardness (Shore A)", "Hardness (Shore 00)", "Durometer hardness", "Shore D" -> Map to "Shore Hardness". CRITICAL: Always include the scale (Shore A, Shore 00, Shore D) in `metric_type`.
 4. TABLE & CONTEXT ALIGNMENT (To Boost Precision): 
    - Pay strict attention to table headers (columns) and rows to avoid mixing up polymers or properties.
    - Do NOT confuse Storage Modulus (E'/G') with Loss Modulus (E''/G'').
@@ -32,7 +33,7 @@ Output a FLAT LIST of independent measurement records (Long Format) strictly map
 
 ### TARGET PROPERTIES (`record_type` ENUM):
 Classify the property STRICTLY into one of these exact strings:
-"Tensile Strength", "Tensile Modulus", "Elongation at Break", "Flexural Modulus", "Flexural Strength", "Impact Strength", "Impact Modulus", "Shear Strength", "Shear Modulus", "Storage Modulus (E' or G')", "Loss Modulus (E'' or G'')", "Tan Delta", "Poisson's Ratio".
+"Tensile Strength", "Tensile Modulus", "Elongation at Break", "Flexural Modulus", "Flexural Strength", "Impact Strength", "Impact Modulus", "Shear Strength", "Shear Modulus", "Storage Modulus (E' or G')", "Loss Modulus (E'' or G'')", "Tan Delta", "Poisson's Ratio", "Shore Hardness".
 
 ### FIELD DEFINITIONS & MAPPING GUIDE (16 Fixed Headers):
 * `doi` (String | null): The Document Object Identifier.

@@ -18,7 +18,8 @@
                 "enum": [
                     "Tensile Strength", "Tensile Modulus", "Elongation at Break", "Flexural Modulus","Flexural Strength",
                     "Impact Strength", "Impact Modulus", "Shear Strength", "Shear Modulus", "Storage Modulus (E' or G')", 
-                    "Loss Modulus (E'' or G'')", "Tan Delta", "Poisson's Ratio"
+                    "Loss Modulus (E'' or G'')", "Tan Delta", "Poisson's Ratio",
+                    "Shore Hardness"
                 ],
                 "description": "The specific mechanical property being measured."
             },

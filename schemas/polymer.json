@@ -1,6 +1,6 @@
 {
   "type": "ARRAY",
-  "description": "List of synthesized or studied polymers extracted from the text.",
+  "description": "List of synthesized or studied Phenolic Resin materials extracted from the text.",
   "items": {
     "type": "OBJECT",
     "required": [
@@ -11,66 +11,62 @@
     "properties": {
       "polymer_name": {
         "type": "STRING",
-        "description": "Primary identifier (e.g., 'PI-1', 'PU-a')."
+        "description": "Primary identifier used by the paper for the synthesized material."
       },
       "polymer_type": {
         "type": "STRING",
-        "description": "Chemical class (e.g., 'Polyimide', 'Polyurethane')."
+        "description": "Chemical class or stage (for example, Novolac phenolic resin, Resol phenolic resin, Cured phenolic network)."
       },
       "components": {
         "type": "ARRAY",
-        "description": "List of monomer abbreviations.",
+        "description": "List of monomer-library strings corresponding to the resin-forming components.",
         "items": {
           "type": "STRING"
         }
       },
       "ratio_type": {
         "type": "STRING",
-        "description": "The type of ratio presented (e.g., mole, weight, unknown)."
+        "description": "How the reported ratio is expressed (for example, mole, weight, equivalent, phr, or unknown)."
       },
       "ratio_values_text": {
         "type": "STRING",
-        "description": "General representation of the ratio values (e.g., '50:50', '1:1')."
+        "description": "Overall formulation ratio text as written in the paper."
       },
       "feed_ratio_text": {
         "type": "STRING",
-        "description": "Raw text of the feed ratio (e.g., 'MDI:BDO:PTMG = 2:1:1')."
+        "description": "Raw contextual wording that describes the feed or formulation ratio."
       },
-      "diamine_ratio": {
+      "phenol_ratio": {
         "type": "STRING",
-        "description": "Molar ratio between diamines (e.g., '70:30')."
+        "description": "Ratio among phenolic monomers WITH NAMES (e.g., \"phenol:p-cresol = 70:30\")."
       },
-      "dianhydride_ratio": {
+      "aldehyde_ratio": {
         "type": "STRING",
-        "description": "Molar ratio between dianhydrides."
+        "description": "Ratio among aldehyde or formaldehyde sources WITH NAMES."
       },
-      "diisocyanate_ratio": {
+      "crosslinker_ratio": {
         "type": "STRING",
-        "description": "Molar ratio between diisocyanates (e.g., 'MDI:TDI = 80:20')."
+        "description": "Ratio among curing crosslinkers WITH NAMES (e.g., HMTA, multifunctional aldehydes)."
       },
-      "diol_ratio": {
+      "modifier_ratio": {
         "type": "STRING",
-        "description": "Molar ratio between diols (e.g., 'BDO:PTMG = 1:1')."
-      },
-      "diacid_ratio": {
-        "type": "STRING",
-        "description": "Molar ratio between diacids."
+        "description": "Ratio among other reactive modifiers WITH NAMES."
       },
       "mn_value": {
         "type": "STRING",
-        "description": "Number average MW with unit (e.g., '25000 g/mol', '45.5 kDa')."
+        "description": "Number-average molecular weight with unit if reported."
       },
       "mw_value": {
         "type": "STRING",
-        "description": "Weight average MW with unit (e.g., '50000 g/mol', '89.2 kDa')."
+        "description": "Weight-average molecular weight with unit if reported."
       },
       "pdi_value": {
         "type": "STRING",
-        "description": "Polydispersity Index (PDI, Đ)."
+        "description": "Polydispersity index or dispersity value if reported."
       },
       "test_method": {
         "type": "STRING",
-        "description": "Method used (e.g., 'GPC', 'SEC', 'Viscosity')."
+        "description": "Standardized method abbreviation such as GPC, SEC, Viscosity, NMR, or LS."
       }
     }
   }

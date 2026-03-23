@@ -19,7 +19,7 @@ class MonomerNameExtractPrompt(PromptABC):
         return ""
 
     def build_prompt(self, **kwargs) -> str:
-        base_prompt = _load_text("/uni-curator/user/lcc/lcc/dataflow-dp/prompts/details/monomer.md")
+        base_prompt = _load_text("/uni-curator/user/zwl/other_polymer_benchmark/PC_benchmark/prompts/details/monomer.md")
         stage_hint = """
 
 STAGE 1 REQUIREMENTS:
@@ -33,4 +33,4 @@ STAGE 1 REQUIREMENTS:
         return f"{base_prompt}\n\n{stage_hint}\n"
 
     def build_json_schema(self) -> dict:
-        return json.load(open("/uni-curator/user/lcc/lcc/dataflow-dp/schemas/monomer.json"))
+        return json.load(open("/uni-curator/user/zwl/other_polymer_benchmark/PC_benchmark/schemas/monomer.json"))
